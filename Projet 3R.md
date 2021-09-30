@@ -9,7 +9,7 @@
 
 [liste de package](https://analyticsindiamag.com/top-10-r-packages-for-data-visualisation/) for data viz in R
 
-[here](https://mode.com/blog/r-data-visualization-package) another list 
+[here](https://mode.com/blog/r-data-visualization-packages/) another list 
 
 ## questions pour bousquet
 

@@ -1,0 +1,78 @@
+---
+title: "3R_Packages"
+output: html_document
+---
+
+# Seront listés ici les packages nécessaires au projet 3R:
+
+## Pré-liste : Packages utilisés par nos collègues dans le Rmd Plotnetrec
+
+```{r global_options, include=FALSE}
+library(tidyverse) # Plein de fonction
+
+library(gridExtra) # Fenêtres graphiques améliorées
+
+library(tibble) # Meilleur formatage des tables de données / Meilleur # structure des datas.
+
+library(ggplot2) # Package graphique
+
+library(knitr) # Package pour paramétrer Rmarkdown (chunk, code, #compilation)
+
+library(UsingR) # Collection de datasets pour s'entraîner aux #statistiques. 
+
+library(skimr) # Obtenir des statistiques descriptives (Amélioration #de summary())
+
+library(pastecs) # Régularisations et décompositions de séries #temporelles
+
+library(psych) # Toolbox pour la classification (ACP;ACF;ACM etc...)
+
+library(kableExtra) # Package pour les tables
+
+library(grid) # Fenêtre graphique
+
+library(TeachingDemos) # Mieux comprendre les concepts statistiques / #concepts de programmation
+
+library('MASS') # Fonctions et datasets pour les statistiques
+
+library(forecast) # Méthodes et fonctions pour afficher et analyser
+# les séries temporelles univariés (ARIMA modelling ?)
+
+library(fpp2) ? # Des masques ? pour quoi faire ? En vrais, des #datasets reliés à un livre d'exercice sur les séries temporelles
+  
+library(scales) # Aide échelles des graphiques
+
+library(RColorBrewer) # Palette de couleur 
+
+library("cowplot") # plot pour les cow boy ! En vrais, des fonctions #qui aident à la réalisation de graphiques pour publication avec #ggplot2 => plot de qualité
+
+library(extrafont) # Facilite l'import et l'export de text
+
+library(plotly) # Graphique ggplot2 intéractif sur le web et création #d'interface. 
+
+library(sfsmisc) # #https://cran.r-project.org/web/packages/sfsmisc/index.html ?
+
+library(patternplot) # Outil pour crée de beau diagramme #(anneau;camenbert;bar;box)
+
+library(stargazer) # Graphique / table / résultat de régréssion en #Latex.
+
+library(latex2exp) # Convertir les formules maths latex en formules #maths Rmarkdown.
+
+library(dplyr) # Plein de fonction
+
+library(shiny) # Package de tableau de bord
+
+library(data.table) # Gestion de base de données
+
+library(shinydashboard) # Package tableau de bord
+
+library(shape) # Forme graphique particulière comme ellipse ; cylindre ; flêches
+
+
+```
+
+## Liste définitive des packages que nous avons besoin
+
+```{r}
+
+```
+
