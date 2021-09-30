@@ -79,4 +79,9 @@ a link to definition and way to draw [error elipse](https://www.visiondummy.com/
 
 ### Different way to explain covariance
 An [article](https://stats.seandolinar.com/covariance-different-ways-to-explain/) about differents ways to represents covariance
+
+### covariance as signed area of rectangles
+- [link to an article](https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/)
+
+- [a good stack exchange conversation](https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean)
   
