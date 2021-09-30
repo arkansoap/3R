@@ -4,6 +4,8 @@
 
 ## package et fonctions r 
 
+[liste de package](https://analyticsindiamag.com/top-10-r-packages-for-data-visualisation/) for data viz in R
+
 ## questions pour bousquet
 
 ## Etapes : 
@@ -70,4 +72,6 @@ a link to definition and way to draw [error elipse](https://www.visiondummy.com/
 
 ![représentation](error_ellipse1.png)
 
-### An [article](https://stats.seandolinar.com/covariance-different-ways-to-explain/) about differents ways to represents covariance
+### Different way to explain covariance
+An [article](https://stats.seandolinar.com/covariance-different-ways-to-explain/) about differents ways to represents covariance
+ 
