@@ -53,3 +53,21 @@ modèles p.600 ds woodridge
 départ, article de li > impasse ds représentation en triangle
 
 test : faire varier nb d 'observations 
+
+## Notes 
+
+### COVARIANCE VS. CORRELATION
+
+- Both covariance and correlation measure the relationship and the dependency between two variables.
+- Covariance indicates the direction of the linear relationship between variables.
+- Correlation measures both the strength and direction of the linear relationship between two variables.
+- Correlation values are standardized.
+- Covariance values are not standardized.
+
+### Error ellipse
+
+a link to definition and way to draw [error elipse](https://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/)
+
+![représentation](error_ellipse1.png)
+
+### An [article](https://stats.seandolinar.com/covariance-different-ways-to-explain/) about differents ways to represents covariance
