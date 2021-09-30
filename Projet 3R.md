@@ -2,9 +2,14 @@
 
 ## listes articles : 
 
+- VISUALIZATION OF COVARIANCE AND CROSS-COVARIANCE FIELDS, Chao Yang,1 Dongbin Xiu,2 & Robert M. Kirby
+- Visualizing Distributions of Covariance Matrices, Tomoki Tokudaa, Ben Goodrichb, Iven Van Mechelena, Andrew Gelmanb, Francis Tuerlinckxa
+
 ## package et fonctions r 
 
 [liste de package](https://analyticsindiamag.com/top-10-r-packages-for-data-visualisation/) for data viz in R
+
+[here](https://mode.com/blog/r-data-visualization-package) another list 
 
 ## questions pour bousquet
 
@@ -74,4 +79,4 @@ a link to definition and way to draw [error elipse](https://www.visiondummy.com/
 
 ### Different way to explain covariance
 An [article](https://stats.seandolinar.com/covariance-different-ways-to-explain/) about differents ways to represents covariance
- 
+  
