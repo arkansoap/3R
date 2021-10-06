@@ -84,4 +84,24 @@ An [article](https://stats.seandolinar.com/covariance-different-ways-to-explain/
 - [link to an article](https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/)
 
 - [a good stack exchange conversation](https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean)
+
+## Notes deuxième séance 
+
+- pente est l élément principal (variation y / variation X)
+
+### covariance representation
+
+- Esp mathématique du rectangle entre 2 points = 2 cov(x,y) si obs independantes entre elles (article HAYES)
+- superposition des rectangles ( pas de sens de garder que triangle)
+- formule de la covariance plus explicite selon mr bousquet avec N(N-1)/2
+- améliorer net cov rectangle 
+
+### représentation regression (schéma photos)
+
+### corrélaion partielle
+
+- corrélation n'est pas transitive
+- 
+
+
   
