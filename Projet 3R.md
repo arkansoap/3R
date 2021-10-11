@@ -179,6 +179,25 @@ Note that this is just the estimated Pearson's correlation coeffcient, but the v
 
     Variance and covariance are mathematical terms frequently used in statistics and probability theory. Variance refers to the spread of a data set around its mean value, while a covariance refers to the measure of the directional relationship between two random variables.
 
+- Classical formula of variance  : 
+
+$$\sigma^2_x=\frac{1}{n}\sum_{x=1}^{n}(x_i - \bar{x})^2 = \frac{1}{n}\sum_{x=1}^{n}x_i^2 - \bar{x}^2 $$
+
+- Hefferman(1988) variance formula rewrote : 
+
+$$\sigma^2_x= \frac{1}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}(x_i-x_j)^2$$
+
+- covariance formula :
+
+$$cov(X,Y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y}) $$
+
+- hefferman covariance : 
+
+$$cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)$$
+
+Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-triangle formed with the difference vector $(x_i — x_j, y_j)$ as its hypotenuse, where negatively sloped difference tors incur a $(—1)$ sign and positively sloped difference vectors take a $(+1)$ sign.
+
+- covariance et covariance empirique !?
 
 # Proposition de plan (mr bousquet)
 
@@ -262,6 +281,10 @@ Note that this is just the estimated Pearson's correlation coeffcient, but the v
     a. Visualisation de la covariance
 
     b. Le R2
+
+# transcription scan mr bousquet 
+
+
 
 
   
