@@ -199,6 +199,10 @@ Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-tri
 
 - covariance et covariance empirique !?
 
+# diagramme de venn et corrélation 
+
+- lister avantage et défauts
+
 # Proposition de plan (mr bousquet)
 
 1. La covariance
@@ -284,7 +288,24 @@ Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-tri
 
 # transcription scan mr bousquet 
 
+# Corrélation partielle 
 
+>> Le coefficient de corrélation partielle, noté ici  $r_{AB.C}$, permet de connaître la valeur de la corrélation entre deux variables A et B, si la variable C était demeurée constante pour la série d’observations considérées. 
 
+>> Dit autrement, le coefficient de corrélation partielle $r_{AB.C}$ est le coefficient de corrélation totale entre les variables A et B quand on leur a retiré leur meilleure explication linéaire en termes de C. Il est donné par la formule :
 
+-  $$r_{AB.C}=\frac{r_{AB}-r_{AC} \cdot r_{BC}}{\sqrt{1-r_{AC}^2} \cdot \sqrt{1-r_{BC}^2}}$$
+
+# Test de linéarité 
+
+ - quels tests ? 
+    - Fisher
+    - student
+    - chow
+    - autocorrélation des termes d'erreurs
+    - hétéroscédasticité
+
+- [comparaison éthodes tsay et hansen ](https://www.cairn.info/revue-economie-et-prevision-2001-2-page-157.htm)
   
+ - Pour déterminer la linéarité, on peut commencer par calculer la droite approchée par la méthode des moindres carrés, par exemple (d'autres méthodes de calcul existent). Ensuite, il suffit de quantifier l'écart de la réponse du système par rapport à cette droite. 
+
