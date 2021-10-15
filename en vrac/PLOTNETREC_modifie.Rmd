@@ -1,0 +1,3945 @@
+---
+title: "PLOTNETREC"
+output: pdf_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=3.5, fig.height=2.8,
+                      fig.align='center', echo = TRUE,
+                      warning=FALSE, message=FALSE)
+library(tidyverse)
+library(gridExtra)
+library(tibble)
+library(ggplot2)
+library(knitr)
+library(UsingR)
+library(skimr)
+library(pastecs)
+#library(summarytools)
+library(psych)
+library(kableExtra)
+library(grid)
+library(TeachingDemos)
+library('MASS')
+library(forecast)
+library(fpp2)
+library(scales)
+library(RColorBrewer)
+library("cowplot")
+library(extrafont)
+library(plotly)
+library(sfsmisc)
+library(patternplot)
+library(stargazer)
+library(latex2exp)
+library(dplyr)
+library(gridExtra)
+theme_set(theme_minimal())
+```
+
+
+# Cas 1 : X suit une loi normale, Y forte variance
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1+ 2*X + rnorm(N, 0, 200) # forte variance
+# Y <- 1+ 2*X + rnorm(N, 0, 80) #moyenne variance
+# Y <- 1+ 2*X + rnorm(N, 0, 10) #faible variance
+ 
+#*******************************************
+ #X <- c(1,2,3,4)
+ #Y <- c(1,4,2,5)
+ 
+#******************************************* 
+#  X <- c(2,3,4,5)
+#  Y <- c(4,2,5,1)
+ # 
+ #******************************************* 
+#heteroskedasticity
+#Y <- 10 * rnorm(N, X, 4*X)  #heteroskedasticity
+ 
+ #*******************************************
+#heterogeneity dummies
+#Y <- c(-50 -2*rnorm(N/2,0,10),50+ 2*rnorm(N/2,0,10))   #heterogeneity
+ 
+ #*******************************************
+# serie temp
+# data("AirPassengers")
+# AP <- AirPassengers
+# plot(AP, ylab="Passengers (1000s)", type="o", pch =20)
+# Y <- (AirPassengers)
+# X <- seq(1:144)
+# --------------------------------------------------
+
+df <- data.frame(x=X, y=Y)
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+```{r}
+plotscatter
+```
+
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotcov
+```
+
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r}
+plotrect
+```
+
+
+
+### Covariance Nette 
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Cas 2 : X suit une loi normale, Y moyenne variance
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1+ 2*X + rnorm(N, 0, 80) #moyenne variance
+ 
+
+df <- data.frame(x=X, y=Y)
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotscatter
+```
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+
+```{r}
+plotcov
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r}
+plotrect
+```
+
+### Covariance Nette
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Cas 3 : X suit une loi normale, Y faible variance
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1+ 2*X + rnorm(N, 0, 10) #faible variance
+ 
+
+df <- data.frame(x=X, y=Y)
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotscatter
+```
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('blue','red')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotcov
+```
+
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r}
+plotrect
+```
+
+
+
+### Covariance Net 
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+
+```
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Cas 4 : X suit une loi normale avec un écart type de 1, Y hétéroscédastique
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 1))  
+
+#heteroskedasticity
+Y <- 10 * rnorm(N, X, 4*X)  #heteroskedasticity
+
+df <- data.frame(x=X, y=Y)
+
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotscatter
+```
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotcov
+```
+
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r}
+plotrect
+```
+
+### Covariance Net 
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+
+plotnetrec +theme(legend.position = "none")
+
+```
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Cas 5 : X suit une loi normale avec un écart type de 1, Y heterogeneity dummies
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+
+#heterogeneity dummies
+Y <- c(-50 -2*rnorm(N/2,0,10),50+ 2*rnorm(N/2,0,10))   #heterogeneity
+ 
+
+df <- data.frame(x=X, y=Y)
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotscatter
+```
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotcov
+```
+
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r}
+plotrect
+```
+
+
+### Covariance Net 
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+
+```
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Air Passenger : 
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+# serie temp
+data("AirPassengers")
+AP <- AirPassengers
+plot(AP, ylab="Passengers (1000s)", type="o", pch =20)
+Y <- (AirPassengers)
+X <- seq(1:144)
+# --------------------------------------------------
+
+df <- data.frame(x=X, y=Y)
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+N=144
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotscatter
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotcov
+```
+
+### Covariance Nette
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+
+```
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Cas 6 : Relation Non-Linéaire
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+
+#heterogeneity dummies
+Y <- X^4 - 2*X^3 - 4*X^2 + rnorm(N,10,20)
+ 
+
+df <- data.frame(x=X, y=Y)
+scatter<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+
+
+```
+
+```{r}
+scatter
+```
+
+### En appliquant le même principe, on à : 
+```{r, include=FALSE}
+# # -----------------------------------------------------  
+# #  Illustration
+# # -----------------------------------------------------
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="loess", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotscatter
+```
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r}
+plotcov
+```
+
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r}
+plotrect
+```
+
+
+### Covariance Nette
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+
+```
+
+```{r}
+plotnetrec +theme(legend.position = "none")
+```
+
+# Cas 1 : X suit une loi normale, Y forte variance
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1+ 2*X + rnorm(N, 0, 200) 
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+
+```{r, include=FALSE}
+plotrect1<-  ggplot(d, aes(RgXmin,RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(RgX,RgY)') +
+  xlab("RgX")+
+  ylab("RgY")
+  #theme_light()
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotrect, plotrect1)
+
+```
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
+
+# Cas 2 : X suit une loi normale, Y moyenne variance
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1+ 2*X + rnorm(N, 0, 80) #moyenne variance
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+
+```{r, include=FALSE}
+plotrect1<-  ggplot(d, aes(RgXmin,RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(RgX,RgY)') +
+  xlab("RgX")+
+  ylab("RgY")
+  #theme_light()
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotrect, plotrect1)
+
+```
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
+
+
+# Cas 3 : X suit une loi normale, Y faible variance
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1+ 2*X + rnorm(N, 0, 10) #faible variance
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+
+```{r, include=FALSE}
+plotrect1<-  ggplot(d, aes(RgXmin,RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(RgX,RgY)') +
+  xlab("RgX")+
+  ylab("RgY")
+  #theme_light()
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotrect, plotrect1)
+
+```
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
+
+# Cas 4 : X suit une loi normale avec un écart type de 1, Y hétéroscédastique
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 1))  
+
+#heteroskedasticity
+Y <- 10 * rnorm(N, X, 4*X)  #heteroskedasticity
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+
+```{r, include=FALSE}
+plotrect1<-  ggplot(d, aes(RgXmin,RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(RgX,RgY)') +
+  xlab("RgX")+
+  ylab("RgY")
+  #theme_light()
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotrect, plotrect1)
+
+```
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
+
+# Cas 5 : X suit une loi normale avec un écart type de 1, Y heterogeneity dummies
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+
+#heterogeneity dummies
+Y <- c(-50 -2*rnorm(N/2,0,10),50+ 2*rnorm(N/2,0,10))   #heterogeneity
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+
+```{r, include=FALSE}
+plotrect1<-  ggplot(d, aes(RgXmin,RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(RgX,RgY)') +
+  xlab("RgX")+
+  ylab("RgY")
+  #theme_light()
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotrect, plotrect1)
+
+```
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
+
+# Air Passenger : 
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=144
+
+# serie temp
+data("AirPassengers")
+AP <- AirPassengers
+plot(AP, ylab="Passengers (1000s)", type="o", pch =20)
+Y <- (AirPassengers)
+X <- seq(1:144)
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
+
+# Cas 6 : Relation Non-Linéaire
+
+```{r, include = FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+
+#heterogeneity dummies
+Y <- X^4 - 2*X^3 - 4*X^2 + rnorm(N,10,20)
+
+RgX=rank(X)
+RgY=rank(Y)
+df <- data.frame(x=RgX, Rgy=Y)
+scatter1<-ggplot(df, aes(x=X,y=Y))+
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  xlab("X")+
+  ylab("Y")
+scatter2<- ggplot(df, aes(x=RgX,y=RgY))+
+  geom_point(size=circle.size, pch=21, fill=colors[[3]])  +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+RgX.bar <- rep(mean(RgX),N)
+RgY.bar <- rep(mean(RgY),N)
+
+
+RgXmin<-rep(0,Nmat)
+RgXmax<-rep(0,Nmat)
+RgYmin<-rep(0,Nmat)
+RgYmax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-RgY[(truc1[i])]
+  RgYmax[i]<-RgY[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((RgX-mean(RgX))*(RgY-(mean(RgY)))))
+mydata=data.frame(RgX,RgY,RgX.bar,RgY.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((RgXmin-RgXmax)*(RgYmin-RgYmax)))
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+
+plotscatter1 <-  ggplot(data=mydata, aes(x=RgX,y=RgY)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('RgY vs. RgX Scatterplot') +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE}
+plotcov1<-  ggplot(mydata, aes(xmin=RgX, xmax=RgX.bar, ymin=RgY, ymax=RgY.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=RgY.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=RgX.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+
+```{r, include=FALSE}
+plotrect1<-  ggplot(d, aes(RgXmin,RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(RgX,RgY)') +
+  xlab("RgX")+
+  ylab("RgY")
+  #theme_light()
+```
+
+
+```{r, include=FALSE}
+SRgX<-sort(RgX,decreasing=FALSE)
+SRgY<-sort(RgY,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SRgY==RgY[i])
+    posyj<-which(SRgY==RgY[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((RgX[i]-RgX[j])*(RgY[i]-RgY[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+RgXmin<-rep(0,Nm1s)
+RgXmax<-rep(0,Nm1s)
+RgYmin<-rep(0,Nm1s)
+RgYmax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  RgXmin[i]<-RgX[(truc1[i])]
+  RgXmax[i]<-RgX[(truc2[i])]
+  RgYmin[i]<-SRgY[(truc3[i])]
+  RgYmax[i]<-SRgY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(RgXmin,RgXmax,RgYmin,RgYmax,S)
+
+plotnetrec1<- 
+  ggplot(data=d,aes(RgXmin, RgYmin, xmin=RgXmin, xmax=RgXmax,ymin=RgYmin, ymax=RgYmax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("RgX")+
+  ylab("RgY")
+```
+
+
+```{r, include=FALSE, echo=FALSE}
+####################################################################################################################################################################################################################################################
+```
+
+
+```{r, include = FALSE}
+Nmat=N*(N-1)/2
+Nm1s=(N-1)^2
+
+ # --------------------------------------------------
+ truc1<- vector()
+ truc2<- vector()
+ i=1
+ for(i in 1:N){
+   up=N-i
+   truc1=cbind(truc1,t((rep(i,up))))
+   truc2=cbind(truc2,t((seq(from=(i+1),to=N))))  
+ }
+
+X.bar <- rep(mean(X),N)
+Y.bar <- rep(mean(Y),N)
+
+
+Xmin<-rep(0,Nmat)
+Xmax<-rep(0,Nmat)
+Ymin<-rep(0,Nmat)
+Ymax<-rep(0,Nmat)
+
+i=1  
+for(i in 1:Nmat){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-Y[(truc1[i])]
+  Ymax[i]<-Y[(truc2[i])]
+  i=i+1
+}
+
+S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+
+factor(sign(0))
+
+S<-factor(sign((Xmin-Xmax)*(Ymin-Ymax)))
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+plotscatter<-  ggplot(data=mydata, aes(x=X,y=Y)) + 
+  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  stat_smooth(method="lm", se=FALSE,color="black",size=1)+
+  ggtitle('Y vs. X Scatterplot') +
+  xlab("X")+
+  ylab("Y")
+```
+
+
+
+```{r, include=FALSE}
+plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  geom_hline(yintercept=Y.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_vline(xintercept=X.bar, linetype='dashed',color="orange",size=0.5) +
+  geom_rect(alpha=0.02, aes(fill=S.bar)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariance') +
+  #  xlim(0, 4) +
+  #  ylim(0, 4)+
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r, include=FALSE}
+plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
+#  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+#  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+#  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  #alpha=.5
+  ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
+  xlab("X")+
+  ylab("Y")
+  #theme_light()
+```
+
+```{r, include=FALSE}
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+  for(j in (i+1):N)
+  {
+    TRUC<-rep(0,N-1)
+    posyi<-which(SY==Y[i])
+    posyj<-which(SY==Y[j])
+    min=min(c(posyi,posyj))
+    max=max(c(posyi,posyj))-1
+    TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+    RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+  }
+}
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+plotnetrec<- 
+  ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('white', 'plum2','blue'), breaks=MS) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+  ylab("Y")
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotscatter, plotscatter1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotcov, plotcov1)
+```
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotrect, plotrect1)
+
+```
+
+## Covariance nette
+
+```{r,fig.height=6, fig.width= 9}
+grid.arrange(plotnetrec +theme(legend.position = "none"), plotnetrec1 +theme(legend.position = "none"))
+```
