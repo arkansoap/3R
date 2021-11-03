@@ -48,7 +48,7 @@ N=50
 
 
 X <- sort(rnorm(N, 40, 100)) 
-Y <- 1+ 2*X + rnorm(N, 0, 200) # forte variance
+Y <- 1- 2*X + rnorm(N, 0, 200) # forte variance
 # Y <- 1+ 2*X + rnorm(N, 0, 80) #moyenne variance
 # Y <- 1+ 2*X + rnorm(N, 0, 10) #faible variance
  
@@ -93,6 +93,7 @@ scatter
 # # -----------------------------------------------------  
 # #  Illustration
 # # -----------------------------------------------------
+N = 50
 Nmat=N*(N-1)/2
 Nm1s=(N-1)^2
 
@@ -169,7 +170,6 @@ plotcov<-  ggplot(mydata, aes(xmin=X, xmax=X.bar, ymin=Y, ymax=Y.bar)) +
 plotcov
 ```
 
-
 ```{r, include=FALSE}
 plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) + 
 #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
@@ -210,6 +210,19 @@ for(i in 1:(N-1))
     RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
   }
 }
+ i = 2
+j =3
+
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+RES
+  
+
 truc1<- vector()
 truc2<- vector()
 i=1
