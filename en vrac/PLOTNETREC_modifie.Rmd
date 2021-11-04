@@ -44,38 +44,17 @@ theme_set(theme_minimal())
 circle.size = 2.5
 colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
 r=0.6
-N=50
+N=700
 
 
 X <- sort(rnorm(N, 40, 100)) 
-Y <- 1- 2*X + rnorm(N, 0, 200) # forte variance
-# Y <- 1+ 2*X + rnorm(N, 0, 80) #moyenne variance
-# Y <- 1+ 2*X + rnorm(N, 0, 10) #faible variance
- 
-#*******************************************
- #X <- c(1,2,3,4)
- #Y <- c(1,4,2,5)
- 
-#******************************************* 
-#  X <- c(2,3,4,5)
-#  Y <- c(4,2,5,1)
- # 
- #******************************************* 
-#heteroskedasticity
-#Y <- 10 * rnorm(N, X, 4*X)  #heteroskedasticity
- 
- #*******************************************
-#heterogeneity dummies
-#Y <- c(-50 -2*rnorm(N/2,0,10),50+ 2*rnorm(N/2,0,10))   #heterogeneity
- 
- #*******************************************
-# serie temp
-# data("AirPassengers")
-# AP <- AirPassengers
-# plot(AP, ylab="Passengers (1000s)", type="o", pch =20)
-# Y <- (AirPassengers)
-# X <- seq(1:144)
-# --------------------------------------------------
+Y <- 1- 2*X + rnorm(N, 0, 200) 
+
+splitter <- data.frame(X,Y)
+data_resample <- sample_n(data, size=100, replace = T)
+
+X <- data_resample$X
+Y <- data_resample$Y
 
 df <- data.frame(x=X, y=Y)
 scatter<-ggplot(df, aes(x=X,y=Y))+
@@ -93,7 +72,7 @@ scatter
 # # -----------------------------------------------------  
 # #  Illustration
 # # -----------------------------------------------------
-N = 50
+N = length(X) 
 Nmat=N*(N-1)/2
 Nm1s=(N-1)^2
 
@@ -175,7 +154,7 @@ plotrect<-  ggplot(d, aes(Xmin,Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax))
 #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
 #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
 #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
-  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue')) +
+  geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red',NA,'blue')) +
   #alpha=.5
   ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
   xlab("X")+
