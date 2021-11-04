@@ -43,6 +43,8 @@ theme_set(theme_minimal())
 ```{r, include = FALSE}
 built_ggplot <- function(data, rank = FALSE, timeseries = FALSE){
   
+  data <- data[order(data[,1]),]
+  
   if(rank == FALSE){
     X = data[,1]
     Y = data[,2]
@@ -124,7 +126,7 @@ built_ggplot <- function(data, rank = FALSE, timeseries = FALSE){
     #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
     #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
     #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
-      geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red','blue', 'green')) +
+      geom_rect(alpha=0.1, aes(fill=S)) +   scale_fill_manual(values=c('red', 'blue')) +
       #alpha=.5
       ggtitle('Covariances Rectangle : 2Cov(X,Y)') +
       xlab("X")+
@@ -243,6 +245,7 @@ Y <- 1- 2*X + rnorm(N, 0, 200) # forte variance
 data <- data.frame(X,Y)
 ```
 
+
 ```{r, include = FALSE}
 graphs <- built_ggplot(data)
 ```
@@ -250,34 +253,48 @@ graphs <- built_ggplot(data)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample)
+```
+
+```{r, include=FALSE}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=50
+
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1- 2*X + rnorm(N, 0, 200) # forte variance
+data <- data.frame(X,Y)
+
+graphs_2 <- built_ggplot(data)
 ```
 
 ### Scatterplot
 
 ```{r,fig.height=6, fig.width= 9, echo=FALSE}
-grid.arrange(graphs[[1]], graphs_sample[[1]])
+grid.arrange(graphs[[1]], graphs_sample[[1]], graphs_2[[1]])
 ```
 
 
 ### Plotcov
 
 ```{r,fig.height=6, fig.width= 9, echo = FALSE}
-grid.arrange(graphs[[2]], graphs_sample[[2]])
+grid.arrange(graphs[[2]], graphs_sample[[2]], graphs_2[[2]])
 ```
 
 
 ### plotrect
 
 ```{r,fig.height=6, fig.width= 9, echo = FALSE}
-grid.arrange(graphs[[3]], graphs_sample[[3]])
+grid.arrange(graphs[[3]], graphs_sample[[3]], graphs_2[[3]])
 ```
 
 ### plotnetrec
 
 ```{r,fig.height=6, fig.width= 9, echo = FALSE}
-grid.arrange(graphs[[4]], graphs_sample[[4]])
+grid.arrange(graphs[[4]], graphs_sample[[4]], graphs_2[[4]])
 ```
 
 # Cas 2 : X suit une loi normale, Y moyenne variance
@@ -303,7 +320,7 @@ graphs <- built_ggplot(data)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample)
 ```
 
@@ -358,7 +375,7 @@ graphs <- built_ggplot(data)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample)
 ```
 
@@ -416,7 +433,7 @@ graphs <- built_ggplot(data)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample)
 ```
 
@@ -473,7 +490,7 @@ graphs <- built_ggplot(data)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample)
 ```
 
@@ -531,7 +548,7 @@ graphs <- built_ggplot(data, timeseries = TRUE)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample, timeseries = TRUE)
 ```
 
@@ -582,7 +599,7 @@ graphs <- built_ggplot(data)
 
 ```{r, include = FALSE}
 splitter <- data.frame(X,Y)
-data_resample <- sample_n(data, size=100, replace = T)
+data_resample <- sample_n(splitter, size=100, replace = F)
 graphs_sample <- built_ggplot(data_resample)
 ```
 

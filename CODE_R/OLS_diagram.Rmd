@@ -435,7 +435,3 @@ OLS_DIAGRAM(X, Y, with_OLS =T)
 
 ```
 
-```{r}
-saveRDS(OLS_DIAGRAM, "Fonction_OLS_DIAGRAM.rds")
-```
-
