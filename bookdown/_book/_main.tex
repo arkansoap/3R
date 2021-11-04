@@ -134,7 +134,7 @@ En statistique et en théorie des probabilités, la variance est une mesure de l
 Variance and covariance are mathematical terms frequently used in statistics and probability theory. Variance refers to the spread of a data set around its mean value, while a covariance refers to the measure of the directional relationship between two random variables.
 
 \hypertarget{duxe9finition-littuxe9raire-usuelle-de-la-covariance}{%
-\section{Définition littéraire usuelle de la covariance :}\label{duxe9finition-littuxe9raire-usuelle-de-la-covariance}}
+\section{Définition littéraire usuelle de la covariance}\label{duxe9finition-littuxe9raire-usuelle-de-la-covariance}}
 
 ``A covariance refers to the measure of how two random variables will change when they are compared to each other.''
 
@@ -199,6 +199,8 @@ La forme normalisée de la matrice de covariance est la matrice de corrélation.
   Covariance values are not standardized.
 \end{itemize}
 
+\emph{lien mathématique entre covariance et corrélation}
+
 \hypertarget{la-corruxe9lation-1}{%
 \section{la corrélation :}\label{la-corruxe9lation-1}}
 
@@ -210,6 +212,24 @@ There are several correlation coefficients, often denoted \(\rho\) or \(r\), mea
 
 \hypertarget{pearson-correlation-coefficient}{%
 \section{Pearson correlation coefficient}\label{pearson-correlation-coefficient}}
+
+\begin{itemize}
+\tightlist
+\item
+  quelques notations pouvant être utiles:
+\end{itemize}
+
+\(S_{xx} = \sum_{i=1}^n(x_i -\bar{x})^2\)
+
+\(S_{yy} = \sum_{i=1}^n(y_i -\bar{y})^2\)
+
+\(S_{xy} = \sum_{i=1}^n(x_i -\bar{x})(y_i -\bar{y})\)
+
+\begin{itemize}
+\tightlist
+\item
+  coefficient de pearson:
+\end{itemize}
 
 \[\rho=\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}\]
 
@@ -235,11 +255,83 @@ Dit autrement, le coefficient de corrélation partielle \(r_{AB.C}\) est le coef
 
 \[r_{AB.C}=\frac{r_{AB}-r_{AC} \cdot r_{BC}}{\sqrt{1-r_{AC}^2} \cdot \sqrt{1-r_{BC}^2}}\]
 
+\hypertarget{thirteen-ways-to-see-correlation-13cor}{%
+\section{\texorpdfstring{thirteen ways to see correlation \citep{13cor}}{thirteen ways to see correlation {[}@13cor{]}}}\label{thirteen-ways-to-see-correlation-13cor}}
+
+Super article !
+
+\emph{choisir certaines des 11 définitions et ajouter les formules et une brève explication}
+
+\begin{quote}
+In 1885, Sir Francis Galton first defined the term ``regression'' and completed the theory of bivariate correlation. A decade later, Karl Pearson developed the index that we still use to measure correlation, Pearson's r . Our article is written in recognition of the 100th anniversary of Galton's first discussion of regression and correlation.
+\end{quote}
+
+\includegraphics{galton.PNG}
+
+\begin{itemize}
+\tightlist
+\item
+  CORRELATION AS A FUNCTION OF RAW SCORES AND MEANS
+\item
+  CORRELATION AS STANDARDIZED COVARIANCE
+\item
+  CORRELATION AS THE GEOMETRIC MEAN THE TWO REGRESSION SLOPES
+\item
+  CORRELATION AS STANDARDIZED SLOPE OF THE REGRESSION LINE CORRELATION AS THE GEOMETRIC MEAN OF THE TWO REGRESSION SLOPES
+\item
+  CORRELATION AS THE SQUARE ROOT OF THE RATIO OF TWO VARIANCES (PROPORTION OF VARIABILITY ACCOUNTED FOR)
+\item
+  CORRELATION AS A FUNCTION OF THE ANGLE BETWEEN THE TWO STANDARDIZED REGRESSION LINES
+\item
+  CORRELATION AS A FUNCTION OF TEST STATISTICS FROM DESIGNED EXPERIMENTS
+\item
+  CORRELATION AS THE RATIO OF TWO MEANS
+\item
+  CORRELATION IN RELATION TO THE BIVARIATE ELLIPSES OF ISOCONCENTRATION
+\item
+  \ldots{}
+\end{itemize}
+
 \hypertarget{vizualization-of-covariance-and-correlation}{%
 \chapter{Vizualization of covariance and correlation}\label{vizualization-of-covariance-and-correlation}}
 
 \hypertarget{diffuxe9rentes-tentatives-pour-repruxe9senter-la-covariance}{%
 \section{Différentes tentatives pour représenter la covariance}\label{diffuxe9rentes-tentatives-pour-repruxe9senter-la-covariance}}
+
+\hypertarget{diagramme-de-venn}{%
+\subsection{diagramme de Venn}\label{diagramme-de-venn}}
+
+\begin{quote}
+A Venn diagram is a widely used diagram style that shows the logical relation between sets, popularized by John Venn in the 1880s. The diagrams are used to teach elementary set theory, and to illustrate simple set relationships in probability, logic, statistics, linguistics and computer science. A Venn diagram uses simple closed curves drawn on a plane to represent sets. Very often, these curves are circles or ellipses.
+\end{quote}
+
+\emph{A compléter + insérer diagram}
+
+\hypertarget{visualizing-distributions-of-covariance-matrices}{%
+\subsection{Visualizing Distributions of Covariance Matrices}\label{visualizing-distributions-of-covariance-matrices}}
+
+Covariance matrices and their corresponding distributions play an important role in statistics. To understand the properties of distributions, we often rely on visualization methods. \citep{VisCov}
+
+But visualizing a distribution in a high-dimensional space is a challenge, with the additional
+difficulty that covariance matrices must be positive semi-definite, a restriction that forces
+the joint distribution of the covariances into an oddly-shaped subregion of the space.
+
+\emph{je suis dépassé par cet article\ldots{}}
+
+\includegraphics{wtf_covViz.PNG}
+
+\hypertarget{visualization-of-covariance-and-cross-covariance-fields-uxe0-ne-pas-inclure}{%
+\subsection{Visualization of covariance and cross-covariance fields (à ne pas inclure \ldots)}\label{visualization-of-covariance-and-cross-covariance-fields-uxe0-ne-pas-inclure}}
+
+\emph{A étudier, qu'est ce que covariance fields exactement\ldots? } \citep{fields}
+
+In mathematics, a field is a set on which addition, subtraction, multiplication, and division are defined and behave as the corresponding operations on rational and real numbers do. A field is thus a fundamental algebraic structure which is widely used in algebra, number theory, and many other areas of mathematics.
+
+\emph{les schémas ont l'air intéressant mais les calculs et le sujet ont l'air trop complexes\ldots.}
+
+\begin{quote}
+In this paper, we present a numerical technique to visualize covariance and cross-covariance fields of two-dimensional stochastic simulation.
+\end{quote}
 
 \hypertarget{a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance}{%
 \subsection{A Geometrical Interpretation of an Alternative Formula for the Sample Covariance}\label{a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance}}
@@ -261,7 +353,7 @@ Geometrically, \(\frac{1}{2}(x_i-x_j)(y_i - y_j)\) is ±1 times the area right-t
 \includegraphics{hayes.PNG}
 
 \hypertarget{covariance-as-signed-area-of-rectangles}{%
-\subsection{Covariance as Signed Area of Rectangles :}\label{covariance-as-signed-area-of-rectangles}}
+\subsection{Covariance as Signed Area of Rectangles}\label{covariance-as-signed-area-of-rectangles}}
 
 Cet article \citep{chudzicki} a été écrit suite à une conversation trrès intéressante sur le site \textbf{stats.statckexchange} (\url{https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean}.) Le sujet initial de cette conversation était : comment expliquer la covariance à quelqu'un qui ne comprends que la notion de moyenne?
 
@@ -275,7 +367,7 @@ mode d'emploi :
   The covariance is the net amount of red in the plot (treating blue as negative values).
 \end{itemize}
 
-``Let's deduce some properties of covariance. Understanding of these properties will be accessible to anyone who has actually drawn a few of the rectangles. :
+Let's deduce some properties of covariance. Understanding of these properties will be accessible to anyone who has actually drawn a few of the rectangles. :
 
 \begin{itemize}
 \tightlist
@@ -307,14 +399,21 @@ Because non-linear associations can create mixtures of positive and negative rec
   Sensitivity to outliers.
 \end{itemize}
 
-A geometric outlier (one point standing away from the mass) will create many large rectangles in association with all the other points. It alone can create a net positive or negative amount of red in the overall picture.''
+A geometric outlier (one point standing away from the mass) will create many large rectangles in association with all the other points. It alone can create a net positive or negative amount of red in the overall picture.
 
 \includegraphics{covRect.PNG}
+
+\hypertarget{covariance-and-regression-diagram}{%
+\subsection{Covariance and regression diagram}\label{covariance-and-regression-diagram}}
+
+Notre point de départ pour ce package est le travail réalisé par notre professeur \citep{bousquet}
+
+\emph{schéma des différentes visualisations de la covariance}
 
 \hypertarget{notre-projet-le-package-plotnetrec}{%
 \section{Notre projet : le package plotnetrec}\label{notre-projet-le-package-plotnetrec}}
 
-Une part du package que nous en sommes en train de développer est de présenter différentes représentations de la covariance.
+Une partie du package que nous en sommes en train de développer consiste à représenter la covariance.
 
 \textbf{\emph{mettre schémas de représentation covariance issu de pltnetrec avec explications}}
 
@@ -324,16 +423,8 @@ Une part du package que nous en sommes en train de développer est de présenter
 \hypertarget{ols-deux-variables}{%
 \section{OLS deux variables}\label{ols-deux-variables}}
 
-\begin{itemize}
-\tightlist
-\item
-  quelques notations pouvant être utiles:
-\end{itemize}
-
-\[S_{xx} = \sum_{i=1}^n(x_i -\bar{x})^2 \]
-\[S_{yy} = \sum_{i=1}^n(y_i -\bar{y})^2 \]
-\[S_{xy} = \sum_{i=1}^n(x_i -\bar{x})(y_i -\bar{y}) \]
-- simple linear regression model
+\hypertarget{simple-linear-regression-model}{%
+\subsection{simple linear regression model}\label{simple-linear-regression-model}}
 
 \[y_i = \beta_0 + \beta_1x_i +  \epsilon_i\]
 where \(\epsilon_i\) is te error or deviation of \(y_i\) from the line \(\beta_0 + \beta_1x_i\)
@@ -372,7 +463,7 @@ from which we can calculate a few additionnal quantities :
 \end{itemize}
 
 \hypertarget{measuring-overall-variation-from-the-sample-line}{%
-\section{Measuring overall variation from the sample line}\label{measuring-overall-variation-from-the-sample-line}}
+\subsection{Measuring overall variation from the sample line}\label{measuring-overall-variation-from-the-sample-line}}
 
 \begin{itemize}
 \item
@@ -430,11 +521,70 @@ Le coefficient de détermination est le carré du coefficient de corrélation li
 
 Kennedy \citep{kennedy} extended the Venn diagram to the exposition of bias and variance in the context of the classical linear regression (CLR) model, written as y = Xb + e .
 
+\emph{A compléter}
+
+\hypertarget{a-geometric-approach-to-compare-variables-in-a-regression-model}{%
+\subsection{A Geometric Approach to Compare Variables in a Regression Model}\label{a-geometric-approach-to-compare-variables-in-a-regression-model}}
+
+He proposes \citep{Bring} a geometric approaches to compare variables in a regression model.
+
+\begin{quote}
+This article gives a brief introduction to the geometric approach in regres- sion analysis, and then geometry is used to shed some light on the problem of comparing the ``importance'' of the in- dependent variables in a multiple regression model. Even though no final answer of how to assess variable impor- tance is given, it is still useful to illustrate the different measures geometrically to gain a better understanding of their properties.
+\end{quote}
+
+\includegraphics{bring1.PNG}
+
+\includegraphics{bring.PNG}
+
+\emph{A compléter}
+
+\hypertarget{two-additional-views-of-linear-regression-coefficients}{%
+\subsection{Two Additional Views of Linear Regression Coefficients}\label{two-additional-views-of-linear-regression-coefficients}}
+
+The author \citep{Cli} proposes an interesting interpretation of the slope in the keast square method. The linear regression line of y on x, as determined by the method of least squares, passes through the central point with slope:
+
+\includegraphics{slope.PNG}
+
+\begin{itemize}
+\tightlist
+\item
+  As a weighted average slope.
+\end{itemize}
+
+\begin{quote}
+This concept of weight for a slope is represented in the accompanying diagrams. (See Figure 1). The slope in the lefthand side diagram has a much larger weight than that in the righthand side for regression of y on x. If we were concerned with the regression of x on y, the reverse would be true. Note that the actual distance between the two points in the two diagrams is the same.
+\end{quote}
+
+\includegraphics{LI_slope.PNG}
+
+\begin{itemize}
+\tightlist
+\item
+  As a contrast
+\end{itemize}
+
+*A détailler \ldots{} ou pas \ldots{}
+
+\hypertarget{covariance-and-regression-diagram-1}{%
+\subsection{Covariance and regression diagram}\label{covariance-and-regression-diagram-1}}
+
+Notre point de départ pour ce package est le travail réalisé par notre professeur \citep{bousquet}
+
+\emph{schémas LS à insérer}
+
 \hypertarget{notre-projet-le-package-plotnetrec-1}{%
 \section{Notre projet: le package plotnetrec}\label{notre-projet-le-package-plotnetrec-1}}
 
 \hypertarget{etat-des-lieux-des-package-r-en-uxe9conomuxe9trie-de-la-visualisation}{%
 \chapter{Etat des lieux des package R en économétrie de la visualisation}\label{etat-des-lieux-des-package-r-en-uxe9conomuxe9trie-de-la-visualisation}}
+
+\begin{itemize}
+\tightlist
+\item
+  viscov
+\end{itemize}
+
+Our visualizations follow the principle of decomposing a covariance matrix into scale parameters and correlations, pulling out marginal summaries where possible and using two and three-dimensional plots to reveal multivariate structure. Visualizing a distribution of covariance matrices is a step beyond visualizing a single covariance matrix or a single multivariate dataset.
 
 \begin{itemize}
 \tightlist

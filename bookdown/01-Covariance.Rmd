@@ -16,7 +16,7 @@ $$\sigma^2_x= \frac{1}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}(x_i-x_j)^2$$
 
 Variance and covariance are mathematical terms frequently used in statistics and probability theory. Variance refers to the spread of a data set around its mean value, while a covariance refers to the measure of the directional relationship between two random variables.
 
-## Définition littéraire usuelle de la covariance :
+## Définition littéraire usuelle de la covariance 
 
 "A covariance refers to the measure of how two random variables will change when they are compared to each other."
 

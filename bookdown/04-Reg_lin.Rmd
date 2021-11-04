@@ -2,12 +2,7 @@
 
 ## OLS deux variables 
 
-- quelques notations pouvant être utiles:
-
-$$S_{xx} = \sum_{i=1}^n(x_i -\bar{x})^2 $$
-$$S_{yy} = \sum_{i=1}^n(y_i -\bar{y})^2 $$
-$$S_{xy} = \sum_{i=1}^n(x_i -\bar{x})(y_i -\bar{y}) $$
-- simple linear regression model 
+### simple linear regression model 
 
 $$y_i = \beta_0 + \beta_1x_i +  \epsilon_i$$ 
 where $\epsilon_i$ is te error or deviation of $y_i$ from the line $\beta_0 + \beta_1x_i$
@@ -34,7 +29,7 @@ from which we can calculate a few additionnal quantities :
 
 - $SSE = \sum_{i=1}^n (y_i -\hat{y_i})^2$ ; is the **sum of squared observed errors** for all observations in a sample of size $n$
 
-## Measuring overall variation from the sample line
+### Measuring overall variation from the sample line
 
 - $MSE = \frac{SSE}{n-p}$ , where $p$ is the number of parametrers of the regression equation. $p=2$ for regression with only one variable. 
 

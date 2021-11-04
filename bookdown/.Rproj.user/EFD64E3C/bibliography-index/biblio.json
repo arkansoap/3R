@@ -36,7 +36,6 @@
                     ]
                 ]
             },
-            "publisher": "Taylor; Francis",
             "title": "Geometrical interpretation of an alternative formula for the sample covariance",
             "type": "book"
         },
@@ -56,7 +55,6 @@
                     ]
                 ]
             },
-            "publisher": "Taylor; Francis",
             "title": "New measures of spread and a simpler formula for the normal distribution",
             "type": "book"
         },
@@ -80,26 +78,123 @@
             "type": "book"
         },
         {
-            "URL": "http://yihui.org/knitr/",
+            "URL": "https://www.jstor.org/stable/2682154",
             "author": [
                 {
-                    "family": "Kennedy",
-                    "given": "Peter E."
+                    "family": "Li",
+                    "given": "C. C."
                 }
             ],
-            "edition": "2nd",
-            "id": "plop",
+            "id": "Cli",
             "issued": {
                 "date-parts": [
                     [
-                        2015
+                        1964
                     ]
                 ]
             },
-            "note": "ISBN 978-1498716963",
-            "publisher": "journal",
-            "publisher-place": "Boca Raton, Florida",
-            "title": "More on venn diagrams for regression",
+            "title": "Two additional views of linear regression coefficients",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Tokudaa",
+                    "given": "Tomoki"
+                },
+                {
+                    "family": "co"
+                }
+            ],
+            "id": "VisCov",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011
+                    ]
+                ]
+            },
+            "publisher-place": "University of Leuven, Belgium, Columbia University, New York, NY, USA",
+            "title": "Visualizing distributions of covariance matrices",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.jstor.org/stable/2685045",
+            "author": [
+                {
+                    "family": "Bring",
+                    "given": "Johan"
+                }
+            ],
+            "id": "Bring",
+            "issued": {
+                "date-parts": [
+                    [
+                        1996
+                    ]
+                ]
+            },
+            "title": "Visualizing distributions of covariance matrices",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Yang",
+                    "given": "Chao"
+                },
+                {
+                    "family": "co"
+                }
+            ],
+            "id": "fields",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011
+                    ]
+                ]
+            },
+            "title": "Visualizing distributions of covariance matrices",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Rodgers",
+                    "given": "Joseph Lee"
+                },
+                {
+                    "family": "co"
+                }
+            ],
+            "id": "13cor",
+            "issued": {
+                "date-parts": [
+                    [
+                        1988
+                    ]
+                ]
+            },
+            "title": "Thirteen ways to look at the correlation coefficient",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Bousquet",
+                    "given": "Alain"
+                }
+            ],
+            "id": "bousquet",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "title": "Covariance and regression diagram",
             "type": "book"
         }
     ],
