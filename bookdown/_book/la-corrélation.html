@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 La corrélation | Econometrics vizualisation</title>
+  <meta name="description" content="First try of bookdown" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 La corrélation | Econometrics vizualisation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="First try of bookdown" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 La corrélation | Econometrics vizualisation" />
+  
+  <meta name="twitter:description" content="First try of bookdown" />
+  
+
+<meta name="author" content="Lucas Chaveneau, Thibault Fuchez, Allan Guichard" />
+
+
+<meta name="date" content="2021-11-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="la-covariance.html"/>
+<link rel="next" href="vizualization-of-covariance-and-correlation.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="la-covariance.html"><a href="la-covariance.html"><i class="fa fa-check"></i><b>2</b> La covariance</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="la-covariance.html"><a href="la-covariance.html#rappel-de-la-définition-de-la-variance"><i class="fa fa-check"></i><b>2.1</b> Rappel de la définition de la variance :</a></li>
+<li class="chapter" data-level="2.2" data-path="la-covariance.html"><a href="la-covariance.html#définition-littéraire-usuelle-de-la-covariance"><i class="fa fa-check"></i><b>2.2</b> Définition littéraire usuelle de la covariance :</a></li>
+<li class="chapter" data-level="2.3" data-path="la-covariance.html"><a href="la-covariance.html#définitions-mathématique-usuelle-et-alternatives"><i class="fa fa-check"></i><b>2.3</b> Définitions mathématique usuelle et alternatives</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="la-corrélation.html"><a href="la-corrélation.html"><i class="fa fa-check"></i><b>3</b> La corrélation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="la-corrélation.html"><a href="la-corrélation.html#de-la-covariance-à-la-corrélation"><i class="fa fa-check"></i><b>3.1</b> de la covariance à la corrélation</a></li>
+<li class="chapter" data-level="3.2" data-path="la-corrélation.html"><a href="la-corrélation.html#la-corrélation-1"><i class="fa fa-check"></i><b>3.2</b> la corrélation :</a></li>
+<li class="chapter" data-level="3.3" data-path="la-corrélation.html"><a href="la-corrélation.html#pearson-correlation-coefficient"><i class="fa fa-check"></i><b>3.3</b> Pearson correlation coefficient</a></li>
+<li class="chapter" data-level="3.4" data-path="la-corrélation.html"><a href="la-corrélation.html#spearmans-rank-correlation-coefficient"><i class="fa fa-check"></i><b>3.4</b> Spearman’s rank correlation coefficient</a></li>
+<li class="chapter" data-level="3.5" data-path="la-corrélation.html"><a href="la-corrélation.html#corrélation-partielle"><i class="fa fa-check"></i><b>3.5</b> Corrélation partielle</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html"><i class="fa fa-check"></i><b>4</b> Vizualization of covariance and correlation</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#différentes-tentatives-pour-représenter-la-covariance"><i class="fa fa-check"></i><b>4.1</b> Différentes tentatives pour représenter la covariance</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance"><i class="fa fa-check"></i><b>4.1.1</b> A Geometrical Interpretation of an Alternative Formula for the Sample Covariance</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#covariance-as-signed-area-of-rectangles"><i class="fa fa-check"></i><b>4.2</b> Covariance as Signed Area of Rectangles :</a></li>
+<li class="chapter" data-level="4.3" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#notre-projet-le-package-plotnetrec"><i class="fa fa-check"></i><b>4.3</b> Notre projet : le package plotnetrec</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><a href="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><i class="fa fa-check"></i><b>5</b> Diagramme de régression et représentation du coefficient de détermination</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><a href="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html#ols-deux-variables"><i class="fa fa-check"></i><b>5.1</b> OLS deux variables</a></li>
+<li class="chapter" data-level="5.2" data-path="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><a href="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html#measuring-overall-variation-from-the-sample-line"><i class="fa fa-check"></i><b>5.2</b> Measuring overall variation from the sample line</a></li>
+<li class="chapter" data-level="5.3" data-path="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><a href="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html#ols-3-variables"><i class="fa fa-check"></i><b>5.3</b> OLS 3 variables</a></li>
+<li class="chapter" data-level="5.4" data-path="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><a href="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html#ols-3-variables-et-plus"><i class="fa fa-check"></i><b>5.4</b> OLS 3 variables et plus</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="reoprésentation-de-la-régression-linéaire.html"><a href="reoprésentation-de-la-régression-linéaire.html"><i class="fa fa-check"></i><b>6</b> Reoprésentation de la régression linéaire</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="reoprésentation-de-la-régression-linéaire.html"><a href="reoprésentation-de-la-régression-linéaire.html#etat-des-lieux-de-la-visualisation-de-la-régression"><i class="fa fa-check"></i><b>6.1</b> Etat des lieux de la visualisation de la régression</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="reoprésentation-de-la-régression-linéaire.html"><a href="reoprésentation-de-la-régression-linéaire.html#more-on-venn-diagrams-for-regression"><i class="fa fa-check"></i><b>6.1.1</b> More on Venn Diagrams for Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="reoprésentation-de-la-régression-linéaire.html"><a href="reoprésentation-de-la-régression-linéaire.html#notre-projet-le-package-plotnetrec-1"><i class="fa fa-check"></i><b>6.2</b> Notre projet: le package plotnetrec</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="etat-des-lieux-des-package-r-en-économétrie-de-la-visualisation.html"><a href="etat-des-lieux-des-package-r-en-économétrie-de-la-visualisation.html"><i class="fa fa-check"></i><b>7</b> Etat des lieux des package R en économétrie de la visualisation</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Econometrics vizualisation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="la-corrélation" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> La corrélation</h1>
+<div id="de-la-covariance-à-la-corrélation" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> de la covariance à la corrélation</h2>
+<p>La covariance de deux variables aléatoires indépendantes est nulle, bien que la réciproque ne soit pas toujours vraie.</p>
+<p>La forme normalisée de la matrice de covariance est la matrice de corrélation.</p>
+<p>“The normalized version of the covariance, the correlation coefficient, however, shows by its magnitude the strength of the linear relation.”</p>
+<ul>
+<li>Both covariance and correlation measure the relationship and the dependency between two variables.</li>
+<li>Covariance indicates the direction of the linear relationship between variables.</li>
+<li>Correlation measures both the strength and direction of the linear relationship between two variables.</li>
+<li>Correlation values are standardized.</li>
+<li>Covariance values are not standardized.</li>
+</ul>
+</div>
+<div id="la-corrélation-1" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> la corrélation :</h2>
+<p>In statistics, correlation or dependence is any statistical relationship, whether causal or not, between two random variables or bivariate data.</p>
+<p>In the broadest sense correlation is any statistical association, though it actually refers to the degree to which a pair of variables are linearly related.</p>
+<p>There are several correlation coefficients, often denoted <span class="math inline">\(\rho\)</span> or <span class="math inline">\(r\)</span>, measuring the degree of correlation. The most common of these is the Pearson correlation coefficient, which is sensitive only to a linear relationship between two variables (which may be present even when one variable is a nonlinear function of the other). Other correlation coefficients – such as Spearman’s rank correlation – have been developed to be more robust than Pearson’s, that is, more sensitive to nonlinear relationships.</p>
+</div>
+<div id="pearson-correlation-coefficient" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Pearson correlation coefficient</h2>
+<p><span class="math display">\[\rho=\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}\]</span></p>
+<p>The Pearson correlation coefficient is a bounded index (i.e., <span class="math inline">\(-1 \leq \rho \leq 1\)</span>) that provides a unitless measure for the strength and direction of the association between two variables.</p>
+</div>
+<div id="spearmans-rank-correlation-coefficient" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Spearman’s rank correlation coefficient</h2>
+<p>measures the association based on the ranks of the variables.</p>
+<p><span class="math display">\[\hat{\theta}=\frac{\sum_{i=1}^n(R_i-\bar{R}(S_i-\bar{S}))}{\sqrt{\sum_{i=1}^n(R_i-\bar{R})^2\sum_{i=1}^n(S_i-\bar{S})^2}}\]</span></p>
+<p>where <span class="math inline">\(R_i\)</span> and <span class="math inline">\(S_i\)</span> are the rank of the <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> values, respectively.</p>
+<p>Note that this is just the estimated Pearson’s correlation coeffcient, but the values of the variables have been replaced by their respective ranks.</p>
+</div>
+<div id="corrélation-partielle" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Corrélation partielle</h2>
+<p>Le coefficient de corrélation partielle, noté ici <span class="math inline">\(r_{AB.C}\)</span>, permet de connaître la valeur de la corrélation entre deux variables A et B, si la variable C était demeurée constante pour la série d’observations considérées.</p>
+<p>Dit autrement, le coefficient de corrélation partielle <span class="math inline">\(r_{AB.C}\)</span> est le coefficient de corrélation totale entre les variables A et B quand on leur a retiré leur meilleure explication linéaire en termes de C. Il est donné par la formule :</p>
+<p><span class="math display">\[r_{AB.C}=\frac{r_{AB}-r_{AC} \cdot r_{BC}}{\sqrt{1-r_{AC}^2} \cdot \sqrt{1-r_{BC}^2}}\]</span></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="la-covariance.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="vizualization-of-covariance-and-correlation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Correlation.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

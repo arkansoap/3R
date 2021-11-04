@@ -1,0 +1,43 @@
+# La covariance 
+
+## Rappel de la définition de la variance :
+
+En statistique et en théorie des probabilités, la variance est une mesure de la dispersion des valeurs d'un échantillon ou d'une distribution de probabilité. Elle exprime la moyenne des carrés des écarts à la moyenne, aussi égale à la différence entre la moyenne des carrés des valeurs de la variable et le carré de la moyenne, selon le théorème de König-Huygens. 
+
+- Classical formula of variance  : 
+
+$$\sigma^2_x=\frac{1}{n}\sum_{x=1}^{n}(x_i - \bar{x})^2 = \frac{1}{n}\sum_{x=1}^{n}x_i^2 - \bar{x}^2 $$
+
+- A new proposition for variance formula[@Heffernan]: 
+
+$$\sigma^2_x= \frac{1}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}(x_i-x_j)^2$$
+
+- Variance vs. Covariance: 
+
+Variance and covariance are mathematical terms frequently used in statistics and probability theory. Variance refers to the spread of a data set around its mean value, while a covariance refers to the measure of the directional relationship between two random variables.
+
+## Définition littéraire usuelle de la covariance :
+
+"A covariance refers to the measure of how two random variables will change when they are compared to each other."
+
+La covariance est une extension de la notion de variance.  La covariance entre deux variables aléatoires est un nombre permettant de quantifier leurs écarts conjoints par rapport à leurs espérances respectives.
+
+Intuitivement, la covariance est une mesure de la variation simultanée de deux variables aléatoires. C'est-à-dire que la covariance devient plus positive pour chaque couple de valeurs qui diffèrent de leur moyenne dans le même sens, et plus négative pour chaque couple de valeurs qui diffèrent de leur moyenne dans le sens opposé.
+
+La covariance de deux variables aléatoires indépendantes est nulle, bien que la réciproque ne soit pas toujours vraie.
+
+Ce concept se généralise naturellement à plusieurs variables (vecteur aléatoire) par la matrice de covariance (ou matrice de variance-covariance) qui, pour un ensemble de p variables aléatoires réelles $X_1$, etc.,$Xp$ est la matrice carrée dont l'élément de la ligne i et de la colonne j est la covariance des variables $X_i$ et $X_j$. Cette matrice permet de quantifier la variation de chaque variable par rapport à chacune des autres.
+
+"The sign of the covariance therefore shows the tendency in the linear relationship between the variables. The magnitude of the covariance is not easy to interpret because it is not normalized and hence depends on the magnitudes of the variables". 
+
+## Définitions mathématique usuelle et alternatives
+
+- covariance formula :
+
+$$cov(X,Y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y}) $$
+
+- formula from heffernan definition of covariance : 
+
+$$cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)$$
+
+- lister autres ...

@@ -24,7 +24,6 @@
 
 # Notes séances avec Mr Bousquet: 
 
-## Première séance :
 
 - attention à la rédaction et au plan (voir docs rédaction)
 - visualisation en économétrie 
@@ -63,9 +62,12 @@ départ, article de li > impasse ds représentation en triangle
 
 test : faire varier nb d 'observations 
 
-## Deuxième séance 
-
 - pente est l élément principal (variation y / variation X)
+
+- qu'est ce que l'économétrie? corrélation / regression / causalité 
+
+- hayek kennedy
+
 
 ### covariance representation
 
@@ -286,7 +288,6 @@ Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-tri
 
     b. Le R2
 
-# transcription scan mr bousquet 
 
 # Corrélation partielle 
 
@@ -309,3 +310,22 @@ Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-tri
   
  - Pour déterminer la linéarité, on peut commencer par calculer la droite approchée par la méthode des moindres carrés, par exemple (d'autres méthodes de calcul existent). Ensuite, il suffit de quantifier l'écart de la réponse du système par rapport à cette droite. 
 
+
+# idée de plan personelle 
+
+1. Intro : visualisation de l'économétrie
+    - Qu'est ce que l'économétrie?
+        définitions, enjeux (causalité, régression, ...)
+    - intéret de la visualisation
+2. Corrélation et Covariance 
+    - Covariance (def et viz)
+    - Corélation (def et viz)
+        - différent types de corrélation
+    - De la covariance à la corrélation
+    - corrélation partielle
+3. Les modèles de regressions 
+4. test de linéarité
+5. package plotnetrec
+6. bibliographie
+    - articles théoriques
+    - packages R existant

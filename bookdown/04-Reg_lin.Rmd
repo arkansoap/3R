@@ -1,0 +1,67 @@
+# Diagramme de régression et représentation du coefficient de détermination
+
+## OLS deux variables 
+
+- quelques notations pouvant être utiles:
+
+$$S_{xx} = \sum_{i=1}^n(x_i -\bar{x})^2 $$
+$$S_{yy} = \sum_{i=1}^n(y_i -\bar{y})^2 $$
+$$S_{xy} = \sum_{i=1}^n(x_i -\bar{x})(y_i -\bar{y}) $$
+- simple linear regression model 
+
+$$y_i = \beta_0 + \beta_1x_i +  \epsilon_i$$ 
+where $\epsilon_i$ is te error or deviation of $y_i$ from the line $\beta_0 + \beta_1x_i$
+
+- Ordinary least square 
+
+We need to find the values of $\beta_0$ and $\beta_1$ that minimize the criterion : 
+$$S = \sum_{i=1}^n \epsilon_i^2 = \sum_{i=1}^n (y_i - (\beta_0 + \beta_1x_i))^2$$
+
+Minimize this sum gives :
+
+$$\hat{\beta_0}= \bar{y} - \hat{\beta_1}\bar{x}$$
+$$\hat{\beta_1}= \frac{\sum_{i=1}^n(x_i -\bar{x})(y_i -\bar{y})}{\sum_{i=1}^n(x_i -\bar{x})^2}$$
+
+- estimated simple linear regression model :
+
+$$y_i = \hat{\beta_0} + \hat{\beta_1x_i} +  e_i$$ 
+
+from which we can calculate a few additionnal quantities :
+
+- $\hat{y_i} = \hat{\beta_0} + \hat{\beta_1x_i}$ ; $\hat{y_i}$ is the **predicted value** (or predicted fit) of y for the $i^{th}$ observation in the sample.
+
+- $e_i=y_i -\hat{y_i}$ ; is the **observed error** (or residual) for the $i^{th}$ observation in the sample.
+
+- $SSE = \sum_{i=1}^n (y_i -\hat{y_i})^2$ ; is the **sum of squared observed errors** for all observations in a sample of size $n$
+
+## Measuring overall variation from the sample line
+
+- $MSE = \frac{SSE}{n-p}$ , where $p$ is the number of parametrers of the regression equation. $p=2$ for regression with only one variable. 
+
+- $s = RMSE = \sqrt{(MSE)}$
+
+- $SSTO=\sum_{i=1}^n (y_i -\bar{y_i})^2$
+
+- coefficient of determination :
+
+$R^2 = \frac{SSTO-SSE}{SSTO} = \frac{SSR}{SSTO}$ is the proportion of variation in $y$ that is explained by $x$.
+
+c'est-à-dire que le coefficient de détermination est alors le rapport de la variance expliquée par la régression SSE sur la variance totale SST.
+
+Le coefficient de détermination est le carré du coefficient de corrélation linéaire R entre les valeurs prédites $\hat{y}_{i}$ et les mesures $y_i$:
+
+$$R^2=corr(\hat{y}_{i},y_i)$$
+
+$R^2$ does not indicate whether:
+
+- the independent variables are a cause of the changes in the dependent variable;
+- omitted-variable bias exists;
+- the correct regression was used;
+- the most appropriate set of independent variables has been chosen;
+- there is collinearity present in the data on the explanatory variables;
+- the model might be improved by using transformed versions of the existing set of independent variables;
+- there are enough data points to make a solid conclusion.
+
+## OLS 3 variables
+
+## OLS 3 variables et plus 

@@ -1,0 +1,10 @@
+# Reoprésentation de la régression linéaire 
+
+## Etat des lieux de la visualisation de la régression
+
+### More on Venn Diagrams for Regression
+
+Kennedy [@kennedy] extended the Venn diagram to the exposition of bias and variance in the context of the classical linear regression (CLR) model, written as y = Xb + e .
+
+## Notre projet: le package plotnetrec
+
