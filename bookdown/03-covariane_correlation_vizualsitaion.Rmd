@@ -18,9 +18,9 @@ Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-tri
 knitr::include_graphics("hayes.PNG")
 ```
 
-## Covariance as Signed Area of Rectangles : 
+### Covariance as Signed Area of Rectangles : 
 
-Cet article [@Chudzicki] a été écrit suite à une conversation trrès intéressante sur le site **stats.statckexchange** (https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean.) Le sujet initial de cette conversation était : comment expliquer la covariance à quelqu'un qui ne comprends que la notion de moyenne?  
+Cet article [@chudzicki] a été écrit suite à une conversation trrès intéressante sur le site **stats.statckexchange** (https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean.) Le sujet initial de cette conversation était : comment expliquer la covariance à quelqu'un qui ne comprends que la notion de moyenne?  
 
 mode d'emploi : 
 

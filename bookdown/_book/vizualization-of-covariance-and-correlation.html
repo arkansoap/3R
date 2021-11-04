@@ -115,9 +115,9 @@ div.csl-indent {
 <li class="chapter" data-level="4.1" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#différentes-tentatives-pour-représenter-la-covariance"><i class="fa fa-check"></i><b>4.1</b> Différentes tentatives pour représenter la covariance</a>
 <ul>
 <li class="chapter" data-level="4.1.1" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance"><i class="fa fa-check"></i><b>4.1.1</b> A Geometrical Interpretation of an Alternative Formula for the Sample Covariance</a></li>
+<li class="chapter" data-level="4.1.2" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#covariance-as-signed-area-of-rectangles"><i class="fa fa-check"></i><b>4.1.2</b> Covariance as Signed Area of Rectangles :</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#covariance-as-signed-area-of-rectangles"><i class="fa fa-check"></i><b>4.2</b> Covariance as Signed Area of Rectangles :</a></li>
-<li class="chapter" data-level="4.3" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#notre-projet-le-package-plotnetrec"><i class="fa fa-check"></i><b>4.3</b> Notre projet : le package plotnetrec</a></li>
+<li class="chapter" data-level="4.2" data-path="vizualization-of-covariance-and-correlation.html"><a href="vizualization-of-covariance-and-correlation.html#notre-projet-le-package-plotnetrec"><i class="fa fa-check"></i><b>4.2</b> Notre projet : le package plotnetrec</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><a href="diagramme-de-régression-et-représentation-du-coefficient-de-détermination.html"><i class="fa fa-check"></i><b>5</b> Diagramme de régression et représentation du coefficient de détermination</a>
 <ul>
@@ -171,10 +171,9 @@ div.csl-indent {
 <p><strong><em>A détailler et reformuler</em></strong></p>
 <p><img src="hayes.PNG" /><!-- --></p>
 </div>
-</div>
-<div id="covariance-as-signed-area-of-rectangles" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> Covariance as Signed Area of Rectangles :</h2>
-<p>Cet article <span class="citation">(<a href="#ref-Chudzicki" role="doc-biblioref"><strong>Chudzicki?</strong></a>)</span> a été écrit suite à une conversation trrès intéressante sur le site <strong>stats.statckexchange</strong> (<a href="https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean" class="uri">https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean</a>.) Le sujet initial de cette conversation était : comment expliquer la covariance à quelqu’un qui ne comprends que la notion de moyenne?</p>
+<div id="covariance-as-signed-area-of-rectangles" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Covariance as Signed Area of Rectangles :</h3>
+<p>Cet article <span class="citation">(<a href="#ref-chudzicki" role="doc-biblioref">Chudzicki 2014</a>)</span> a été écrit suite à une conversation trrès intéressante sur le site <strong>stats.statckexchange</strong> (<a href="https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean" class="uri">https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean</a>.) Le sujet initial de cette conversation était : comment expliquer la covariance à quelqu’un qui ne comprends que la notion de moyenne?</p>
 <p>mode d’emploi :</p>
 <ul>
 <li>Draw all possible such rectangles. Color them transparently, making the positive rectangles red (say) and the negative rectangles “anti-red” (blue).</li>
@@ -199,8 +198,9 @@ div.csl-indent {
 <p>A geometric outlier (one point standing away from the mass) will create many large rectangles in association with all the other points. It alone can create a net positive or negative amount of red in the overall picture.”</p>
 <p><img src="covRect.PNG" /><!-- --></p>
 </div>
-<div id="notre-projet-le-package-plotnetrec" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Notre projet : le package plotnetrec</h2>
+</div>
+<div id="notre-projet-le-package-plotnetrec" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Notre projet : le package plotnetrec</h2>
 <p>Une part du package que nous en sommes en train de développer est de présenter différentes représentations de la covariance.</p>
 <p><strong><em>mettre schémas de représentation covariance issu de pltnetrec avec explications</em></strong></p>
 
@@ -208,6 +208,9 @@ div.csl-indent {
 </div>
 <h3>References</h3>
 <div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-chudzicki" class="csl-entry">
+Chudzicki, David. 2014. <em>Covariance as Signed Area of Rectangles</em>. <a href="https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/">https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/</a>.
+</div>
 <div id="ref-Hayes" class="csl-entry">
 Hayes, Kevin. 2011. <em>Geometrical Interpretation of an Alternative Formula for the Sample Covariance</em>. Taylor; Francis. <a href="https://www.jstor.org/stable/23020503">https://www.jstor.org/stable/23020503</a>.
 </div>

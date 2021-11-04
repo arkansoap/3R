@@ -1,15 +1,94 @@
 {
     "sources": [
         {
+            "author": [
+                {
+                    "family": "Kennedy",
+                    "given": "Peter E."
+                }
+            ],
+            "id": "kennedy",
+            "issued": {
+                "date-parts": [
+                    [
+                        2002
+                    ]
+                ]
+            },
+            "publisher": "journal of statistics Education Vol 10, Number 1",
+            "publisher-place": "Simon Fraser University, Canada",
+            "title": "More on venn diagrams for regression",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.jstor.org/stable/23020503",
+            "author": [
+                {
+                    "family": "Hayes",
+                    "given": "Kevin"
+                }
+            ],
+            "id": "Hayes",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011
+                    ]
+                ]
+            },
+            "publisher": "Taylor; Francis",
+            "title": "Geometrical interpretation of an alternative formula for the sample covariance",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.jstor.org/stable/2684480",
+            "author": [
+                {
+                    "family": "Heffernan",
+                    "given": "Peter M."
+                }
+            ],
+            "id": "Heffernan",
+            "issued": {
+                "date-parts": [
+                    [
+                        1988
+                    ]
+                ]
+            },
+            "publisher": "Taylor; Francis",
+            "title": "New measures of spread and a simpler formula for the normal distribution",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/",
+            "author": [
+                {
+                    "family": "Chudzicki",
+                    "given": "David"
+                }
+            ],
+            "id": "chudzicki",
+            "issued": {
+                "date-parts": [
+                    [
+                        2014
+                    ]
+                ]
+            },
+            "title": "Covariance as signed area of rectangles",
+            "type": "book"
+        },
+        {
             "URL": "http://yihui.org/knitr/",
             "author": [
                 {
-                    "family": "Xie",
-                    "given": "Yihui"
+                    "family": "Kennedy",
+                    "given": "Peter E."
                 }
             ],
             "edition": "2nd",
-            "id": "xie2015",
+            "id": "plop",
             "issued": {
                 "date-parts": [
                     [
@@ -18,9 +97,9 @@
                 ]
             },
             "note": "ISBN 978-1498716963",
-            "publisher": "Chapman; Hall/CRC",
+            "publisher": "journal",
             "publisher-place": "Boca Raton, Florida",
-            "title": "Dynamic documents with R and knitr",
+            "title": "More on venn diagrams for regression",
             "type": "book"
         }
     ],
