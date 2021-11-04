@@ -1,0 +1,110 @@
+\documentclass{beamer}
+
+\usepackage{tikz}
+
+\usepackage[utf8]{inputenc}
+\useinnertheme[shadow=true]{rounded}
+\useoutertheme{infolines}
+\usecolortheme{beaver}
+
+\setbeamerfont{block title}{size={}}
+\setbeamercolor{titlelike}{parent=structure,bg=white}
+%title information
+\title{Visualisation in econometrics}
+\author{FUCHEZ Thibault, \\
+CHAVENEAU Lucas, \\ 
+GUICHARD Allan}
+\date{November 2nd, 2021}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}{Table of content}
+    \tableofcontents[hideallsubsections]{}
+\end{frame}
+
+\section{Partie 1 : Covariance}
+
+\subsection{Definition}
+
+\begin{frame}
+On commence par définir de manière littéraire la covariance
+    \begin{block}{What is Covariance ?}
+        A covariance refers to the measure of how two random variables will change when they are compared to each other.
+    \end{block}
+    \begin{block}{Spearman's rank correlation coefficient}
+        Measures the association based on the ranks of the variables.
+    \end{block}
+    $$
+    \hat{\theta}=\frac{\sum_{i=1}^n(R_i-\bar{R}(S_i-\bar{S}))}{\sqrt{\sum_{i=1}^n(R_i-\bar{R})^2\sum_{i=1}^n(S_i-\bar{S})^2}}
+    $$
+
+where $R_i$ and $S_i$ are the rank of the $x_i$ and $y_i$ values, respectively.
+\end{frame}
+
+\subsection{Hypothesis}
+
+\begin{frame}{A bit Theory}
+
+On écris les hypothèses qui régissent les calculs :\\
+\vspace{10}
+Assume 2 random variables $X, Y$ and a random bivariate sample $(x_1, y_1),\ (x_2, y_2),$  \ldots , $(x_N, y_N)$. \\
+\vspace{10}
+Let's consider that the observations are independant of each other, however X, Y could have an impact on each other. 
+\end{frame}
+
+\begin{frame}{A bit Theory}
+Classical Covariance:
+    \begin{equation}
+        \sigma^2_x=\frac{1}{n}\sum_{x=1}^{n}(x_i - \bar{x})^2 = \frac{1}{n}\sum_{x=1}^{n}x_i^2 - \bar{x}^2 
+    \end{equation}
+Hefferman Covariance:
+    \begin{equation}
+        cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)
+    \end{equation}
+\end{frame}
+
+\subsection{Issues about the covariance graphical representation}
+\begin{frame}{How it looks ?!}
+Montrer quelques représentations de la Covariance : \\
+
+The first use of Venn Diagrams : Cohen, J., and Cohen, P. (1975), Applied Multiple Regression/Correlation Analysis for the Behavioral Sciences, Hillside, NJ: Lawrence Erlbaum Associates.
+Peter Kennedy : 2001 : Venn Diagrams for Regression
+Kevin Hayes : Mai 2011 : Covariance triangle rectangle
+Scatter_Plot : Qui l'a fait en premier ?? Article qui relate la covariance rectangle ?
+
+L'étape d'après ? 
+\begin{itemize}
+    \item Covariance retangle très coûteuse en terme de performance ! 
+\end{itemize}
+
+
+
+
+
+\end{frame}
+
+\subsection{}
+
+
+
+\subsection{Visualisation in Econometrics}
+
+\begin{frame}{Contextualisation}
+Explain the issues about the graphic representation in econometrics from the start: 
+
+What are the best representation nowadays :
+
+
+\end{frame}
+
+Lister ici les documents faisant référence à la chronologie de la visualisation en économétrie : 
+
+Diagramme de Venn
+Représentation de la covariance en triangle rectangle
+Régréssion 
+etc... 
+
+\end{document}
