@@ -1,43 +1,131 @@
-# La covariance 
+# Covariance 
 
-## Rappel de la définition de la variance :
+## Reminder of the definition of variance
 
-En statistique et en théorie des probabilités, la variance est une mesure de la dispersion des valeurs d'un échantillon ou d'une distribution de probabilité. Elle exprime la moyenne des carrés des écarts à la moyenne, aussi égale à la différence entre la moyenne des carrés des valeurs de la variable et le carré de la moyenne, selon le théorème de König-Huygens. 
+In statistics and probability theory, the variance is a measure of the dispersion of the values of a sample or a probability distribution. It expresses the average of the squares of the deviations from the mean, also equal to the difference between the average of the squares of the values of the variable and the square of the mean, according to the König-Huygens theorem. 
 
-- Classical formula of variance  : 
+- Classical formula of variance  
 
-$$\sigma^2_x=\frac{1}{n}\sum_{x=1}^{n}(x_i - \bar{x})^2 = \frac{1}{n}\sum_{x=1}^{n}x_i^2 - \bar{x}^2 $$
+$$\sigma^2_x=\frac{1}{n}\sum_{x=1}^{n}(x_i - \bar{x})^2 = \frac{1}{n}\sum_{x=1}^{n}x_i^2 - \bar{x}^2$$
 
 - A new proposition for variance formula[@Heffernan]: 
 
 $$\sigma^2_x= \frac{1}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}(x_i-x_j)^2$$
+This formulation (extended to covariance) will be discussed again in the paper. Intuitively, we can see here the geometrical aspect of the variance of x perceived as the expression of a square.
 
 - Variance vs. Covariance: 
 
 Variance and covariance are mathematical terms frequently used in statistics and probability theory. Variance refers to the spread of a data set around its mean value, while a covariance refers to the measure of the directional relationship between two random variables.
 
-## Définition littéraire usuelle de la covariance 
+## Usual literary definition of covariance 
 
-"A covariance refers to the measure of how two random variables will change when they are compared to each other."
+Covariance is an extension of the notion of variance.  The covariance between two random variables is a number allowing to quantify their joint deviations from their respective expectations.
 
-La covariance est une extension de la notion de variance.  La covariance entre deux variables aléatoires est un nombre permettant de quantifier leurs écarts conjoints par rapport à leurs espérances respectives.
+A covariance refers to the measure of how two random variables will change when they are compared to each other.
 
-Intuitivement, la covariance est une mesure de la variation simultanée de deux variables aléatoires. C'est-à-dire que la covariance devient plus positive pour chaque couple de valeurs qui diffèrent de leur moyenne dans le même sens, et plus négative pour chaque couple de valeurs qui diffèrent de leur moyenne dans le sens opposé.
+Intuitively, covariance is a measure of the simultaneous variation of two random variables. That is, the covariance becomes more positive for each pair of values that differ from their mean in the same direction, and more negative for each pair of values that differ from their mean in the opposite direction.
 
-La covariance de deux variables aléatoires indépendantes est nulle, bien que la réciproque ne soit pas toujours vraie.
+The sign of the covariance therefore shows the tendency in the linear relationship between the variables. The magnitude of the covariance is not easy to interpret because it is not normalized and hence depends on the magnitudes of the variables.
 
-Ce concept se généralise naturellement à plusieurs variables (vecteur aléatoire) par la matrice de covariance (ou matrice de variance-covariance) qui, pour un ensemble de p variables aléatoires réelles $X_1$, etc.,$Xp$ est la matrice carrée dont l'élément de la ligne i et de la colonne j est la covariance des variables $X_i$ et $X_j$. Cette matrice permet de quantifier la variation de chaque variable par rapport à chacune des autres.
+The covariance of two independent random variables is zero, although the converse is not always true.
 
-"The sign of the covariance therefore shows the tendency in the linear relationship between the variables. The magnitude of the covariance is not easy to interpret because it is not normalized and hence depends on the magnitudes of the variables". 
+This concept is naturally generalized to several variables (random vector) by the covariance matrix (or variance-covariance matrix) which, for a set of p real random variables $X_1$, etc., $Xp$ is the square matrix whose element of row i and column j is the covariance of variables $X_i$ and $X_j$. This matrix allows us to quantify the variation of each variable with respect to each of the others.
 
-## Définitions mathématique usuelle et alternatives
+## Usual and alternative mathematical definitions
 
-- covariance formula :
+### Usual definition
 
-$$cov(X,Y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y}) $$
+- covariance formula:
+
+For two jointly distributed real-valued random variables X and Y with finite, the covariance is defined as the expected value (or mean) of the product of their deviations from their individual expected values
+$$Cov(X,Y)=\mathbb{E}((X-\mathbb{E}(X))\times(Y-\mathbb{E}(Y)))$$
+where $\mathbb{E}(X)$ is the expected value of X, also known as the mean of X. The covariance is also sometimes denoted  $\sigma_{X,Y}$, in analogy to variance. By using the linearity property of expectations, this can be simplified to the expected value of their product minus the product of their expected values:
+
+\begin{align}
+  Cov(X,Y) &=\mathbb{E}((X-\mathbb{E}(X))\times(Y-\mathbb{E}(Y))) \\
+  &=\mathbb{E}(XY- X\mathbb{E}(Y) - \mathbb{E}(X)Y + \mathbb{E}(x)\mathbb{E}(Y)) \\
+  &= \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y) - \mathbb{E}(x)\mathbb{E}(Y) + \mathbb{E}(x)\mathbb{E}(Y) \\
+  &= \mathbb{E}(XY)-\mathbb{E}(X)\mathbb{E}(Y)
+\end{align}
+
+The empirical covariance of a sample is defined by 
+$$Cov(x,~y)=\frac{1}{N}
+\sum_{i=1}^{N} (x_i-\overline{x})(y_i -\overline{y})$$
+With
+$\overline{x}=\frac{1}{N}\sum_{i=1}^{N} x_j$ et $\overline{y}=\frac{1}{N}\sum_{i=1}^{N} y_j$ 
+An unbiased estimator of the population covariance is defined by
+$$Cov(x,~y)=\frac{1}{(N-1)}
+\sum_{i=1}^{N} (x_i-\overline{x})(y_i -\overline{y})$$
+
+or equivalently :
+$$Cov(x,~y)=\frac{N}{N-1}(\overline{xy}-\overline{x}~\overline{y})$$
+
+### Alternative definition, a story of rectangles ...
 
 - formula from heffernan definition of covariance : 
 
 $$cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)$$
 
-- lister autres ...
+Let be two random variables $(X,~Y)$, and a sample of N pairs of independent observations
+$$(x_1,~y_1),(x_2,~y_2),\dotsi (x_N,~y_N)$$.
+
+Let us consider two observations drawn at random of index $k$, $l$ and let us calculate the mathematical expectation of the area of the rectangle formed by the two chosen points:
+
+$$\mathbb{E}(x_k-x_l)(y_k-y_l)$$
+
+So 
+$$\mathbb{E}(x_ky_k-x_ky_l-x_ly_k+x_ly_l)$$
+$$\mathbb{E}(x_ky_k) -\mathbb{E}(x_k)\mathbb{E}(y_l) -\mathbb{E}(x_l)\mathbb{E}(y_k)+ \mathbb{E}(x_ly_l)$$
+$$2\mathbb{E}(XY)-2\mathbb{E}(X)\mathbb{E}(Y)$$
+
+Hence, covariance:
+
+$$\mathbb{E}(x_k-x_l)(y_k-y_l)= 2~~ Cov(X,Y)$$
+\begin{paracol}{2}
+    \begin{leftcolumn}
+\begin{figure} 
+\begin{tikzpicture}
+\draw  [-,ultra thick](0,0) -- (4,0) -- (4,6) -- (0,6) -- (0,0);
+%\node[text width=2cm] at (3,-0.5){$\sqrt{2}~\sigma_x$};
+%\node[text width=2cm] at (5.5,3){$\beta\sqrt{2}~\sigma_x$};
+\filldraw[draw=black,fill=blue!20] (0,0) rectangle (4,6);
+\draw[->,dotted] (0,0)--(4,6);
+\node[text width=2cm] at (5.2,6){$(x_k,y_k)$};
+\node[text width=2cm] at (-0.2,0){$(x_l,y_l)$};
+\fill (4,6)  circle[radius=3pt];
+\fill (0,0)  circle[radius=3pt];
+\node[text width=2cm] at (2,3){$2Cov(x,y)$};
+\end{tikzpicture}
+\caption{Corr\'elation positive}
+\end{figure}
+ \end{leftcolumn}
+  \begin{rightcolumn} %{0.48\textwidth}
+  \begin{figure}
+    \begin{tikzpicture}
+\draw [-,ultra thick](0,0) -- (4,0) -- (4,6) -- (0,6) -- (0,0);
+%\node[text width=2cm] at (3,-0.5){$\sqrt{2}~\sigma_x$};
+%\node[text width=2cm] at (5.5,3){$\beta\sqrt{2}~\sigma_x$};
+\filldraw[draw=black,fill=red!20] (0,0) rectangle (4,6);
+\draw[->,dotted] (0,6)--(4,0);
+\node[text width=2cm] at (-0.3,6){$(x_k,y_k)$};
+\node[text width=2cm] at (5.2,0){$(x_l,y_l)$};
+%\draw (0,6) node[left] {$(x_k,y_k)$};
+%\draw (6,0) node[left] {$(x_l,y_l)$};
+\fill (0,6)  circle[radius=3pt];
+\fill (4,0)  circle[radius=3pt];
+\node[text width=2cm] at (2,3){$2Cov(x,y)$};
+\end{tikzpicture}
+\caption{Corr\'elation n\'egative}
+\end{figure}
+    \end{rightcolumn}
+\end{paracol}
+
+On a sample of N pairs of observations $(x_i,y_i)~i=1,\dots, N$ the empirical covariance can also be computed as the average of the $N(N-1)$ areas of the $(x_i,y_i)$ and $(x_j,y_j)$ vertex rectangles for $i=1,\dots, N-1$ and $j=1,\dots, N$
+Note that the $N$ rectangles (degenerate, of zero area) of vertex $(x_i,y_i)$ and $(x_j,y_j)$ with $i=j$ should not be taken into account in the calculation. 
+$$Cov(x,~y)=\frac{1}{N(N-1)}\sum_{i=1}^{N-1} \sum_{j=i+1}^{N}~(x_i-x_j)(y_i-y_j)$$
+
+An equivalent definition is to consider half (due to symmetry) of the average of the $N(N-1)$ areas of the rectangles of vertices $(x_i,y_i)$ and $(x_j,y_j)$ for $i=1,\dots, N$ and $j=1,\dots, N$ (evidence in annexes).
+
+$$Cov(x,~y)=\frac{1}{2N(N-1)}
+\sum_{i=1}^{N} \sum_{j=1}^{N}~(x_i-x_j)(y_i-y_j)$$
+

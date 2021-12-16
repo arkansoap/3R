@@ -1,48 +1,39 @@
-# Vizualization of covariance and correlation
+# Vizualization of covariance
 
-## Différentes tentatives pour représenter la covariance
+## State of the art: different attempts to represent the covariance
 
 ### diagramme de Venn 
 
 > A Venn diagram is a widely used diagram style that shows the logical relation between sets, popularized by John Venn in the 1880s. The diagrams are used to teach elementary set theory, and to illustrate simple set relationships in probability, logic, statistics, linguistics and computer science. A Venn diagram uses simple closed curves drawn on a plane to represent sets. Very often, these curves are circles or ellipses.
 
-*A compléter + insérer diagram*
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{venn_colinearity.PNG}
+    \caption{Ballentine Venn diagrams displaying modest and considerable collinearity.}
+    \label{fig:my_label}
+\end{figure}
 
 ### Visualizing Distributions of Covariance Matrices 
 
-Covariance matrices and their corresponding distributions play an important role in statistics. To understand the properties of distributions, we often rely on visualization methods. [@VisCov]
+>> Covariance matrices and their corresponding distributions play an important role in statistics. To understand the properties of distributions, we often rely on visualization methods. [@VisCov]
 
-But visualizing a distribution in a high-dimensional space is a challenge, with the additional
+Visualizing a distribution in a high-dimensional space is a challenge, with the additional
 difficulty that covariance matrices must be positive semi-definite, a restriction that forces
 the joint distribution of the covariances into an oddly-shaped subregion of the space.
-
-*je suis dépassé par cet article...*
 
 ```{r, echo = FALSE}
 knitr::include_graphics("wtf_covViz.PNG")
 ```
 
-### Visualization of covariance and cross-covariance fields (à ne pas inclure ...)
-
- *A étudier, qu'est ce que covariance fields exactement...? * [@fields] 
- 
-In mathematics, a field is a set on which addition, subtraction, multiplication, and division are defined and behave as the corresponding operations on rational and real numbers do. A field is thus a fundamental algebraic structure which is widely used in algebra, number theory, and many other areas of mathematics.
-
-*les schémas ont l'air intéressant mais les calculs et le sujet ont l'air trop complexes....*
-
-> In this paper, we present a numerical technique to visualize covariance and cross-covariance fields of two-dimensional stochastic simulation.
-
 ### A Geometrical Interpretation of an Alternative Formula for the Sample Covariance
 
-Kevin Hayes [@Hayes] propose une nouvelle interprétation géométrique et visuelle de la covaraiance, à partir de l'application de la formule de la variance poposée par Hefferman. Il étend cette formule à la covariance d'un échantillon pour extraire ses résultats. 
+Kevin Hayes [@Hayes] proposes a new geometric and visual interpretation of covariance, based on the application of Hefferman's formula for variance. He extends this formula to the covariance of a sample to extract his results. 
 
 - formula from heffernan definition of covariance : 
 
 $$cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)$$
 
-Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-triangle formed with the difference vector $(x_i — x_j, y_j)$ as its hypotenuse, where negatively sloped difference tors incur a $(—1)$ sign and positively sloped difference vectors take a $(+1)$ sign. [@Hayes]
-
-***A détailler et reformuler***
+>> Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-triangle formed with the difference vector $(x_i — x_j, y_j)$ as its hypotenuse, where negatively sloped difference tors incur a $(—1)$ sign and positively sloped difference vectors take a $(+1)$ sign. [@Hayes]
 
 ```{r, echo = FALSE}
 knitr::include_graphics("hayes.PNG")
@@ -50,9 +41,9 @@ knitr::include_graphics("hayes.PNG")
 
 ### Covariance as Signed Area of Rectangles 
 
-Cet article [@chudzicki] a été écrit suite à une conversation trrès intéressante sur le site **stats.statckexchange** (https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean.) Le sujet initial de cette conversation était : comment expliquer la covariance à quelqu'un qui ne comprends que la notion de moyenne?  
+This article [@chudzicki] was written following a very interesting conversation on the **stats.statckexchange** site. The initial topic of this conversation was: how to explain covariance to someone who only understands the notion of mean? 
 
-mode d'emploi : 
+**instructions for use :** 
 
 - Draw all possible such rectangles. Color them transparently, making the positive rectangles red (say) and the negative rectangles "anti-red" (blue).
 - The covariance is the net amount of red in the plot (treating blue as negative values).
@@ -79,15 +70,58 @@ A geometric outlier (one point standing away from the mass) will create many lar
 knitr::include_graphics("covRect.PNG")
 ```
 
-### Covariance and regression diagram
+## Our current project: the package plotnetrec
 
-Notre point de départ pour ce package est le travail réalisé par notre professeur [@bousquet]
+### Plotnetrec
 
-*schéma des différentes visualisations de la covariance*
+```{r, echo = FALSE}
+knitr::include_graphics("All.PNG")
+```
 
-## Notre projet : le package plotnetrec
+### Hetrogeneity
 
-Une partie du package que nous en sommes en train de développer consiste à représenter la covariance. 
+\begin{minipage}{0.45\textwidth}
+\centering
+  \includegraphics{graph_plotnetrec_normal.png}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.45\textwidth}
+\centering
+    \includegraphics{plot_rect_normal.png}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\centering
+    \includegraphics{graph_plotnetrec_heterogene.png}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.45\textwidth}
+\centering
+    \includegraphics{graph_rect_heterogene.png}
+\end{minipage}
 
-***mettre schémas de représentation covariance issu de pltnetrec avec explications***
+### Heterosdasticity
 
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{graph_plotnetrec_normal.png}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{plot_rect_normal.png}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{graph_plotnetrect_heterosk.png}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{graph_rect_heterosk.png}
+\end{minipage}
+
+### Non linear relationship
+
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{graph_plotnetrec_normal.png}
+\end{minipage} 
+\hspace{3ex}
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{graph_plotnetrect_nolinear.png}
+\end{minipage} 

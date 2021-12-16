@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Causalité | Econometrics vizualisation</title>
+  <meta name="description" content="First try of bookdown" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Causalité | Econometrics vizualisation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="First try of bookdown" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Causalité | Econometrics vizualisation" />
+  
+  <meta name="twitter:description" content="First try of bookdown" />
+  
+
+<meta name="author" content="Lucas Chaveneau, Thibault Fuchez, Allan Guichard" />
+
+
+<meta name="date" content="2021-12-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="vizualisation-of-regression-and-correlation-beetween-variable.html"/>
+<link rel="next" href="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-is-econometrics"><i class="fa fa-check"></i><b>1.1</b> What is Econometrics</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-about-econometric-visualization"><i class="fa fa-check"></i><b>1.2</b> What about econometric visualization?</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#state-of-the-art"><i class="fa fa-check"></i><b>1.3</b> State of the art…</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#our-project-an-r-package."><i class="fa fa-check"></i><b>1.4</b> Our project, an R package.</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="covariance.html"><a href="covariance.html"><i class="fa fa-check"></i><b>2</b> Covariance</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="covariance.html"><a href="covariance.html#reminder-of-the-definition-of-variance"><i class="fa fa-check"></i><b>2.1</b> Reminder of the definition of variance</a></li>
+<li class="chapter" data-level="2.2" data-path="covariance.html"><a href="covariance.html#usual-literary-definition-of-covariance"><i class="fa fa-check"></i><b>2.2</b> Usual literary definition of covariance</a></li>
+<li class="chapter" data-level="2.3" data-path="covariance.html"><a href="covariance.html#usual-and-alternative-mathematical-definitions"><i class="fa fa-check"></i><b>2.3</b> Usual and alternative mathematical definitions</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="covariance.html"><a href="covariance.html#usual-definition"><i class="fa fa-check"></i><b>2.3.1</b> Usual definition</a></li>
+<li class="chapter" data-level="2.3.2" data-path="covariance.html"><a href="covariance.html#alternative-definition-a-story-of-rectangles"><i class="fa fa-check"></i><b>2.3.2</b> Alternative definition, a story of rectangles …</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="correlation.html"><a href="correlation.html"><i class="fa fa-check"></i><b>3</b> Correlation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="correlation.html"><a href="correlation.html#from-covariance-to-correlation"><i class="fa fa-check"></i><b>3.1</b> from covariance to correlation</a></li>
+<li class="chapter" data-level="3.2" data-path="correlation.html"><a href="correlation.html#correlation-definition"><i class="fa fa-check"></i><b>3.2</b> Correlation definition</a></li>
+<li class="chapter" data-level="3.3" data-path="correlation.html"><a href="correlation.html#galton-a-pioneer-in-the-history-of-correlation"><i class="fa fa-check"></i><b>3.3</b> Galton, a pioneer in the history of correlation</a></li>
+<li class="chapter" data-level="3.4" data-path="correlation.html"><a href="correlation.html#thirteen-ways-to-see-correlation-13cor"><i class="fa fa-check"></i><b>3.4</b> thirteen ways to see correlation <span class="citation">(<span>Rodgers and co 1988</span>)</span></a></li>
+<li class="chapter" data-level="3.5" data-path="correlation.html"><a href="correlation.html#pearson-correlation-coefficient"><i class="fa fa-check"></i><b>3.5</b> Pearson correlation coefficient</a></li>
+<li class="chapter" data-level="3.6" data-path="correlation.html"><a href="correlation.html#spearmans-rank-correlation-coefficient"><i class="fa fa-check"></i><b>3.6</b> Spearman’s rank correlation coefficient</a></li>
+<li class="chapter" data-level="3.7" data-path="correlation.html"><a href="correlation.html#partial-correlation"><i class="fa fa-check"></i><b>3.7</b> Partial Correlation</a></li>
+<li class="chapter" data-level="3.8" data-path="correlation.html"><a href="correlation.html#semi-partial-correlation"><i class="fa fa-check"></i><b>3.8</b> Semi partial Correlation</a></li>
+<li class="chapter" data-level="3.9" data-path="correlation.html"><a href="correlation.html#transitivity-correlation"><i class="fa fa-check"></i><b>3.9</b> Transitivity correlation</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="correlation.html"><a href="correlation.html#distance-correlation"><i class="fa fa-check"></i><b>3.9.1</b> Distance correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="correlation.html"><a href="correlation.html#other-correlations"><i class="fa fa-check"></i><b>3.10</b> Other Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html"><i class="fa fa-check"></i><b>4</b> Vizualization of covariance</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#state-of-the-art-different-attempts-to-represent-the-covariance"><i class="fa fa-check"></i><b>4.1</b> State of the art: different attempts to represent the covariance</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#diagramme-de-venn"><i class="fa fa-check"></i><b>4.1.1</b> diagramme de Venn</a></li>
+<li class="chapter" data-level="4.1.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#visualizing-distributions-of-covariance-matrices"><i class="fa fa-check"></i><b>4.1.2</b> Visualizing Distributions of Covariance Matrices</a></li>
+<li class="chapter" data-level="4.1.3" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance"><i class="fa fa-check"></i><b>4.1.3</b> A Geometrical Interpretation of an Alternative Formula for the Sample Covariance</a></li>
+<li class="chapter" data-level="4.1.4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#covariance-as-signed-area-of-rectangles"><i class="fa fa-check"></i><b>4.1.4</b> Covariance as Signed Area of Rectangles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#our-current-project-the-package-plotnetrec"><i class="fa fa-check"></i><b>4.2</b> Our current project: the package plotnetrec</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#plotnetrec"><i class="fa fa-check"></i><b>4.2.1</b> Plotnetrec</a></li>
+<li class="chapter" data-level="4.2.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#hetrogeneity"><i class="fa fa-check"></i><b>4.2.2</b> Hetrogeneity</a></li>
+<li class="chapter" data-level="4.2.3" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#heterosdasticity"><i class="fa fa-check"></i><b>4.2.3</b> Heterosdasticity</a></li>
+<li class="chapter" data-level="4.2.4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#non-linear-relationship"><i class="fa fa-check"></i><b>4.2.4</b> Non linear relationship</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html"><i class="fa fa-check"></i><b>5</b> Linear regression and first reliability measure</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#ols-two-variables"><i class="fa fa-check"></i><b>5.1</b> OLS two variables</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#simple-linear-regression-model"><i class="fa fa-check"></i><b>5.1.1</b> simple linear regression model</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#measuring-overall-variation-from-the-sample-line"><i class="fa fa-check"></i><b>5.1.2</b> Measuring overall variation from the sample line</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#ols-plus-de-deux-variables"><i class="fa fa-check"></i><b>5.2</b> OLS plus de deux variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html"><i class="fa fa-check"></i><b>6</b> Vizualisation of regression and correlation beetween variable</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#state-of-the-art-1"><i class="fa fa-check"></i><b>6.1</b> State of the art</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#more-on-venn-diagrams-for-regression-figure-6.1"><i class="fa fa-check"></i><b>6.1.1</b> More on Venn Diagrams for Regression (figure 6.1)</a></li>
+<li class="chapter" data-level="6.1.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#a-geometric-approach-to-compare-variables-in-a-regression-model"><i class="fa fa-check"></i><b>6.1.2</b> A Geometric Approach to Compare Variables in a Regression Model</a></li>
+<li class="chapter" data-level="6.1.3" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#two-additional-views-of-linear-regression-coefficients"><i class="fa fa-check"></i><b>6.1.3</b> Two Additional Views of Linear Regression Coefficients</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#our-current-project-the-plotnetrec-package"><i class="fa fa-check"></i><b>6.2</b> Our current project, the plotnetrec package:</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#ols-diagramatic-representation"><i class="fa fa-check"></i><b>6.2.1</b> OLS Diagramatic representation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#correlation-representation"><i class="fa fa-check"></i><b>6.2.2</b> Correlation representation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="causalité.html"><a href="causalité.html"><i class="fa fa-check"></i><b>7</b> Causalité</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="causalité.html"><a href="causalité.html#les-principaux-cas"><i class="fa fa-check"></i><b>7.1</b> Les principaux cas</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="causalité.html"><a href="causalité.html#causalité-simultanée"><i class="fa fa-check"></i><b>7.1.1</b> Causalité simultanée</a></li>
+<li class="chapter" data-level="7.1.2" data-path="causalité.html"><a href="causalité.html#variables-omises"><i class="fa fa-check"></i><b>7.1.2</b> Variables omises</a></li>
+<li class="chapter" data-level="7.1.3" data-path="causalité.html"><a href="causalité.html#erreurs-de-mesure"><i class="fa fa-check"></i><b>7.1.3</b> Erreurs de mesure</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="causalité.html"><a href="causalité.html#erreur-de-mesure-sur-la-variable-dépendante"><i class="fa fa-check"></i><b>7.2</b> Erreur de mesure sur la variable dépendante</a></li>
+<li class="chapter" data-level="7.3" data-path="causalité.html"><a href="causalité.html#erreur-de-mesure-sur-la-variable-indépendante"><i class="fa fa-check"></i><b>7.3</b> Erreur de mesure sur la variable indépendante</a></li>
+<li class="chapter" data-level="7.4" data-path="causalité.html"><a href="causalité.html#variables-instrumentales"><i class="fa fa-check"></i><b>7.4</b> Variables instrumentales</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><a href="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><i class="fa fa-check"></i><b>8</b> State of the art of R packages in visualization econometrics (and data-viz more broadly)</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="9" data-path="annexes.html"><a href="annexes.html"><i class="fa fa-check"></i><b>9</b> annexes</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="annexes.html"><a href="annexes.html#correction-de-bessels-proof"><i class="fa fa-check"></i><b>9.1</b> Correction de Bessel’s proof</a></li>
+<li class="chapter" data-level="9.2" data-path="annexes.html"><a href="annexes.html#proof-for-covxyfrac12nn-1sum_i1n-sum_j1nx_i-x_jy_i-y_j"><i class="fa fa-check"></i><b>9.2</b> Proof for <span class="math inline">\(Cov(x,~y)=\frac{1}{2N(N-1)}\sum_{i=1}^{N} \sum_{j=1}^{N}~(x_i-x_j)(y_i-y_j)\)</span></a></li>
+<li class="chapter" data-level="9.3" data-path="annexes.html"><a href="annexes.html#a-little-bit-of-calculation"><i class="fa fa-check"></i><b>9.3</b> a little bit of calculation</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>10</b> Notes</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Econometrics vizualisation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="causalité" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Causalité</h1>
+<p>Dans le modèle de base <span class="math inline">\(y^=\alpha+\beta x+\varepsilon\)</span> l’estimateur MCO <span class="math inline">\(\hat{\beta}\)</span> est sans biais si <span class="math inline">\(x\)</span> est indépendant de <span class="math inline">\(\varepsilon\)</span>. On ne peut a priori savoir si c’est le cas et en tout cas pas a posteriori à l’issue de l’estimation puisque les résidus sont par construction indépendants de <span class="math inline">\(X\)</span> On peut montrer facilement qu’il n’existe pas de solution unique en <span class="math inline">\(\hat{\beta}\)</span> du maximum de vraisemblance lorsque l’on augmente le modèle d’un paramètre libre représentant la corrélation entre <span class="math inline">\(\varepsilon\)</span> et <span class="math inline">\(x\)</span>..
+La prédiction <span class="math inline">\(\mathbb{E}(y~/x)=\hat{\beta}x\)</span> n’est correcte que si <span class="math inline">\(\mathbb{E}(\varepsilon~/x)=0\)</span>.
+Sinon <span class="math inline">\(\mathbb{E}(\varepsilon~/x)\ne 0\)</span> il y une endogénéité et <span class="math inline">\(\hat{\beta}\)</span> n’est plus une mesure exacte de l’effet marginal d’une variation exogène de <span class="math inline">\(x\)</span>.
+Les principales situations d’endogènéité rencontrées et étudiées sont liés aux problèmes :</p>
+<ul>
+<li>Causalité simultanée</li>
+<li>Variables omises</li>
+<li>Erreurs de mesure sur les variables</li>
+<li>Biais de sélection</li>
+<li>Forme fonctionnelle mal spécifiée</li>
+</ul>
+<div id="les-principaux-cas" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Les principaux cas</h2>
+<div id="causalité-simultanée" class="section level3" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Causalité simultanée</h3>
+<p>Est-ce suffisant? de montrer tout simplement par un diagramme que régresser y sur x puis x sur y ne donne pas le même résultat.
+La réponse est non ce n’est pas suffisant!</p>
+</div>
+<div id="variables-omises" class="section level3" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Variables omises</h3>
+<p>….reprendre les résultats précédents en simplifiant pour illustrer l’effet de l’omission d’une variable et présenter les conditions telles que le biais d’omission d’une variable entraine un biais sur les paramètres du modèle.</p>
+</div>
+<div id="erreurs-de-mesure" class="section level3" number="7.1.3">
+<h3><span class="header-section-number">7.1.3</span> Erreurs de mesure</h3>
+<p>Soit le modèle RLS suivant</p>
+<p><span class="math display">\[y^{\star}=\alpha+\beta x^{\star}+\varepsilon\]</span></p>
+<p>On n’observe pas <span class="math inline">\(y^{\star}\)</span> (mais <span class="math inline">\(y=y^{\star}+v_y\)</span>), ni <span class="math inline">\(x^{\star}\)</span> (mais <span class="math inline">\(x=x^{\star}+u_x\)</span>).</p>
+<p>Considérons les hypothèses suivantes:</p>
+<p><span class="math inline">\(\mathbb{E}(u_x)=\mathbb{E}(v_y)=0\)</span></p>
+<p><span class="math inline">\(\mathbb{E}(y v_y)=\mathbb{E}(y u_x)=\mathbb{E}(x u_y)=\mathbb{E}(x v_x)=0\)</span></p>
+<p><span class="math inline">\(\mathbb{E}(\varepsilon u_y)=0\)</span></p>
+<p>Les erreurs de mesure sont d’espérances nulle, et indépendantes des variables et du terme d’erreur.
+Sous ses hypothèses, pour deux points <span class="math inline">\(k\)</span> <span class="math inline">\(l\)</span> choisis au hasard, la covariance entre <span class="math inline">\(X\)</span> et <span class="math inline">\(Y\)</span> ne change pas</p>
+<p><span class="math display">\[\mathbb{E}[(x_k-x_l)(y_k-y_l)]\]</span></p>
+<p><span class="math display">\[\mathbb{E}[(x_k^{\star}+u_k-(x_l^{\star}+u_l))(y_k^{\star}+v_k-(y_l^{\star}+v_l))]\]</span></p>
+<p><span class="math display">\[\mathbb{E}[(x_k^{\star}+u_k)(y_k^{\star}+v_k)] -\mathbb{E}[x_k^{\star}+u_k]\mathbb{E}[y_l^{\star}+v_l] -\mathbb{E}[x_l^{\star}+u_l]\mathbb{E}[y_k^{\star}+v_k]+ \mathbb{E}[(x_l^{\star}+u_l)(y_l^{\star}+v_l)]\]</span></p>
+<p><span class="math display">\[2Cov(x^{\star},y^{\star})\]</span></p>
+<p>Les erreurs de mesure sont préjudiciables à la précision mais en moyenne elles n’affectent pas la covariance. Le seul problème essentiel est donc lié à l’estimation correcte des paramètres, alors que la corrélation entre les variables dépendantes et indépendantes ne change pas. En revanche, il ne faut pas confondre l’effet de <span class="math inline">\(x\)</span> sur <span class="math inline">\(y\)</span> avec l’effet de l’erreur de mesure de <span class="math inline">\(x\)</span> sur <span class="math inline">\(y\)</span> (qui est nul).</p>
+</div>
+</div>
+<div id="erreur-de-mesure-sur-la-variable-dépendante" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Erreur de mesure sur la variable dépendante</h2>
+<p>Considérons une erreur de mesure sur la variable dépendante <span class="math inline">\(y\)</span>, i.e. soit <span class="math inline">\(\sigma_v^2 &gt; 0\)</span> et <span class="math inline">\(\sigma_u^2 = 0\)</span>. Le modèle devient:
+<span class="math display">\[y=\alpha+\beta x + v+ \varepsilon\]</span>
+L’erreur de mesure sur la variable dépendante n’a pas d’importance au sens qu’elle n’a pas d’effet de biais sur les paramètres estimés du modèle. En pratique, elle peut être considérée comme contribuant au terme de perturbation du modèle. Elle n’est évidemment pas souhaitable, car tout ce qui augmente le bruit dans le modèle aura tendance à rendre les estimations de la régression moins précises, mais sans incidence en terme de biais dans les estimations.</p>
+<p>On ne fait pas dans ce cas de schéma pour une preuve graphique tellement c’est évident!!</p>
+</div>
+<div id="erreur-de-mesure-sur-la-variable-indépendante" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Erreur de mesure sur la variable indépendante</h2>
+<p>On considère le cas où l’erreur de mesure porte sur la variable dépendante <span class="math inline">\(x\)</span>, i.e. Soit <span class="math inline">\(\sigma_v^2 =0\)</span> et <span class="math inline">\(\sigma_u^2 &gt;0\)</span>.
+Le modèle devient :
+<span class="math display">\[y=\alpha+\beta x -\beta u + \varepsilon\]</span></p>
+<p>Dans la régression de <span class="math inline">\(y\)</span> sur <span class="math inline">\(x\)</span>, l’erreur de mesure de <span class="math inline">\(x\)</span> devient une partie de l’erreur dans l’équation de régression liée au paramètre <span class="math inline">\(\beta\)</span>, créant ainsi un biais d’endogénéité. L’estimateur OLS <span class="math inline">\(\hat{\beta}=\frac{Cov(x,y)}{Var(x)}\)</span> est biaisé vers 0. L’estimateur sans biais est <span class="math inline">\(\beta=\frac{Cov(x^\star ,y)}{Var(x^\star)}\)</span>.</p>
+<p>Preuve :
+Puisque <span class="math inline">\(Cov(x^\star,y)=Cov(x,y)\)</span>, on a :
+<span class="math display">\[\frac{\hat{\beta}}{\beta}=\frac{Var(x^\star)}{Var(x)}=\frac{\sigma_x^{\star 2}}{\sigma_u^2+\sigma_x^{\star 2}} \implies plim~\hat{\beta}=\lambda \beta\]</span>
+avec <span class="math inline">\(\lambda=\frac{\sigma_x^{\star 2}}{\sigma_u^2+\sigma_x^{\star 2}}\)</span>. Puisque <span class="math inline">\(0&lt;\lambda&lt;1\)</span> le coefficient <span class="math inline">\(\hat{\beta}\)</span> es biaisé vers 0.
+Le biais dépend du niveau et du signe de <span class="math inline">\(\beta\)</span> :
+<span class="math display">\[plim~\hat{\beta}-\beta=\lambda \beta-\beta=-(1-\lambda)\beta=-\frac{\sigma_u^2}{\sigma_u^2+\sigma_x^{\star 2}}\beta\]</span>
+### Schéma du modèle avec erreur de mesure sur la variable indépendante
+La figure suivante illustre le problème de façon très simple.</p>
+</div>
+<div id="variables-instrumentales" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> Variables instrumentales</h2>
+<p><span class="math display">\[Y=\alpha + \beta X +u\]</span>
+<span class="math display">\[X=\theta + \delta Z +v\]</span>
+<span class="math display">\[\beta_{IV}=\frac{Cov(Y,Z)}{Cov(X,Z)} =\frac{\rho_{zy} \sigma_y}{\rho_{zx} \sigma_x}\]</span></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="vizualisation-of-regression-and-correlation-beetween-variable.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-Causalité.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

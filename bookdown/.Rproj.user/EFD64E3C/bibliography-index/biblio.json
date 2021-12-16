@@ -196,6 +196,24 @@
             },
             "title": "Covariance and regression diagram",
             "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "GÁBOR J. SZÉKELY",
+                    "given": "MARIA L. RIZZO AND NAIL K. BAKIROV"
+                }
+            ],
+            "id": "cordis",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "title": "MEASURING AND TESTING DEPENDENCE BY CORRELATION OF DISTANCES",
+            "type": "book"
         }
     ],
     "project_biblios": [
