@@ -72,56 +72,52 @@ knitr::include_graphics("covRect.PNG")
 
 ## Our current project: the package plotnetrec
 
-### Plotnetrec
+Le package plotnetrec et leurs graphiques associées est une représentation alternative d'un scatterplot. Le but étant de déceler certaines particularités d'un jeu de données. 
 
-```{r, echo = FALSE}
-knitr::include_graphics("All.PNG")
-```
+\begin{minipage}{0.45\textwidth}
+    \includegraphics{all.png}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.45\textwidth}
+Nous nous situons ici dans un cas normal, sans problèmes dans le jeu de données.
+
+* Le graphique en haut à droite relies tout les observations par apport a leurs moyennes respectives et nous en traçons le rectangle. Si la pente de la diagonale est négatif, le rectangle et donc rouge et inversement, le rectangle est bleu.
+
+* Le graphique en bas à gauche relies tout les observations entre elles et nous en traçons le rectangle. Si la pente de la diagonale est négatif, le rectangle et donc rouge et inversement, le rectangle est bleu.
+
+* Le graphique en bas à droite est sensiblement identique à celui d'en bas a gauche à la différence où nous en tirons une de couleur nette. C'est à dire qu'une superpostion de rouge et de bleu vont s'annuler et donner l'absence de couleur. Inversement, le surprésence d'une des deux couleurs va donner une couleur bleu.
+
+\end{minipage}
+
+Il est temps de comparer avec certaines problèmatique.
 
 ### Hetrogeneity
 
 \begin{minipage}{0.45\textwidth}
-\centering
-  \includegraphics{graph_plotnetrec_normal.png}
+    \includegraphics{plotnetrec_heterogeneity.png}
 \end{minipage} 
 \hspace{3.5ex}
 \begin{minipage}{0.45\textwidth}
-\centering
-    \includegraphics{plot_rect_normal.png}
-\end{minipage}
-\begin{minipage}{0.45\textwidth}
-\centering
-    \includegraphics{graph_plotnetrec_heterogene.png}
-\end{minipage} 
-\hspace{3.5ex}
-\begin{minipage}{0.45\textwidth}
-\centering
-    \includegraphics{graph_rect_heterogene.png}
+  Nous remarquons trés clairement le caractére hétérogène de $Y$. Le graphique plotnetrec semble identifié la zone de séparation de deux groupes. 
 \end{minipage}
 
 ### Heterosdasticity
 
 \begin{minipage}{0.45\textwidth}
-    \includegraphics{graph_plotnetrec_normal.png}
+    \includegraphics{plotnetrec_heteroscedasticite.png}
 \end{minipage} 
 \hspace{3.5ex}
 \begin{minipage}{0.45\textwidth}
-    \includegraphics{plot_rect_normal.png}
-\end{minipage}
-\begin{minipage}{0.45\textwidth}
-    \includegraphics{graph_plotnetrect_heterosk.png}
-\end{minipage} 
-\hspace{3.5ex}
-\begin{minipage}{0.45\textwidth}
-    \includegraphics{graph_rect_heterosk.png}
+  Le cas hétérogène est a retravaillé. 
 \end{minipage}
 
 ### Non linear relationship
 
 \begin{minipage}{0.45\textwidth}
-    \includegraphics{graph_plotnetrec_normal.png}
+    \includegraphics{plotetrect_non_linear.png}
 \end{minipage} 
-\hspace{3ex}
+\hspace{3.5ex}
 \begin{minipage}{0.45\textwidth}
-    \includegraphics{graph_plotnetrect_nolinear.png}
+    Le cas non linèaire semble trés expressif dans tous les graphiques ici présent. 
 \end{minipage} 
+

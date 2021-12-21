@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Vizualisation of regression and correlation beetween variable | Econometrics vizualisation</title>
+  <title>References | Econometrics vizualisation</title>
   <meta name="description" content="First try of bookdown" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Vizualisation of regression and correlation beetween variable | Econometrics vizualisation" />
+  <meta property="og:title" content="References | Econometrics vizualisation" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Vizualisation of regression and correlation beetween variable | Econometrics vizualisation" />
+  <meta name="twitter:title" content="References | Econometrics vizualisation" />
   
   <meta name="twitter:description" content="First try of bookdown" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="linear-regression-and-first-reliability-measure.html"/>
-<link rel="next" href="causality.html"/>
+<link rel="prev" href="references.html"/>
+<link rel="next" href="annexes.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -171,151 +171,17 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vizualisation-of-regression-and-correlation-beetween-variable" class="section level1">
-<h1><span class="header-section-number">Chapter 6</span> Vizualisation of regression and correlation beetween variable</h1>
-<div id="state-of-the-art-1" class="section level2">
-<h2><span class="header-section-number">6.1</span> State of the art</h2>
-<div id="more-on-venn-diagrams-for-regression-figure-6.1" class="section level3">
-<h3><span class="header-section-number">6.1.1</span> More on Venn Diagrams for Regression (figure 6.1)</h3>
-<p>Kennedy <span class="citation">(Kennedy <a href="#ref-kennedy" role="doc-biblioref">2002</a>)</span> extended the Venn diagram to the exposition of bias and variance in the context of the classical linear regression (CLR) model, written as y = Xb + e .</p>
-<ul>
-<li>Purple area: variation in y uniquely explained by variation in X</li>
-<li>A larger purple area means that more information is used in estimation, implying a smaller variance of the <span class="math inline">\(\beta_x\)</span> estimate.</li>
-<li>The black area: the variation in y that cannot be explained by X</li>
-</ul>
+<div id="references-1" class="section level1 unnumbered">
+<h1>References</h1>
 
-<p><strong>Another example of venn diagram: Relating species richness to the structure of continuous landscapes</strong></p>
-<ul>
-<li>Venn diagram representing the partition of the variance of the response variable Y (species richness) between two sets of explanatory variables, namely landscape data (a) and space (c).</li>
-<li>The variance jointly explained by landscape data and space is represented by (b) in the diagram. The rectangle represents the total variance in Y (figure 6.2).</li>
-</ul>
-
-</div>
-<div id="a-geometric-approach-to-compare-variables-in-a-regression-model" class="section level3">
-<h3><span class="header-section-number">6.1.2</span> A Geometric Approach to Compare Variables in a Regression Model</h3>
-<p>He proposes <span class="citation">(Bring <a href="#ref-Bring" role="doc-biblioref">1996</a>)</span> a geometric approaches to compare variables in a regression model.</p>
-<blockquote>
-<p>This article gives a brief introduction to the geometric approach in regres- sion analysis, and then geometry is used to shed some light on the problem of comparing the “importance” of the in- dependent variables in a multiple regression model. Even though no final answer of how to assess variable impor- tance is given, it is still useful to illustrate the different measures geometrically to gain a better understanding of their properties.</p>
-</blockquote>
-<p>The model vector, <span class="math inline">\(\hat{y}\)</span> is the perpendicular projection of y on x. Why it is the best estimate?</p>
-<ul>
-<li>The squared length of y, <span class="math inline">\(||y||^2 = \sum y_i^2\)</span> is the total sum of square, <span class="math inline">\(SS_{tot}\)</span></li>
-<li>The square length of <span class="math inline">\(\hat{y}\)</span>, <span class="math inline">\(||\hat{y}||^2= \sum \hat{y}^2=SS_{reg}\)</span></li>
-<li>The square length of the vector <span class="math inline">\(y-\hat{y}\)</span>, <span class="math inline">\(||y - \hat{y}||^2=\sum(y_i-\hat{y}_i)^2 = SS_{res}\)</span></li>
-</ul>
-<p>In other words, the observations vector is decomposed into a model vector and an error vector, and the shortest possible length of <span class="math inline">\(y-\hat{y}\)</span> is found by projecting y perpendicular in x.</p>
-<ul>
-<li>The shortest possible length of <span class="math inline">\(y - \hat{y}\)</span> is found by projecting <span class="math inline">\(y\)</span> perpendicular on <span class="math inline">\(x\)</span>.</li>
-<li><span class="math inline">\(R^2 = \frac{SS_{reg}}{SS_{tot}}= \frac{||\hat{y}||^2}{||y||^2}\)</span> (the <span class="math inline">\(y\)</span> vector is standardized to have lenght 1.)</li>
-<li><span class="math display">\[r_{xy} = 
-\begin{cases} ||\hat{y}||  \ \ \ \text{if}  \  \theta \leq 90 \degree \ \ \ \text{or} \ \theta \geq 270 \degree  \\ -||\hat{y}|| \ \ \ \text{if}  \ 90\degree \leq \theta \leq 270\degree
-\end{cases}\]</span></li>
-</ul>
-
-
-</div>
-<div id="two-additional-views-of-linear-regression-coefficients" class="section level3">
-<h3><span class="header-section-number">6.1.3</span> Two Additional Views of Linear Regression Coefficients</h3>
-<p>The author <span class="citation">(Li <a href="#ref-Cli" role="doc-biblioref">1964</a>)</span> proposes an interesting interpretation of the slope in the keast square method. The linear regression line of y on x, as determined by the method of least squares, passes through the central point with slope.</p>
-<p><strong>A View of Linear Regression Coefficients as a weighted average slope</strong></p>
-<ul>
-<li>Consider any point <span class="math inline">\(P_i=(x_i,y_i)\)</span> and <span class="math inline">\(P_o=(\bar{x}, \bar{y})\)</span>, the slope of the line <span class="math inline">\(P_i P_o\)</span> is : <span class="math inline">\(b_i=\frac{y_i -\bar{y}}{x_i-\bar{x}}\)</span></li>
-<li>Let’s attach a weight <span class="math inline">\(w_i\)</span> to each <span class="math inline">\(b_i\)</span>, if 2 points are very close, their slope is not very reliable (need little weight)</li>
-<li>The “distance” between two points <span class="math inline">\(\to\)</span> the distance projected on the x-axis. To avoid negative weight, we may then take the weight, <span class="math inline">\(w_i=(x_i-\bar{x})^2\)</span></li>
-<li>Adopting this system of weighting, we see that b is the weighted mean of the <span class="math inline">\(b_i\)</span>’s.
-<span class="math display">\[\begin{equation}
-b=\bar{b}=\frac{\sum b_i w_i}{\sum w_i} = \hat{\beta_1} = \frac{\sum(x_i -\bar{x})(y_i -\bar{y})}{\sum(x_i -\bar{x})^2}
-\end{equation}\]</span></li>
-</ul>
-<blockquote>
-<p>This concept of weight for a slope is represented in the accompanying diagrams. (See Figure 1). The slope in the lefthand side diagram has a much larger weight than that in the righthand side for regression of y on x. If we were concerned with the regression of x on y, the reverse would be true. Note that the actual distance between the two points in the two diagrams is the same.</p>
-</blockquote>
-
-</div>
-</div>
-<div id="our-current-project-the-plotnetrec-package" class="section level2">
-<h2><span class="header-section-number">6.2</span> Our current project, the plotnetrec package:</h2>
-<div id="ols-diagramatic-representation" class="section level3">
-<h3><span class="header-section-number">6.2.1</span> OLS Diagramatic representation</h3>
-<p>The principle of construction of the following diagram giving a diagrammatic representation of the regression and OLS is :</p>
-<ul>
-<li>we assume that the covariance (an average of all possible rectangles as seen previously among all pairs of points in a data sample) can be represented by a rectangle.</li>
-<li>This rectangle has by definition a known area given by the calculation of the empirical covariance <span class="math inline">\(Cov(X,Y)\)</span>. But the covariance depends on three parameters since <span class="math inline">\(Cov(X,Y) =\rho \sigma_x \sigma_y\)</span> . To represent the covariance and draw the corresponding
-the corresponding rectangle, we have to make an additional assumption i.e. choose a normalization .
-We assume that one side of this rectangle is normalized by <span class="math inline">\(sigma_x\)</span>. In this case, the other side necessarily has a length of <span class="math inline">\(\rho \sigma_y\)</span>.</li>
-<li>Following the same approach, we now assume that the variances of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be represented by two squares whose sides are of course the standard deviations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> respectively.</li>
-</ul>
-<p>The diagram allows:</p>
-<ul>
-<li>to represent the OLS estimator by the slope of the diagonal of the rectangle representing the covariance. Geometrically, we obtain that if <span class="math inline">\(X\)</span> increases by one standard deviation then <span class="math inline">\(Y\)</span> increases by <span class="math inline">\(\rho\)</span> standard deviation of the dependent variable Y.</li>
-<li>to represent the explained variance in the total variance.</li>
-<li>Correctly represent the coefficient of determination as the relative share of the explained variance in the total variance. With Venn diagrams sometimes used to represent the <span class="math inline">\(R^2\)</span>, visual perception is based on the relative size of two surfaces and their intersection. The proposed diagram is not an ad hoc construction, it is based on a methodological and theoretical foundation allowing not only to represent the <span class="math inline">\(R^2\)</span> but also to read its value correctly.</li>
-</ul>
-<p>reminder:</p>
-<p><span class="math display">\[\begin{align*}
-&amp; \rho = \frac{COV(X,Y)}{\sigma_x \sigma_y}\\
-\Leftrightarrow &amp; COV(X,Y) = \rho \sigma_y \times \sigma_x
-\end{align*}\]</span></p>
-
-<div id="reg-lin-multiple" class="section level4">
-<h4><span class="header-section-number">6.2.1.1</span> reg lin multiple</h4>
-
-</div>
-</div>
-<div id="correlation-representation" class="section level3">
-<h3><span class="header-section-number">6.2.2</span> Correlation representation</h3>
-<p>Pour continuer avec des representations alternatives, nous proposons ici une représentaion alternative du coefficient de corrélation.</p>
-<p>For this, we need some reminders:</p>
-<p><span class="math display">\[\rho = \frac{COV(X,Y)}{\sigma_x \sigma_y}\]</span></p>
-<p><span class="math display">\[V(X+Y) = V(X) + V(Y) + 2COV(X,Y)\]</span></p>
-<ul>
-<li>Limits: <span class="math inline">\(\rho = 1\)</span></li>
-</ul>
-<p>When <span class="math inline">\(\rho = 1\)</span> then <span class="math inline">\(COV(X,Y) = \sigma_x \sigma_y\)</span></p>
-<p>By replacing, we found: <span class="math inline">\(V(X+Y) = V(X) + V(Y) + 2\sigma_x \sigma_y\)</span></p>
-
-<ul>
-<li>Limits : <span class="math inline">\(\rho = -1\)</span></li>
-</ul>
-<p>When <span class="math inline">\(\rho = -1\)</span> then <span class="math inline">\(COV(X,Y) = -\sigma_x \sigma_y\)</span></p>
-<p>By replacing, we found: <span class="math inline">\(V(X+Y) = V(X) + V(Y) - 2\sigma_x \sigma_y\)</span></p>
-
-<ul>
-<li>Limits: <span class="math inline">\(\rho = 0\)</span></li>
-</ul>
-<p>When <span class="math inline">\(\rho = 0\)</span> then <span class="math inline">\(COV(X,Y) = 0\)</span></p>
-<p>By replacing, we found: : <span class="math inline">\(V(X+Y) = V(X) + V(Y)\)</span></p>
-
-<ul>
-<li>Interest</li>
-</ul>
-<p>Correlation matrix with distinct mathematical construction.</p>
-
-
-<p>Nous devons regarder dynamiquement ce qui se passe. En partant du cas où les variables sont indépendant (<span class="math inline">\(\rho = 0\)</span>), si la corrélation augmente de manière positive, le carré augmente son air et pivote vers le cas où la corrélation est parfaitement positive. Inversement, si la corrélation augmente de manière négative, le carré diminue d’air et pivote vers le cas où la corrélation est parfaitement négatif</p>
-
-</div>
-</div>
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-Bring">
-<p>Bring, Johan. 1996. <em>Visualizing Distributions of Covariance Matrices</em>. <a href="https://www.jstor.org/stable/2685045">https://www.jstor.org/stable/2685045</a>.</p>
-</div>
-<div id="ref-kennedy">
-<p>Kennedy, Peter E. 2002. <em>More on Venn Diagrams for Regression</em>. Simon Fraser University, Canada: journal of statistics Education Vol 10, Number 1.</p>
-</div>
-<div id="ref-Cli">
-<p>Li, C. C. 1964. <em>Two Additional Views of Linear Regression Coefficients</em>. <a href="https://www.jstor.org/stable/2682154">https://www.jstor.org/stable/2682154</a>.</p>
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="linear-regression-and-first-reliability-measure.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="causality.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="references.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="annexes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -346,7 +212,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-Reg_lin_viz.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/08-references.Rmd",
 "text": "Edit"
 },
 "history": {

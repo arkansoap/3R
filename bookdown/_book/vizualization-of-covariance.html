@@ -24,7 +24,7 @@
 <meta name="author" content="Lucas Chaveneau, Thibault Fuchez, Allan Guichard" />
 
 
-<meta name="date" content="2021-12-16" />
+<meta name="date" content="2021-12-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,6 @@
   
 <link rel="prev" href="correlation.html"/>
 <link rel="next" href="linear-regression-and-first-reliability-measure.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,33 +50,12 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -95,83 +73,66 @@ div.csl-indent {
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-is-econometrics"><i class="fa fa-check"></i><b>1.1</b> What is Econometrics</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-about-econometric-visualization"><i class="fa fa-check"></i><b>1.2</b> What about econometric visualization?</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#state-of-the-art"><i class="fa fa-check"></i><b>1.3</b> State of the art…</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#our-project-an-r-package."><i class="fa fa-check"></i><b>1.4</b> Our project, an R package.</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="covariance.html"><a href="covariance.html"><i class="fa fa-check"></i><b>2</b> Covariance</a>
-<ul>
+<li class="chapter" data-level="2" data-path="covariance.html"><a href="covariance.html"><i class="fa fa-check"></i><b>2</b> Covariance</a><ul>
 <li class="chapter" data-level="2.1" data-path="covariance.html"><a href="covariance.html#reminder-of-the-definition-of-variance"><i class="fa fa-check"></i><b>2.1</b> Reminder of the definition of variance</a></li>
 <li class="chapter" data-level="2.2" data-path="covariance.html"><a href="covariance.html#usual-literary-definition-of-covariance"><i class="fa fa-check"></i><b>2.2</b> Usual literary definition of covariance</a></li>
-<li class="chapter" data-level="2.3" data-path="covariance.html"><a href="covariance.html#usual-and-alternative-mathematical-definitions"><i class="fa fa-check"></i><b>2.3</b> Usual and alternative mathematical definitions</a>
-<ul>
+<li class="chapter" data-level="2.3" data-path="covariance.html"><a href="covariance.html#usual-and-alternative-mathematical-definitions"><i class="fa fa-check"></i><b>2.3</b> Usual and alternative mathematical definitions</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="covariance.html"><a href="covariance.html#usual-definition"><i class="fa fa-check"></i><b>2.3.1</b> Usual definition</a></li>
 <li class="chapter" data-level="2.3.2" data-path="covariance.html"><a href="covariance.html#alternative-definition-a-story-of-rectangles"><i class="fa fa-check"></i><b>2.3.2</b> Alternative definition, a story of rectangles …</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="correlation.html"><a href="correlation.html"><i class="fa fa-check"></i><b>3</b> Correlation</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="correlation.html"><a href="correlation.html#from-covariance-to-correlation"><i class="fa fa-check"></i><b>3.1</b> from covariance to correlation</a></li>
+<li class="chapter" data-level="3" data-path="correlation.html"><a href="correlation.html"><i class="fa fa-check"></i><b>3</b> Correlation</a><ul>
+<li class="chapter" data-level="3.1" data-path="correlation.html"><a href="correlation.html#from-covariance-to-correlation"><i class="fa fa-check"></i><b>3.1</b> From covariance to correlation</a></li>
 <li class="chapter" data-level="3.2" data-path="correlation.html"><a href="correlation.html#correlation-definition"><i class="fa fa-check"></i><b>3.2</b> Correlation definition</a></li>
 <li class="chapter" data-level="3.3" data-path="correlation.html"><a href="correlation.html#galton-a-pioneer-in-the-history-of-correlation"><i class="fa fa-check"></i><b>3.3</b> Galton, a pioneer in the history of correlation</a></li>
-<li class="chapter" data-level="3.4" data-path="correlation.html"><a href="correlation.html#thirteen-ways-to-see-correlation-13cor"><i class="fa fa-check"></i><b>3.4</b> thirteen ways to see correlation <span class="citation">(<span>Rodgers and co 1988</span>)</span></a></li>
+<li class="chapter" data-level="3.4" data-path="correlation.html"><a href="correlation.html#thirteen-ways-to-see-correlation-13cor"><i class="fa fa-check"></i><b>3.4</b> Thirteen ways to see correlation <span class="citation">(Rodgers and co <span>1988</span>)</span></a></li>
 <li class="chapter" data-level="3.5" data-path="correlation.html"><a href="correlation.html#pearson-correlation-coefficient"><i class="fa fa-check"></i><b>3.5</b> Pearson correlation coefficient</a></li>
 <li class="chapter" data-level="3.6" data-path="correlation.html"><a href="correlation.html#spearmans-rank-correlation-coefficient"><i class="fa fa-check"></i><b>3.6</b> Spearman’s rank correlation coefficient</a></li>
 <li class="chapter" data-level="3.7" data-path="correlation.html"><a href="correlation.html#partial-correlation"><i class="fa fa-check"></i><b>3.7</b> Partial Correlation</a></li>
 <li class="chapter" data-level="3.8" data-path="correlation.html"><a href="correlation.html#semi-partial-correlation"><i class="fa fa-check"></i><b>3.8</b> Semi partial Correlation</a></li>
-<li class="chapter" data-level="3.9" data-path="correlation.html"><a href="correlation.html#transitivity-correlation"><i class="fa fa-check"></i><b>3.9</b> Transitivity correlation</a>
-<ul>
-<li class="chapter" data-level="3.9.1" data-path="correlation.html"><a href="correlation.html#distance-correlation"><i class="fa fa-check"></i><b>3.9.1</b> Distance correlation</a></li>
+<li class="chapter" data-level="3.9" data-path="correlation.html"><a href="correlation.html#transitivity-correlation"><i class="fa fa-check"></i><b>3.9</b> Transitivity correlation</a></li>
+<li class="chapter" data-level="3.10" data-path="correlation.html"><a href="correlation.html#distance-correlation"><i class="fa fa-check"></i><b>3.10</b> Distance correlation</a></li>
+<li class="chapter" data-level="3.11" data-path="correlation.html"><a href="correlation.html#other-correlations"><i class="fa fa-check"></i><b>3.11</b> Other Correlations</a></li>
 </ul></li>
-<li class="chapter" data-level="3.10" data-path="correlation.html"><a href="correlation.html#other-correlations"><i class="fa fa-check"></i><b>3.10</b> Other Correlations</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html"><i class="fa fa-check"></i><b>4</b> Vizualization of covariance</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#state-of-the-art-different-attempts-to-represent-the-covariance"><i class="fa fa-check"></i><b>4.1</b> State of the art: different attempts to represent the covariance</a>
-<ul>
+<li class="chapter" data-level="4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html"><i class="fa fa-check"></i><b>4</b> Vizualization of covariance</a><ul>
+<li class="chapter" data-level="4.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#state-of-the-art-different-attempts-to-represent-the-covariance"><i class="fa fa-check"></i><b>4.1</b> State of the art: different attempts to represent the covariance</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#diagramme-de-venn"><i class="fa fa-check"></i><b>4.1.1</b> diagramme de Venn</a></li>
 <li class="chapter" data-level="4.1.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#visualizing-distributions-of-covariance-matrices"><i class="fa fa-check"></i><b>4.1.2</b> Visualizing Distributions of Covariance Matrices</a></li>
 <li class="chapter" data-level="4.1.3" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance"><i class="fa fa-check"></i><b>4.1.3</b> A Geometrical Interpretation of an Alternative Formula for the Sample Covariance</a></li>
 <li class="chapter" data-level="4.1.4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#covariance-as-signed-area-of-rectangles"><i class="fa fa-check"></i><b>4.1.4</b> Covariance as Signed Area of Rectangles</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#our-current-project-the-package-plotnetrec"><i class="fa fa-check"></i><b>4.2</b> Our current project: the package plotnetrec</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#plotnetrec"><i class="fa fa-check"></i><b>4.2.1</b> Plotnetrec</a></li>
-<li class="chapter" data-level="4.2.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#hetrogeneity"><i class="fa fa-check"></i><b>4.2.2</b> Hetrogeneity</a></li>
-<li class="chapter" data-level="4.2.3" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#heterosdasticity"><i class="fa fa-check"></i><b>4.2.3</b> Heterosdasticity</a></li>
-<li class="chapter" data-level="4.2.4" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#non-linear-relationship"><i class="fa fa-check"></i><b>4.2.4</b> Non linear relationship</a></li>
+<li class="chapter" data-level="4.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#our-current-project-the-package-plotnetrec"><i class="fa fa-check"></i><b>4.2</b> Our current project: the package plotnetrec</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#hetrogeneity"><i class="fa fa-check"></i><b>4.2.1</b> Hetrogeneity</a></li>
+<li class="chapter" data-level="4.2.2" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#heterosdasticity"><i class="fa fa-check"></i><b>4.2.2</b> Heterosdasticity</a></li>
+<li class="chapter" data-level="4.2.3" data-path="vizualization-of-covariance.html"><a href="vizualization-of-covariance.html#non-linear-relationship"><i class="fa fa-check"></i><b>4.2.3</b> Non linear relationship</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html"><i class="fa fa-check"></i><b>5</b> Linear regression and first reliability measure</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#ols-two-variables"><i class="fa fa-check"></i><b>5.1</b> OLS two variables</a>
-<ul>
+<li class="chapter" data-level="5" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html"><i class="fa fa-check"></i><b>5</b> Linear regression and first reliability measure</a><ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#ols-two-variables"><i class="fa fa-check"></i><b>5.1</b> OLS two variables</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#simple-linear-regression-model"><i class="fa fa-check"></i><b>5.1.1</b> simple linear regression model</a></li>
 <li class="chapter" data-level="5.1.2" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#measuring-overall-variation-from-the-sample-line"><i class="fa fa-check"></i><b>5.1.2</b> Measuring overall variation from the sample line</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#ols-plus-de-deux-variables"><i class="fa fa-check"></i><b>5.2</b> OLS plus de deux variables</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html"><i class="fa fa-check"></i><b>6</b> Vizualisation of regression and correlation beetween variable</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#state-of-the-art-1"><i class="fa fa-check"></i><b>6.1</b> State of the art</a>
-<ul>
+<li class="chapter" data-level="6" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html"><i class="fa fa-check"></i><b>6</b> Vizualisation of regression and correlation beetween variable</a><ul>
+<li class="chapter" data-level="6.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#state-of-the-art-1"><i class="fa fa-check"></i><b>6.1</b> State of the art</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#more-on-venn-diagrams-for-regression-figure-6.1"><i class="fa fa-check"></i><b>6.1.1</b> More on Venn Diagrams for Regression (figure 6.1)</a></li>
 <li class="chapter" data-level="6.1.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#a-geometric-approach-to-compare-variables-in-a-regression-model"><i class="fa fa-check"></i><b>6.1.2</b> A Geometric Approach to Compare Variables in a Regression Model</a></li>
 <li class="chapter" data-level="6.1.3" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#two-additional-views-of-linear-regression-coefficients"><i class="fa fa-check"></i><b>6.1.3</b> Two Additional Views of Linear Regression Coefficients</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#our-current-project-the-plotnetrec-package"><i class="fa fa-check"></i><b>6.2</b> Our current project, the plotnetrec package:</a>
-<ul>
+<li class="chapter" data-level="6.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#our-current-project-the-plotnetrec-package"><i class="fa fa-check"></i><b>6.2</b> Our current project, the plotnetrec package:</a><ul>
 <li class="chapter" data-level="6.2.1" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#ols-diagramatic-representation"><i class="fa fa-check"></i><b>6.2.1</b> OLS Diagramatic representation</a></li>
 <li class="chapter" data-level="6.2.2" data-path="vizualisation-of-regression-and-correlation-beetween-variable.html"><a href="vizualisation-of-regression-and-correlation-beetween-variable.html#correlation-representation"><i class="fa fa-check"></i><b>6.2.2</b> Correlation representation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>7</b> Causality</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="causality.html"><a href="causality.html#the-main-cases"><i class="fa fa-check"></i><b>7.1</b> The main cases</a>
-<ul>
+<li class="chapter" data-level="7" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>7</b> Causality</a><ul>
+<li class="chapter" data-level="7.1" data-path="causality.html"><a href="causality.html#the-main-cases"><i class="fa fa-check"></i><b>7.1</b> The main cases</a><ul>
 <li class="chapter" data-level="7.1.1" data-path="causality.html"><a href="causality.html#simultaneous-causality"><i class="fa fa-check"></i><b>7.1.1</b> Simultaneous causality</a></li>
 <li class="chapter" data-level="7.1.2" data-path="causality.html"><a href="causality.html#omitted-variables"><i class="fa fa-check"></i><b>7.1.2</b> Omitted variables</a></li>
 <li class="chapter" data-level="7.1.3" data-path="causality.html"><a href="causality.html#measurement-errors"><i class="fa fa-check"></i><b>7.1.3</b> Measurement errors</a></li>
@@ -180,15 +141,16 @@ div.csl-indent {
 <li class="chapter" data-level="7.3" data-path="causality.html"><a href="causality.html#measurement-error-on-the-independent-variable"><i class="fa fa-check"></i><b>7.3</b> Measurement error on the independent variable</a></li>
 <li class="chapter" data-level="7.4" data-path="causality.html"><a href="causality.html#instrumental-variables"><i class="fa fa-check"></i><b>7.4</b> Instrumental variables</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><a href="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><i class="fa fa-check"></i><b>8</b> State of the art of R packages in visualization econometrics (and data-viz more broadly)</a></li>
+<li class="chapter" data-level="8" data-path="etat-des-lieux-des-package-r-en-économétrie-de-la-visualisation.html"><a href="etat-des-lieux-des-package-r-en-économétrie-de-la-visualisation.html"><i class="fa fa-check"></i><b>8</b> Etat des lieux des package R en économétrie de la visualisation</a></li>
+<li class="chapter" data-level="9" data-path="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><a href="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><i class="fa fa-check"></i><b>9</b> State of the art of R packages in visualization econometrics (and data-viz more broadly)</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="chapter" data-level="9" data-path="annexes.html"><a href="annexes.html"><i class="fa fa-check"></i><b>9</b> annexes</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="annexes.html"><a href="annexes.html#correction-de-bessels-proof"><i class="fa fa-check"></i><b>9.1</b> Correction de Bessel’s proof</a></li>
-<li class="chapter" data-level="9.2" data-path="annexes.html"><a href="annexes.html#proof-for-covxyfrac12nn-1sum_i1n-sum_j1nx_i-x_jy_i-y_j"><i class="fa fa-check"></i><b>9.2</b> Proof for <span class="math inline">\(Cov(x,~y)=\frac{1}{2N(N-1)}\sum_{i=1}^{N} \sum_{j=1}^{N}~(x_i-x_j)(y_i-y_j)\)</span></a></li>
-<li class="chapter" data-level="9.3" data-path="annexes.html"><a href="annexes.html#a-little-bit-of-calculation"><i class="fa fa-check"></i><b>9.3</b> a little bit of calculation</a></li>
+<li class="chapter" data-level="" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="10" data-path="annexes.html"><a href="annexes.html"><i class="fa fa-check"></i><b>10</b> annexes</a><ul>
+<li class="chapter" data-level="10.1" data-path="annexes.html"><a href="annexes.html#correction-de-bessels-proof"><i class="fa fa-check"></i><b>10.1</b> Correction de Bessel’s proof</a></li>
+<li class="chapter" data-level="10.2" data-path="annexes.html"><a href="annexes.html#proof-for-covxyfrac12nn-1sum_i1n-sum_j1nx_i-x_jy_i-y_j"><i class="fa fa-check"></i><b>10.2</b> Proof for <span class="math inline">\(Cov(x,~y)=\frac{1}{2N(N-1)}\sum_{i=1}^{N} \sum_{j=1}^{N}~(x_i-x_j)(y_i-y_j)\)</span></a></li>
+<li class="chapter" data-level="10.3" data-path="annexes.html"><a href="annexes.html#a-little-bit-of-calculation"><i class="fa fa-check"></i><b>10.3</b> a little bit of calculation</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>10</b> Notes</a></li>
+<li class="chapter" data-level="11" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>11</b> Notes</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -209,45 +171,46 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vizualization-of-covariance" class="section level1" number="4">
+<div id="vizualization-of-covariance" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Vizualization of covariance</h1>
-<div id="state-of-the-art-different-attempts-to-represent-the-covariance" class="section level2" number="4.1">
+<div id="state-of-the-art-different-attempts-to-represent-the-covariance" class="section level2">
 <h2><span class="header-section-number">4.1</span> State of the art: different attempts to represent the covariance</h2>
-<div id="diagramme-de-venn" class="section level3" number="4.1.1">
+<div id="diagramme-de-venn" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> diagramme de Venn</h3>
 <blockquote>
 <p>A Venn diagram is a widely used diagram style that shows the logical relation between sets, popularized by John Venn in the 1880s. The diagrams are used to teach elementary set theory, and to illustrate simple set relationships in probability, logic, statistics, linguistics and computer science. A Venn diagram uses simple closed curves drawn on a plane to represent sets. Very often, these curves are circles or ellipses.</p>
 </blockquote>
+
 </div>
-<div id="visualizing-distributions-of-covariance-matrices" class="section level3" number="4.1.2">
+<div id="visualizing-distributions-of-covariance-matrices" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Visualizing Distributions of Covariance Matrices</h3>
 <blockquote>
 <blockquote>
-<p>Covariance matrices and their corresponding distributions play an important role in statistics. To understand the properties of distributions, we often rely on visualization methods. <span class="citation">(<a href="#ref-VisCov" role="doc-biblioref">Tokudaa and co 2011</a>)</span></p>
+<p>Covariance matrices and their corresponding distributions play an important role in statistics. To understand the properties of distributions, we often rely on visualization methods. <span class="citation">(Tokudaa and co <a href="#ref-VisCov" role="doc-biblioref">2011</a>)</span></p>
 </blockquote>
 </blockquote>
 <p>Visualizing a distribution in a high-dimensional space is a challenge, with the additional
 difficulty that covariance matrices must be positive semi-definite, a restriction that forces
 the joint distribution of the covariances into an oddly-shaped subregion of the space.</p>
-<p><img src="wtf_covViz.PNG" /><!-- --></p>
+<p><img src="wtf_covViz.PNG" width="314" /></p>
 </div>
-<div id="a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance" class="section level3" number="4.1.3">
+<div id="a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance" class="section level3">
 <h3><span class="header-section-number">4.1.3</span> A Geometrical Interpretation of an Alternative Formula for the Sample Covariance</h3>
-<p>Kevin Hayes <span class="citation">(<a href="#ref-Hayes" role="doc-biblioref">Hayes 2011</a>)</span> proposes a new geometric and visual interpretation of covariance, based on the application of Hefferman’s formula for variance. He extends this formula to the covariance of a sample to extract his results.</p>
+<p>Kevin Hayes <span class="citation">(Hayes <a href="#ref-Hayes" role="doc-biblioref">2011</a>)</span> proposes a new geometric and visual interpretation of covariance, based on the application of Hefferman’s formula for variance. He extends this formula to the covariance of a sample to extract his results.</p>
 <ul>
 <li>formula from heffernan definition of covariance :</li>
 </ul>
 <p><span class="math display">\[cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j&gt;i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)\]</span></p>
 <blockquote>
 <blockquote>
-<p>Geometrically, <span class="math inline">\(\frac{1}{2}(x_i-x_j)(y_i - y_j)\)</span> is ±1 times the area right-triangle formed with the difference vector <span class="math inline">\((x_i — x_j, y_j)\)</span> as its hypotenuse, where negatively sloped difference tors incur a <span class="math inline">\((—1)\)</span> sign and positively sloped difference vectors take a <span class="math inline">\((+1)\)</span> sign. <span class="citation">(<a href="#ref-Hayes" role="doc-biblioref">Hayes 2011</a>)</span></p>
+<p>Geometrically, <span class="math inline">\(\frac{1}{2}(x_i-x_j)(y_i - y_j)\)</span> is ±1 times the area right-triangle formed with the difference vector <span class="math inline">\((x_i — x_j, y_j)\)</span> as its hypotenuse, where negatively sloped difference tors incur a <span class="math inline">\((—1)\)</span> sign and positively sloped difference vectors take a <span class="math inline">\((+1)\)</span> sign. <span class="citation">(Hayes <a href="#ref-Hayes" role="doc-biblioref">2011</a>)</span></p>
 </blockquote>
 </blockquote>
-<p><img src="hayes.PNG" /><!-- --></p>
+<p><img src="hayes.PNG" width="312" /></p>
 </div>
-<div id="covariance-as-signed-area-of-rectangles" class="section level3" number="4.1.4">
+<div id="covariance-as-signed-area-of-rectangles" class="section level3">
 <h3><span class="header-section-number">4.1.4</span> Covariance as Signed Area of Rectangles</h3>
-<p>This article <span class="citation">(<a href="#ref-chudzicki" role="doc-biblioref">Chudzicki 2014</a>)</span> was written following a very interesting conversation on the <strong>stats.statckexchange</strong> site. The initial topic of this conversation was: how to explain covariance to someone who only understands the notion of mean?</p>
+<p>This article <span class="citation">(Chudzicki <a href="#ref-chudzicki" role="doc-biblioref">2014</a>)</span> was written following a very interesting conversation on the <strong>stats.statckexchange</strong> site. The initial topic of this conversation was: how to explain covariance to someone who only understands the notion of mean?</p>
 <p><strong>instructions for use :</strong></p>
 <ul>
 <li>Draw all possible such rectangles. Color them transparently, making the positive rectangles red (say) and the negative rectangles “anti-red” (blue).</li>
@@ -270,39 +233,39 @@ the joint distribution of the covariances into an oddly-shaped subregion of the 
 <li>Sensitivity to outliers.</li>
 </ul>
 <p>A geometric outlier (one point standing away from the mass) will create many large rectangles in association with all the other points. It alone can create a net positive or negative amount of red in the overall picture.</p>
-<p><img src="covRect.PNG" /><!-- --></p>
+<p><img src="covRect.PNG" width="508" /></p>
 </div>
 </div>
-<div id="our-current-project-the-package-plotnetrec" class="section level2" number="4.2">
+<div id="our-current-project-the-package-plotnetrec" class="section level2">
 <h2><span class="header-section-number">4.2</span> Our current project: the package plotnetrec</h2>
-<div id="plotnetrec" class="section level3" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> Plotnetrec</h3>
-<p><img src="All.png" /><!-- --></p>
-</div>
-<div id="hetrogeneity" class="section level3" number="4.2.2">
-<h3><span class="header-section-number">4.2.2</span> Hetrogeneity</h3>
+<p>Le package plotnetrec et leurs graphiques associées est une représentation alternative d’un scatterplot. Le but étant de déceler certaines particularités d’un jeu de données.</p>
+
+<p>Il est temps de comparer avec certaines problèmatique.</p>
+<div id="hetrogeneity" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Hetrogeneity</h3>
 
 </div>
-<div id="heterosdasticity" class="section level3" number="4.2.3">
-<h3><span class="header-section-number">4.2.3</span> Heterosdasticity</h3>
+<div id="heterosdasticity" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Heterosdasticity</h3>
 
 </div>
-<div id="non-linear-relationship" class="section level3" number="4.2.4">
-<h3><span class="header-section-number">4.2.4</span> Non linear relationship</h3>
+<div id="non-linear-relationship" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Non linear relationship</h3>
+
 
 </div>
 </div>
 </div>
 <h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-chudzicki" class="csl-entry">
-Chudzicki, David. 2014. <em>Covariance as Signed Area of Rectangles</em>. <a href="https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/">https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/</a>.
+<div id="refs" class="references">
+<div id="ref-chudzicki">
+<p>Chudzicki, David. 2014. <em>Covariance as Signed Area of Rectangles</em>. <a href="https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/">https://www.davidchudzicki.com/posts/covariance-as-signed-area-of-rectangles/</a>.</p>
 </div>
-<div id="ref-Hayes" class="csl-entry">
-Hayes, Kevin. 2011. <em>Geometrical Interpretation of an Alternative Formula for the Sample Covariance</em>. <a href="https://www.jstor.org/stable/23020503">https://www.jstor.org/stable/23020503</a>.
+<div id="ref-Hayes">
+<p>Hayes, Kevin. 2011. <em>Geometrical Interpretation of an Alternative Formula for the Sample Covariance</em>. <a href="https://www.jstor.org/stable/23020503">https://www.jstor.org/stable/23020503</a>.</p>
 </div>
-<div id="ref-VisCov" class="csl-entry">
-Tokudaa, Tomoki, and co. 2011. <em>Visualizing Distributions of Covariance Matrices</em>. University of Leuven, Belgium, Columbia University, New York, NY, USA.
+<div id="ref-VisCov">
+<p>Tokudaa, Tomoki, and co. 2011. <em>Visualizing Distributions of Covariance Matrices</em>. University of Leuven, Belgium, Columbia University, New York, NY, USA.</p>
 </div>
 </div>
             </section>

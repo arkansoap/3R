@@ -2,12 +2,12 @@
 title: "Econometrics vizualisation"
 author: "Lucas Chaveneau, Thibault Fuchez, Allan Guichard"
 date: "`r Sys.Date()`"
-site: bookdown::bookdown_site
 documentclass: report
 bibliography: references.bib
 biblio-style: apalike
 link-citations: yes
-description: "First try of bookdown"
+description: First try of bookdown
+site: bookdown::bookdown_site
 ---
 
 # Introduction
@@ -24,6 +24,8 @@ knitr::write_bib(c(
 ), 'packages.bib')
 ```
 ## What is Econometrics
+
+BLABLABLA
 
 Econometrics is a branch of economics that aims to estimate and test economic models (simplified representation of reality). Thus, the econometrician tries to identify the parameters of a model by means of statistical estimation, and thus tries to induce the characteristics of a general group (the population) from those of a particular group (the sample).
 
