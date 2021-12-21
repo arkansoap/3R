@@ -1,0 +1,348 @@
+# Visualisation of regression and correlation beetween variable
+
+## State of the art
+
+### More on Venn Diagrams for Regression (figure 6.1)
+
+Kennedy [@kennedy] extended the Venn diagram to the exposition of bias and variance in the context of the classical linear regression (CLR) model, written as $y = Xb + e$.
+
+- Purple area: variation in $y$ uniquely explained by variation in $X$
+- A larger purple area means that more information is used in estimation, implying a smaller variance of the $\beta_x$ estimate.
+- The black area: the variation in $y$ that cannot be explained by $X$
+
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{vennken.PNG}
+    \caption{Venn Diagram in the context of classical linear regression}
+\end{figure}
+
+**Another example of Venn Diagram: relating species richness to the structure of continuous landscapes (figure 6.2).**
+
+- Venn diagram representing the partition of the variance of the response variable $Y$ (species richness) between two sets of explanatory variables, namely landscape data (a) and space (c).
+- The variance jointly explained by landscape data and space is represented by (b) in the diagram. The rectangle represents the total variance in $Y$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{venn.PNG}
+    \caption{Venn Diagram relating species richness to the structure of continuous landscapes}
+\end{figure}
+
+### A geometric approach to compare variables in a regression model
+
+The article of Brings [@Bring],  proposes a geometric approache to compare variables in a regression model. 
+
+>> "This article gives a brief introduction to the geometric approach in regression analysis, and then geometry is used to shed some light on the problem of comparing the "importance" of the independent variables in a multiple regression model. Even though no final answer of how to assess variable importance is given, it is still useful to illustrate the different measures geometrically to gain a better understanding of their properties".
+
+The model vector, $\hat{y}$ is the perpendicular projection of $y$ on $x$. Why it is the best estimate?
+
+- The squared length of $y$, $||y||^2 = \sum y_i^2$ is the total sum of square, $SS_{tot}$
+- The square length of $\hat{y}$, $||\hat{y}||^2= \sum \hat{y}^2=SS_{reg}$
+- The square length of the vector $y-\hat{y}$, $||y - \hat{y}||^2=\sum(y_i-\hat{y}_i)^2 = SS_{res}$
+
+In other words, the observations vector is decomposed into a model vector and an error vector, and the shortest possible length of $y-\hat{y}$ is found by projecting $y$ perpendicular in $x$.
+
+- The shortest possible length of $y - \hat{y}$ is found by projecting $y$ perpendicular on $x$.
+- $R^2 = \frac{SS_{reg}}{SS_{tot}}= \frac{||\hat{y}||^2}{||y||^2}$ (the $y$ vector is standardized to have lenght 1.)
+- $$r_{xy} = 
+\begin{cases} ||\hat{y}||  \ \ \ \text{if}  \  \theta \leq 90 \degree \ \ \ \text{or} \ \theta \geq 270 \degree  \\ -||\hat{y}|| \ \ \ \text{if}  \ 90\degree \leq \theta \leq 270\degree
+\end{cases}$$
+
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{bring1.PNG}
+    \caption{Geometrical representation of linear regression}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{Bring.PNG}
+    \caption{Geometrical representation of the product measure, $Z_i = B_i r_i$}
+\end{figure}
+
+### Two Additional Views of Linear Regression Coefficients
+
+The author [@Cli] proposes an interesting interpretation of the slope in the least square method. The linear regression line of $y$ on $x$, as determined by the method of least squares, passes through the central point with slope.
+
+**A View of Linear Regression Coefficients as a weighted average slope**
+
+- Consider any point $P_i=(x_i,y_i)$ and $P_o=(\bar{x}, \bar{y})$, the slope of the line $P_i P_o$ is: $b_i=\frac{y_i -\bar{y}}{x_i-\bar{x}}$.
+- Let's attach a weight $w_i$ to each $b_i$, if 2 points are very close, their slope is not very reliable (need little weight).
+- The "distance" between two points $\to$ the distance projected on the $x$-axis. To avoid negative weight, we may then take the weight, $w_i=(x_i-\bar{x})^2$.
+- Adopting this system of weighting, we see that $b$ is the weighted mean of the $b_i$'s.
+
+
+\begin{equation}
+    b=\bar{b}=\frac{\sum b_i w_i}{\sum w_i} = \hat{\beta_1} =        \frac{\sum(x_i -\bar{x})(y_i -\bar{y})}{\sum(x_i -\bar{x})^2}
+\end{equation}
+
+>> "This concept of weight for a slope is represented in the accompanying diagrams. (See Figure 1). The slope in the lefthand side diagram has a much larger weight than that in the righthand side for regression of $y$ on $x$. If we were concerned with the regression of $x$ on $y$, the reverse would be true. Note that the actual distance between the two points in the two diagrams is the same."
+
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{LI_slope.PNG}
+    \caption{Representation of the weight equal to the square of the base, based on the slope from $P_1$ to $P_0$}
+\end{figure}
+
+## Our current project, the Plotnetrec package:
+
+### OLS diagramatic representation 
+
+The principles of construction of the following diagram giving a diagrammatic representation of the regression and OLS are:
+
+- We assume that the covariance (an average of all possible rectangles as seen previously among all pairs of points in a data sample) can be represented by a rectangle.
+- This rectangle has by definition a known area given by the calculation of the empirical covariance $Cov(X,Y)$. But the covariance depends on three parameters since $Cov(X,Y) =\rho \sigma_x \sigma_y$. To represent the covariance and draw the corresponding rectangle, we have to make an additional assumption i.e. choose a normalization.
+We assume that one side of this rectangle is normalized by $sigma_x$. In this case, the other side necessarily has a length of $\rho \sigma_y$.
+- Following the same approach, we now assume that the variances of $X$ and $Y$ can be represented by two squares whose sides are of course the standard deviations of $X$ and $Y$ respectively.
+
+The diagram allows:
+
+- To represent the OLS estimator by the slope of the diagonal of the rectangle representing the covariance. Geometrically, we obtain that if $X$ increases by one standard deviation then $Y$ increases by $\rho$ standard deviation of the dependent variable $Y$.
+- To represent the explained variance in the total variance.
+- Correctly represent the coefficient of determination as the relative share of the explained variance in the total variance. With Venn diagrams sometimes used to represent the $R^2$, visual perception is based on the relative size of two surfaces and their intersection. The proposed diagram is not an ad hoc construction, it is based on a methodological and theoretical foundation allowing not only to represent the $R^2$ but also to read its value correctly.
+
+Reminder:
+
+\begin{align*}
+& \rho = \frac{COV(X,Y)}{\sigma_x \sigma_y}\\
+\Leftrightarrow & COV(X,Y) = \rho \sigma_y \times \sigma_x
+\end{align*}
+
+\begin{figure}[H]
+\centering
+  \begin{tikzpicture}[scale=1.2]
+    \def\sx{3};
+    \def\sy{4};
+    \def\r{0.5}; %postive%
+    \coordinate (O) at (0,0);
+    \coordinate (A) at (-\sx,-\sx);
+    \coordinate (B) at (\sy,\sy);
+    \coordinate (C) at (-\sx,{\sy*\r});
+    \draw[fill=green!20!white, draw=black] (O) rectangle (A); %variance for X%
+    \draw[fill=orange!20!white, draw=black] (O)rectangle (B); %variance for Y%
+    \draw[<->,fill=blue!40!white, draw=black] (O)rectangle(C);%covariance%
+    \draw[<->,thick] (A) -- node[below, scale = 0.8] {$\sigma_x$} (0,-\sx);
+    \draw[<->,thick] (O) -- node[below, scale = 0.8] {$\sigma_y$} (\sy,0);
+    \draw[<->,thick] (O) -- node[right, scale = 0.8] {$\rho\sigma_y$} (0,\r*\sy);
+    \draw[<->,thick] (O) -- node[left, scale = 0.8] {$\rho\sigma_y$} (0,\r*\sy);
+    \tkzDefPoint(0,0){t}
+    \tkzDefPoint(-\sx,0){tt};
+    \tkzDefPoint(0,\r*\sy){ttt};
+    \tkzMarkAngle[size=1, draw=black,fill=blue!20,mark=|](t,tt,ttt)];
+    \node[right, scale = 0.58] at (-\sx*0.6,0.3){$\arctan(\hat{\beta}=\frac{\rho\sigma_y}{\sigma_x})$};
+    % Regression line
+    \draw[-,ultra thick] (-\sx,0) -- node[midway,sloped,above, scale = 0.6] {Regression line} (0,\r*\sy);
+    %exlained variance%
+    \draw[fill=orange!40!white, draw=black] (O)rectangle (\r*\sy,\r*\sy);
+    % function r^2%
+    \draw[red,name path=curve 1,samples=200] plot[variable=\x,domain=0:\sy]
+    ({\x},{(\x^2/\sy});
+    % read the value for RÂ² and put a new scaled axe%
+    \draw[red] (\sy*1.1,0) node[below, scale = 0.6] {0} --(\sy*1.1,\sy) node [above, scale = 0.6] {1};
+    \draw[-stealth,dotted,red] (\r*\sy,\r^2*\sy) -- (\sy*1.1,\r^2*\sy) node[right,rotate=0]{$R^2=\rho^2$};
+  \end{tikzpicture}
+\end{figure}
+
+#### Multiple linear regression diagram
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.2]
+  \def\sx{3};
+  \def\sy{4};
+  \def\sz{2};
+  \def\rxy{0.8}; %positive%
+  \def\rxz{0.5}; %positive%
+  \def\ryz{0.5}; %positive%
+  %$$$$$$$$$$$$$$$$$$$$$%
+  \def\vrxz{0.8660254};
+  \def\vryz{0.8660254};
+  \def\ryxz{0.7333333};
+  %\def\truca{(sqrt(1-(\rxz)^2))};
+  %\def\truc{(-\sx*(sqrt(1-(\rxz)^2)))};
+  %\def\truc{-\sx*0.5};
+  \coordinate (O) at (0,0);
+  \coordinate (A) at (-\sx,-\sx);
+  \coordinate (B) at (\sy,\sy);
+  \coordinate (C) at (-\sx,{\sy*\rxy});
+  \coordinate (D) at (-\sx*\vrxz,-\sx*\vrxz);
+  \coordinate (E) at (\sy*\vryz,\sy*\vryz);
+  \coordinate (F) at (-\sx-\sz,-\sx-\sz);
+  \coordinate (G) at (\sy+\sz,\sy+\sz);
+  \coordinate (H) at (\ryxz*\vryz*\sy,\ryxz*\vryz*\sy);
+  \coordinate (I) at (\rxy*\sy,\rxy*\sy);
+
+  \draw[fill=magenta!80!white, draw=black] (A) rectangle (F); %variance for z%
+  \draw[fill=magenta!80!white, draw=black] (\sy,\sy) rectangle (G); %variance for z%
+
+  \draw[fill=green!20!white, draw=black] (O) rectangle (A); %variance for X%
+  \draw[fill=orange!20!white, draw=black] (O)rectangle (B); %variance for Y%
+  \draw[<->,fill=blue!20!white, draw=black] (O)rectangle(C);%covariance X Y%
+
+  %\draw[<->,thick] (O) -- node[left] {$\rho_{xy}\sigma_y$} (0,\rxy*\sy);
+
+  %\draw[fill=green!50!white, draw=black] (O) rectangle (D); %residual variance x.z%
+  \shade[inner color=magenta!40, outer color=green!60,opacity=1, draw=black](O) rectangle (D); %variance résiduelle x.z%
+
+  %\draw[fill=orange!50!white, draw=black] (O) rectangle (E);%variance résiduelle y.z%
+  \shade[top color=orange,bottom color=magenta!30,opacity=1,, draw=black] (O) rectangle (E);%variance résiduelle y.z%
+  %\draw[fill=red!50!white, draw=black] (O) rectangle (H);%R2 partiel de X sur Y purgé de l'effet de Z%
+  \shade[inner color=green,outer color=orange,draw=black] (O) rectangle (H);%R2 partiel de X sur Y purgé de l'effet de Z%
+
+  %\draw[fill=gray!50!white, draw=black,opacity=0.5] (O) rectangle (I); %R2 RLS Y=a+bX%
+  \shade[top color=green!50,bottom color=orange,opacity=0.5, draw=black] (O) rectangle (I); %R2 RLS Y=a+bX%
+
+  \draw[<->,thick] (A) -- node[below] {$\sigma_x$} (0,-\sx);
+  \draw[<->,thick] (O) -- node[below] {$\sigma_y$} (\sy,0);
+  \draw[<->,thick] (F) -- node[below] {$\sigma_z$} (-\sx,-\sx-\sz);
+  \draw[<->,thick] (\sy,\sy) -- node[below] {$\sigma_z$} (\sy+\sz,\sy);
+  % Regression line
+  \draw[-,ultra thick] (-\sx,0) -- node[midway,sloped,above] {RLS line} (0,\rxy*\sy);
+  \draw[-,ultra thick] (-\sx*\vrxz,0) -- node[midway,sloped,above] {RLM line} (0,\ryxz*\vryz*\sy);
+
+\end{tikzpicture}
+\end{figure}
+
+### Correlation representation
+
+Keep going with alternative representations, we introduce visualization of the correlation coefficient.
+
+First of all, we need some reminders: 
+
+$$\rho = \frac{COV(X,Y)}{\sigma_x \sigma_y}$$
+
+$$V(X+Y) = V(X) + V(Y) + 2COV(X,Y)$$
+
+
+* Limits: $\rho = 1$
+
+When $\rho = 1$ then $COV(X,Y) = \sigma_x \sigma_y$ 
+
+By replacing, we found: $V(X+Y) = V(X) + V(Y) + 2\sigma_x \sigma_y$
+
+\begin{minipage}{0.60\textwidth}
+    \begin{tikzpicture}[scale=0.7]
+      \def\sx{3};
+      \def\sy{4};
+      \def\r{1}; %postive%
+      \coordinate (O) at (0,0);
+      \coordinate (A) at (-\sx,-\sx);
+      \coordinate (B) at (\sy,\sy);
+      \coordinate (C) at (-\sx,{\sy*\r});
+      \draw[fill=green!580!white, draw=black] (O) rectangle (A); %variance for X%
+      \draw[fill=orange!80!white, draw=black] (O)rectangle (B); %variance for Y%
+      \draw[<->,fill=blue!80!white, draw=black] (O)rectangle(C);%covariance%
+      \draw[<->,fill=blue!80!white, draw=black] (O)rectangle(\sy,-\sx);%covariance%
+      \draw[<->,thick] (A) -- node[below] {$\sigma_x$} (0,-\sx);
+      \draw[<->,thick] (O) -- node[below] {$\sigma_y$} (\sy,0);
+      \shade[left color=green,outer color=yellow,opacity=0.5,draw=black,very thick](-\sx,-\sx) -- (-\sx,\sy) -- (\sy,\sy) -- (\sy,-\sx)-- cycle;
+    \end{tikzpicture}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.35\textwidth}
+Here we decide to represent $V(X+Y)$ like a square in the middle. And due to this last equation, we represent $V(X+Y)$ as an area which equals to the sum of $4$ rectangles area: $V(X) + V(Y) + 2\sigma_x \sigma_y$
+\end{minipage}
+
+
+* Limits : $\rho = -1$ 
+
+When $\rho = -1$ then $COV(X,Y) = -\sigma_x \sigma_y$ 
+
+By replacing, we found: $V(X+Y) = V(X) + V(Y) - 2\sigma_x \sigma_y$
+    
+
+\begin{minipage}{0.60\textwidth}
+    \begin{tikzpicture}[scale=0.7]
+      \def\sx{3};
+      \def\sy{4};
+      \def\r{1}; %postive%
+      \coordinate (O) at (0,0);
+      \coordinate (A) at (-\sx,-\sx);
+      \coordinate (B) at (\sy,\sy);
+      \coordinate (C) at (-\sx,{\sy*\r});
+      \draw[fill=green!580!white, draw=black] (O) rectangle (A); %variance for X%
+      \draw[fill=orange!80!white, draw=black] (O)rectangle (B); %variance for Y%
+      \draw[<->,fill=blue!80!white, draw=black] (O)rectangle(C);%covariance%
+      \draw[<->,fill=blue!80!white, draw=black] (O)rectangle(\sy,-\sx);%covariance%
+      \draw[<->,thick] (A) -- node[below] {$\sigma_x$} (0,-\sx);
+      \draw[<->,thick] (O) -- node[below] {$\sigma_y$} (\sy,0);
+      \shade[left color=green,outer color=yellow,opacity=0.5,draw=black,very thick](-\sx,-\sx) -- (-\sx,\sy) -- (\sy,\sy) -- (\sy,-\sx)-- cycle;
+      \shade[inner color=green,outer color=orange,opacity=3.5,draw=black,very thick] (0,0) -- (0,\sy-\sx) -- (\sy-\sx,\sy-\sx) -- (\sy-\sx,0)-- cycle;
+<<<<<<< HEAD
+    \end{tikzpicture}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.35\textwidth}
+ Here we decide to represent $V(X+Y)$ like a square in the middle. And due to this last equation, we represent $V(X+Y)$ as an area which equals to the sum of $4$ rectangles area: $V(X) + V(Y) - 2\sigma_x \sigma_y$
+\end{minipage}
+
+
+* Limits: $\rho = 0$
+
+When $\rho = 0$ then $COV(X,Y) = 0$ 
+
+By replacing, we found: : $V(X+Y) = V(X) + V(Y)$
+
+\begin{minipage}{0.60\textwidth}
+    \begin{tikzpicture}[scale=0.7]
+      \def\sx{3};
+      \def\sy{4};
+      \def\r{1}; %postive%
+      \coordinate (O) at (0,0);
+      \coordinate (A) at (-\sx,-\sx);
+      \coordinate (B) at (\sy,\sy);
+      \coordinate (C) at (-\sx,{\sy*\r});
+      \draw[fill=green!580!white, draw=black] (O) rectangle (A); %variance for X%
+      \draw[fill=orange!80!white, draw=black] (O)rectangle (B); %variance for Y%
+      \draw[<->,fill=blue!80!white, draw=black] (O)rectangle(C);%covariance%
+      \draw[<->,fill=blue!80!white, draw=black] (O)rectangle(\sy,-\sx);%covariance%
+      \draw[<->,thick] (A) -- node[below] {$\sigma_x$} (0,-\sx);
+      \draw[<->,thick] (O) -- node[below] {$\sigma_y$} (\sy,0);
+      \shade[left color=green,outer color=yellow,opacity=0.5,draw=black,very thick](-\sx,-\sx) -- (-\sx,\sy) -- (\sy,\sy) -- (\sy,-\sx)-- cycle;
+      \shade[inner color=green,outer color=orange,opacity=3.5,draw=black,very thick] (0,0) -- (0,\sy-\sx) -- (\sy-\sx,\sy-\sx) -- (\sy-\sx,0)-- cycle;
+      \draw [<->,fill=gray!40!white, opacity=0.4,draw=black,very thick] (-\sx,0) -- (0,\sy) -- (\sy,\sy-\sx) -- (\sy-\sx,-\sx)-- cycle;
+      \draw [<->,fill=gray!80!white, opacity=0.4,draw=black,very thick] (0,0) -- (0,\sy-\sx) -- (\sy-\sx,\sy-\sx) -- (\sy-\sx,0)-- cycle;
+    \end{tikzpicture}
+\end{minipage} 
+\hspace{3.5ex}
+\begin{minipage}{0.35\textwidth}
+Here we decide to represent $V(X+Y)$ like a square in the middle. And due to this last equation, we represent $V(X+Y)$ as an area which equals to the sum of $2$ rectangles area: $V(X) + V(Y)$
+\end{minipage}
+
+- Interest
+
+Correlation matrix with distinct mathematical construction. 
+
+\definecolor{bleu}{RGB}{112,204,215}
+
+\begin{figure}
+\centering
+  \begin{tikzpicture}[scale=0.7]
+    \def\sx{3};
+    \def\sy{4};
+    \def\r{1}; %postive%
+    \coordinate (O) at (0,0);
+    \coordinate (A) at (-\sx,-\sx);
+    \coordinate (B) at (\sy,\sy);
+    \coordinate (C) at (-\sx,{\sy*\r});
+    \draw[<->,fill=bleu, draw=black] (-\sx,0) -- (-\sx,\sy) --(0,\sy);
+    \draw[<->,fill=bleu, draw=black] (-\sx,0) -- (-\sx,-\sx) --(\sy-\sx,-\sx);
+    \draw[<->,fill=bleu, draw=black] (\sy-\sx,-\sx) -- (\sy,-\sx) --(\sy,\sy-\sx);
+    \draw[<->,fill=bleu, draw=black] (0,\sy)--(\sy,\sy) --(\sy,\sy-\sx);
+    \shade[top color=red,bottom color=red,opacity=3.5,draw=black,very thick] (0,0) -- (0,\sy-\sx) -- (\sy-\sx,\sy-\sx) -- (\sy-\sx,0)-- cycle;
+    \draw [<->,fill=gray!40!white, opacity=0.4,draw=black,very thick] (-\sx,0) -- (0,\sy) -- (\sy,\sy-\sx) -- (\sy-\sx,-\sx)-- cycle;
+    \draw [<->,fill=gray!80!white, opacity=0.4,draw=black,very thick] (0,0) -- (0,\sy-\sx) -- (\sy-\sx,\sy-\sx) -- (\sy-\sx,0)-- cycle;
+    \draw [-stealth, color = blue,line width=3pt](0,\sy) -- (-\sx,\sy);
+    \draw [-stealth,color = blue,  line width=3pt](-\sx,0) -- (-\sx,-\sx);
+    \draw [-stealth,color = blue, line width=3pt](\sy-\sx,-\sx) -- (\sy,-\sx);
+    \draw [-stealth,color = blue, line width=3pt](\sy,\sy-\sx) -- (\sy,\sy);
+    \draw [-stealth, color = red, line width=3pt](0,\sy) -- (0,\sy - \sx);
+    \draw [-stealth,color = red, line width=3pt](-\sx,0) -- (0, 0);
+    \draw [-stealth,color = red, line width=3pt](\sy-\sx,-\sx) -- (\sy-\sx,0);
+    \draw [-stealth,color = red, line width=3pt](\sy,\sy-\sx) -- (\sy-\sx,\sy-\sx);
+  
+  \end{tikzpicture}
+\end{figure}
+
+Let's observe what dynamically happens starting from the independant case ($\rho = 0$). If the correlation increases positively, the square increases its area and pivots toward the case where the correlation is perfectly positive. Conversely, if the correlation increases negatively, the area's square decreases and pivote towards the perfectly negative correlation place. 
+
+$$V(X+Y) = V(X) + V(Y) + 2COV(X,Y)$$

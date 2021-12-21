@@ -1,0 +1,137 @@
+# Visualization of covariance
+
+## State of the art: different attempts to represent the covariance
+
+### Venn diagramm 
+
+>> A Venn diagram is a widely used diagram style that shows the logical relation between sets, popularized by John Venn in the 1880s. The diagrams are used to teach elementary set theory, and to illustrate simple set relationships in probability, logic, statistics, linguistics and computer science. A Venn diagram uses simple closed curves drawn on a plane to represent sets. Very often, these curves are circles or ellipses.
+
+\begin{figure}
+    \centering
+    \includegraphics[width= 250 pt]{venn_colinearity.PNG}
+    \caption{Ballentine Venn diagrams displaying modest and considerable collinearity}
+    \label{fig:my_label}
+\end{figure}
+
+### Visualizing distributions of covariance matrices 
+
+>> Covariance matrices and their corresponding distributions play an important role in statistics. To understand the properties of distributions, we often rely on visualization methods. [@VisCov]
+
+Visualizing a distribution in a high-dimensional space is a challenge, with the additional difficulty that covariance matrices must be positive semi-definite, a restriction that forces the joint distribution of the covariances into an oddly-shaped subregion of the space.
+
+\begin{figure}
+    \centering
+    \includegraphics{wtf_covViz.PNG}
+    \caption{Visualize distributions of covariance matrices}
+    \label{fig:my_label}
+\end{figure}
+
+### A geometrical interpretation of an alternative formula for the sample covariance
+
+Kevin Hayes [@Hayes] proposes a new geometric and visual interpretation of covariance, based on the application of Hefferman's variance formula. He extends this formula to the covariance of a sample to extract his results. 
+
+- Formula from Heffernan definition of covariance: 
+
+$$
+cov(X,Y)= \frac{2}{n(n-1)}\sum_{i=1}^{n-1}\sum_{j>i}^{n}\frac{1}{2}(x_i-x_j)(y_i - y_j)
+$$
+
+>> Geometrically, $\frac{1}{2}(x_i-x_j)(y_i - y_j)$ is ±1 times the area right-triangle formed with the difference vector $(x_i — x_j, y_j)$ as its hypotenuse, where negatively sloped difference tors incur a $(—1)$ sign and positively sloped difference vectors take a $(+1)$ sign. [@Hayes]
+
+\begin{figure}
+    \centering
+    \includegraphics{hayes.PNG}
+    \caption{Some examples of covariance as area of rectangles}
+    \label{fig:my_label}
+\end{figure}
+
+
+### Covariance as signed area of rectangles 
+
+This article [@chudzicki] was written following a very interesting conversation on the **stats.statckexchange** site. The initial topic of this conversation was: "How to explain covariance to someone who only understands the notion of mean?".
+
+**Instructions for use:** 
+
+- Draw all possible such rectangles. Color them transparently, making the positive rectangles red (say) and the negative rectangles "anti-red" (blue).
+- The covariance is the net amount of red in the plot (treating blue as negative values).
+
+Let's deduce some properties of covariance. Understanding of these properties will be accessible to anyone who has actually drawn a few of the rectangles.
+
+- Bilinearity:
+
+Because the amount of red depends on the size of the plot, covariance is directly proportional to the scale on the $x$-axis and to the scale on the $y$-axis.
+
+- Correlation:
+
+Covariance increases as the points approximate an upward sloping line and decreases as the points approximate a downward sloping line. This is because in the former case most of the rectangles are positive and in the latter case, most are negative.
+
+- Relationship to linear associations:
+
+Because non-linear associations can create mixtures of positive and negative rectangles, they lead to unpredictable (and not very useful) covariances. Linear associations can be fully interpreted by means of the preceding two characterizations.
+
+- Sensitivity to outliers: 
+
+A geometric outlier (one point standing away from the mass) will create many large rectangles in association with all the other points. It alone can create a net positive or negative amount of red in the overall picture.
+
+\begin{figure}
+    \centering
+    \includegraphics{covRect.PNG}
+    \caption{Covariance rectangle}
+    \label{fig:my_label}
+\end{figure}
+
+## Our current project: the package Plotnetrec
+
+The Plonetrec package and its associated graphs is an alternative representation of a scatterplot. The aim is to detect certain particularities in a dataset. 
+
+\begin{figure}[H]
+\centering
+   \includegraphics{all.png}
+\end{figure}
+
+We locate in a standard case, whitout issues in he dataset.
+
+* The graph at the top right relates all the observations to their respective averages and we draw all corresponding rectangles . If the slope of the diagonal is negative, the rectangle is red and conversely, the rectangle is blue.
+
+* The bottom-left graphic relates all observations in pairs to draw all rectangle. In this figure, their is superposition of the rectangles. The sum of all rectangles areas gives two times the Covariance.
+
+* The bottom-righ graphic differs from the bottom-left by the coloring. We apply a transparency effect according to the net amount of the two colors. A superposition of red and blue will cancel each other and it results a lack of color. The more a color is represented, the more blue is intense. 
+
+Let's compare with some problematic.
+
+### Heterogeneity
+
+\vspace{0.6cm}
+
+\begin{minipage}{0.70\textwidth}
+    \includegraphics{plotnetrec_heterogeneity.png}
+\end{minipage}
+\hspace{3.5ex}
+\begin{minipage}{0.25\textwidth}
+   We clearly notice the heterogeneous character of $Y$. The Plotnetrec graphic seems to identify the split area of the groups.
+\end{minipage}   
+
+### Heteroskedasticity
+
+\vspace{0.6cm}
+
+\begin{minipage}{0.70\textwidth}
+    \includegraphics{plotnetrec_heteroscedasticite.png}
+\end{minipage}
+\hspace{3.5ex}
+\begin{minipage}{0.25\textwidth}
+  The heteroskedasticity case has to be redesigned.
+\end{minipage}
+
+### Non linear relationship
+
+\vspace{0.6cm}
+
+\begin{minipage}{0.70\textwidth}
+    \includegraphics{plotetrect_non_linear.png}
+\end{minipage}
+\hspace{3.5ex}
+\begin{minipage}{0.25\textwidth}
+    Non linear case seems very expressive in the panel of graphics beside.
+\end{minipage}
+

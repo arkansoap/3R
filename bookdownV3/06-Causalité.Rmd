@@ -1,0 +1,126 @@
+# Causality
+
+In the basic model $y=\alpha+\beta x+\varepsilon$ the OLS estimator $\hat{\beta}$ is unbiased if $x$ is independent of $\varepsilon$. We cannot know a priori if this is the case and in any case not a posteriori at the end of the estimation since the residuals are by construction independent of $X$. We can easily show that there is no unique solution in $\hat{\beta}$ of the maximum likelihood when we increase the model by a free parameter representing the correlation between $\varepsilon$ and $x$.
+The prediction $\mathbb{E}(y~/x)=\hat{\beta}x$ is correct only if $\mathbb{E}(\varepsilon~/x)=0$.
+Otherwise $\mathbb{E}(\varepsilon~/x)=0$ there is an endogeneity and $\hat{\beta}$ is not an exact measure of the marginal effect of an exogenous variation of $x$.
+The main situations of endogeneity encountered and studied are related to the problems:
+
+- Simultaneous causality
+- Omitted variables
+- Measurement errors on the variables
+- Selection bias
+- Poorly specified functional form
+
+## The main cases
+
+### Simultaneous causality
+Is it enough to simply show by a diagram that regressing $y$ on $x$ and then $x$ on $y$ does not give the same result? 
+The answer is no, it is not enough!
+
+### Omitted variables
+.... Repeat the previous results in a simplified way to illustrate the effect of omitting a variable and present the conditions under which the omission of a variable leads to a bias on the model parameters.
+
+### Measurement errors
+Let's consider the following RLS model
+
+$$y^{\star}=\alpha+\beta x^{\star}+\varepsilon$$
+
+
+We do not observe $y^{\star}$ (but $y=y^{\star}+v_y$), nor $x^{\star}$ (but $x=x^{\star}+u_x$). 
+
+Consider the following assumptions: 
+
+$\mathbb{E}(u_x)=\mathbb{E}(v_y)=0$
+
+$\mathbb{E}(y v_y)=\mathbb{E}(y u_x)=\mathbb{E}(x u_y)=\mathbb{E}(x v_x)=0$
+
+$\mathbb{E}(\varepsilon u_y)=0$
+
+
+The measurement errors are of zero expectation, and independent of the variables and the error term. 
+Under these assumptions, for two randomly chosen points $k$ and $l$, the covariance between $X$ and $Y$ does not change.
+
+$$\mathbb{E}[(x_k-x_l)(y_k-y_l)]$$
+
+$$\mathbb{E}[(x_k^{\star}+u_k-(x_l^{\star}+u_l))(y_k^{\star}+v_k-(y_l^{\star}+v_l))]$$
+
+$$\mathbb{E}[(x_k^{\star}+u_k)(y_k^{\star}+v_k)] -\mathbb{E}[x_k^{\star}+u_k]\mathbb{E}[y_l^{\star}+v_l] -\mathbb{E}[x_l^{\star}+u_l]\mathbb{E}[y_k^{\star}+v_k]+ \mathbb{E}[(x_l^{\star}+u_l)(y_l^{\star}+v_l)]$$
+
+
+$$2Cov(x^{\star},y^{\star})$$
+
+
+Measurement errors are detrimental to accuracy but on average they do not affect the covariance. The only essential problem is therefore related to the correct estimation of the parameters, while the correlation between the dependent and independent variables does not change. On the other hand, one should not confuse the effect of $x$ on $y$ with the effect of the measurement error of $x$ on $y$ (which is zero).
+
+## Measurement error on the dependent variable
+
+Let us consider a measurement error on the dependent variable $y$, i.e. let $\sigma_v^2 > 0$ and $\sigma_u^2 = 0$. The model becomes:
+$$y=alpha+beta x + v+ \varepsilon$$
+The measurement error on the dependent variable does not matter in the sense that it has no biasing effect on the estimated parameters of the model. In practice, it can be considered as contributing to the disturbance term of the model. It is obviously undesirable, as anything that increases the noise in the model will tend to make the regression estimates less accurate, but it has no impact in terms of bias in the estimates.
+
+In this case, we do not make a diagram for a graphical proof because it is so obvious!
+
+## Measurement error on the independent variable
+
+We consider the case where the measurement error is on the dependent variable $x$, i.e. Let $sigma_v^2 =0$ and $sigma_u^2 >0$. 
+The model becomes:
+$$y=alpha+beta x -beta u + \varepsilon$$
+
+In the regression of $y$ on $x$, the measurement error of $x$ becomes part of the error in the regression equation related to the parameter $\beta$, thus creating an endogeneity bias. The OLS estimator $\hat{\beta}=\frac{Cov(x,y)}{Var(x)}$ is biased towards 0. The unbiased estimator is $\beta=frac{Cov(x^\star ,y)}{Var(x^\star)}$. 
+
+Proof:
+
+Since $Cov(x^\star,y)=Cov(x,y)$, we have:
+$$\frac{\hat{\beta}}{\beta}=\frac{Var(x^\star)}{Var(x)}=\frac{\sigma_x^{\star 2}}{\sigma_u^2+\sigma_x^{\star 2}} \implies plim~\hat{\beta}=\lambda \beta$$
+With $\lambda=\frac{\sigma_x^{\star 2}}{\sigma_u^2+\sigma_x^{\star 2}}$. Since $0<lambda<1$ the coefficient $\hat{\beta}$ is biased towards 0.
+The bias depends on the level and the sign of $\beta$: 
+$$
+plim~\hat{\beta}-\beta=\lambda \beta-\beta=-(1-\lambda)\beta=-\frac{\sigma_u^2}{\sigma_u^2+\sigma_x^{\star 2}}\beta
+$$
+
+### Diagram of the model with measurement error on the independent variable
+
+The following figure illustrates the problem in a very simple way.
+
+\begin{figure}[H]
+\begin{tikzpicture} [scale=1.5]
+\def\sx{3};
+\def\su{1.5};
+\def\sxt{3.354101966};
+\def\sy{4};
+\def\r{0.5}; %positive%
+\def\truc{1.788854382}
+\coordinate (O) at (0,0);
+\coordinate (A) at (-\sx,-\sx);
+\coordinate (B) at (\sy,\sy);
+\coordinate (C) at (-\sx,{\sy*\r});
+\coordinate (D) at (-\sx,0);
+\coordinate (E) at (-\sx-\su,-\su);
+\coordinate (F) at (-\sxt,-\sxt);
+
+\draw[fill=green!20!white, draw=black] (O) rectangle (A); %variance for X%
+\draw[fill=orange!20!white, draw=black] (O)rectangle (B); %variance for Y%
+\draw[<->,fill=blue!40!white, draw=black] (O)rectangle(C);%covariance%
+\draw[<->,fill=green!10!white, draw=black] (D)rectangle(E);%variance for u%
+\draw[fill=green!5!white, draw=black,opacity=0.5] (O) rectangle (F); %variance for Xt%
+\draw[<->,fill=blue!30!white, draw=black,opacity=0.5] (-\sxt,0)rectangle(0,\truc);%covariance%
+
+\draw[<->,thick] (A) -- node[below] {$\sigma_x^\star$} (0,-\sx);
+\draw[<->,thick] (O) -- node[below] {$\sigma_y$} (\sy,0);
+\draw[<->,thick] (O) -- node[left] {$\rho\sigma_y$} (0,\r*\sy);
+\draw[<->,thick] (E) -- node[below] {$\sigma_u$} (-\sx,-\su);
+\draw[<->,thick] (F) -- node[below] {$\sigma_x$} (0,-\sxt);
+ 
+% Regression line
+\draw[-,ultra thick] (-\sx,0) -- node[midway,sloped,above] {True Regression line} (0,\r*\sy);
+% Biasied Regression line
+\draw[-,ultra thick,red] (-\sxt,0) -- node[midway,sloped,below] {Biased Regression line} (0,\truc);
+\end{tikzpicture}
+\caption{\label{measurement error on x} Regression of $y$ on $x$ with measurement error on $X$}
+\end{figure}
+
+## Instrumental variables
+$$Y=\alpha + \beta X +u$$
+$$X=\theta + \delta Z +v$$
+$$\beta_{IV}=\frac{Cov(Y,Z)}{Cov(X,Z)} =\frac{\rho_{zy} \sigma_y}{\rho_{zx} \sigma_x}$$
+

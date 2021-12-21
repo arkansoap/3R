@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Correlation | Econometrics visualization</title>
+  <meta name="description" content="First try of bookdown" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Correlation | Econometrics visualization" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="First try of bookdown" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Correlation | Econometrics visualization" />
+  
+  <meta name="twitter:description" content="First try of bookdown" />
+  
+
+<meta name="author" content="Lucas Chaveneau, Thibault Fuchez, Allan Guichard" />
+
+
+<meta name="date" content="2021-12-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="covariance.html"/>
+<link rel="next" href="visualization-of-covariance.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-is-econometrics"><i class="fa fa-check"></i><b>1.1</b> What is Econometrics?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-about-econometric-visualization"><i class="fa fa-check"></i><b>1.2</b> What about econometric visualization?</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#state-of-the-art"><i class="fa fa-check"></i><b>1.3</b> State of the art</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#our-project-an-r-package"><i class="fa fa-check"></i><b>1.4</b> Our project, an R package</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="covariance.html"><a href="covariance.html"><i class="fa fa-check"></i><b>2</b> Covariance</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="covariance.html"><a href="covariance.html#variance-definition-reminder"><i class="fa fa-check"></i><b>2.1</b> Variance definition reminder</a></li>
+<li class="chapter" data-level="2.2" data-path="covariance.html"><a href="covariance.html#covariance-standard-definition"><i class="fa fa-check"></i><b>2.2</b> Covariance standard definition</a></li>
+<li class="chapter" data-level="2.3" data-path="covariance.html"><a href="covariance.html#mathematical-standard-and-alternatives-covariance-definition"><i class="fa fa-check"></i><b>2.3</b> Mathematical standard and alternatives covariance definition</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="covariance.html"><a href="covariance.html#standard-definition"><i class="fa fa-check"></i><b>2.3.1</b> Standard definition</a></li>
+<li class="chapter" data-level="2.3.2" data-path="covariance.html"><a href="covariance.html#alternative-definition-a-story-of-rectangles"><i class="fa fa-check"></i><b>2.3.2</b> Alternative definition, a story of rectangles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="correlation.html"><a href="correlation.html"><i class="fa fa-check"></i><b>3</b> Correlation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="correlation.html"><a href="correlation.html#correlation-overview"><i class="fa fa-check"></i><b>3.1</b> Correlation overview</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="correlation.html"><a href="correlation.html#from-covariance-to-correlation"><i class="fa fa-check"></i><b>3.1.1</b> From covariance to correlation</a></li>
+<li class="chapter" data-level="3.1.2" data-path="correlation.html"><a href="correlation.html#correlation-definition"><i class="fa fa-check"></i><b>3.1.2</b> Correlation definition</a></li>
+<li class="chapter" data-level="3.1.3" data-path="correlation.html"><a href="correlation.html#galton-a-pioneer-in-the-history-of-correlation"><i class="fa fa-check"></i><b>3.1.3</b> Galton, a pioneer in the history of correlation</a></li>
+<li class="chapter" data-level="3.1.4" data-path="correlation.html"><a href="correlation.html#pearson-correlation-coefficient"><i class="fa fa-check"></i><b>3.1.4</b> Pearson correlation coefficient</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="correlation.html"><a href="correlation.html#alternatives-correlation-measurement"><i class="fa fa-check"></i><b>3.2</b> Alternatives correlation measurement</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="correlation.html"><a href="correlation.html#spearmans-rank-correlation-coefficient"><i class="fa fa-check"></i><b>3.2.1</b> Spearman’s rank correlation coefficient</a></li>
+<li class="chapter" data-level="3.2.2" data-path="correlation.html"><a href="correlation.html#partial-correlation"><i class="fa fa-check"></i><b>3.2.2</b> Partial Correlation</a></li>
+<li class="chapter" data-level="3.2.3" data-path="correlation.html"><a href="correlation.html#semi-partial-correlation"><i class="fa fa-check"></i><b>3.2.3</b> Semi partial Correlation</a></li>
+<li class="chapter" data-level="3.2.4" data-path="correlation.html"><a href="correlation.html#transitivity-correlation"><i class="fa fa-check"></i><b>3.2.4</b> Transitivity correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="correlation.html"><a href="correlation.html#distance-correlation"><i class="fa fa-check"></i><b>3.3</b> Distance correlation</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="correlation.html"><a href="correlation.html#other-correlations"><i class="fa fa-check"></i><b>3.3.1</b> Other Correlations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html"><i class="fa fa-check"></i><b>4</b> Visualization of covariance</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#state-of-the-art-different-attempts-to-represent-the-covariance"><i class="fa fa-check"></i><b>4.1</b> State of the art: different attempts to represent the covariance</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#venn-diagramm"><i class="fa fa-check"></i><b>4.1.1</b> Venn diagramm</a></li>
+<li class="chapter" data-level="4.1.2" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#visualizing-distributions-of-covariance-matrices"><i class="fa fa-check"></i><b>4.1.2</b> Visualizing distributions of covariance matrices</a></li>
+<li class="chapter" data-level="4.1.3" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#a-geometrical-interpretation-of-an-alternative-formula-for-the-sample-covariance"><i class="fa fa-check"></i><b>4.1.3</b> A geometrical interpretation of an alternative formula for the sample covariance</a></li>
+<li class="chapter" data-level="4.1.4" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#covariance-as-signed-area-of-rectangles"><i class="fa fa-check"></i><b>4.1.4</b> Covariance as signed area of rectangles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#our-current-project-the-package-plotnetrec"><i class="fa fa-check"></i><b>4.2</b> Our current project: the package Plotnetrec</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#heterogeneity"><i class="fa fa-check"></i><b>4.2.1</b> Heterogeneity</a></li>
+<li class="chapter" data-level="4.2.2" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#heteroskedasticity"><i class="fa fa-check"></i><b>4.2.2</b> Heteroskedasticity</a></li>
+<li class="chapter" data-level="4.2.3" data-path="visualization-of-covariance.html"><a href="visualization-of-covariance.html#non-linear-relationship"><i class="fa fa-check"></i><b>4.2.3</b> Non linear relationship</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html"><i class="fa fa-check"></i><b>5</b> Linear regression and first reliability measure</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#simple-linear-regression"><i class="fa fa-check"></i><b>5.1</b> Simple linear regression</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#estimation-by-ordinary-least-squares"><i class="fa fa-check"></i><b>5.1.1</b> Estimation by ordinary least squares</a></li>
+<li class="chapter" data-level="5.1.2" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#measuring-overall-variation-from-the-sample-line"><i class="fa fa-check"></i><b>5.1.2</b> Measuring overall variation from the sample line</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="linear-regression-and-first-reliability-measure.html"><a href="linear-regression-and-first-reliability-measure.html#multiple-linear-regression"><i class="fa fa-check"></i><b>5.2</b> Multiple linear regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html"><i class="fa fa-check"></i><b>6</b> Visualisation of regression and correlation beetween variable</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#state-of-the-art-1"><i class="fa fa-check"></i><b>6.1</b> State of the art</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#more-on-venn-diagrams-for-regression-figure-6.1"><i class="fa fa-check"></i><b>6.1.1</b> More on Venn Diagrams for Regression (figure 6.1)</a></li>
+<li class="chapter" data-level="6.1.2" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#a-geometric-approach-to-compare-variables-in-a-regression-model"><i class="fa fa-check"></i><b>6.1.2</b> A geometric approach to compare variables in a regression model</a></li>
+<li class="chapter" data-level="6.1.3" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#two-additional-views-of-linear-regression-coefficients"><i class="fa fa-check"></i><b>6.1.3</b> Two Additional Views of Linear Regression Coefficients</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#our-current-project-the-plotnetrec-package"><i class="fa fa-check"></i><b>6.2</b> Our current project, the Plotnetrec package:</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#ols-diagramatic-representation"><i class="fa fa-check"></i><b>6.2.1</b> OLS diagramatic representation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="visualisation-of-regression-and-correlation-beetween-variable.html"><a href="visualisation-of-regression-and-correlation-beetween-variable.html#correlation-representation"><i class="fa fa-check"></i><b>6.2.2</b> Correlation representation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>7</b> Causality</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="causality.html"><a href="causality.html#the-main-cases"><i class="fa fa-check"></i><b>7.1</b> The main cases</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="causality.html"><a href="causality.html#simultaneous-causality"><i class="fa fa-check"></i><b>7.1.1</b> Simultaneous causality</a></li>
+<li class="chapter" data-level="7.1.2" data-path="causality.html"><a href="causality.html#omitted-variables"><i class="fa fa-check"></i><b>7.1.2</b> Omitted variables</a></li>
+<li class="chapter" data-level="7.1.3" data-path="causality.html"><a href="causality.html#measurement-errors"><i class="fa fa-check"></i><b>7.1.3</b> Measurement errors</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="causality.html"><a href="causality.html#measurement-error-on-the-dependent-variable"><i class="fa fa-check"></i><b>7.2</b> Measurement error on the dependent variable</a></li>
+<li class="chapter" data-level="7.3" data-path="causality.html"><a href="causality.html#measurement-error-on-the-independent-variable"><i class="fa fa-check"></i><b>7.3</b> Measurement error on the independent variable</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="causality.html"><a href="causality.html#diagram-of-the-model-with-measurement-error-on-the-independent-variable"><i class="fa fa-check"></i><b>7.3.1</b> Diagram of the model with measurement error on the independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="causality.html"><a href="causality.html#instrumental-variables"><i class="fa fa-check"></i><b>7.4</b> Instrumental variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><a href="state-of-the-art-of-r-packages-in-visualization-econometrics-and-data-viz-more-broadly.html"><i class="fa fa-check"></i><b>8</b> State of the art of R packages in visualization econometrics (and data-viz more broadly)</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="9" data-path="annexes.html"><a href="annexes.html"><i class="fa fa-check"></i><b>9</b> annexes</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="annexes.html"><a href="annexes.html#correction-of-bessels-proof"><i class="fa fa-check"></i><b>9.1</b> Correction of Bessel’s proof</a></li>
+<li class="chapter" data-level="9.2" data-path="annexes.html"><a href="annexes.html#proof-for-covxyfrac12nn-1sum_i1n-sum_j1nx_i-x_jy_i-y_j"><i class="fa fa-check"></i><b>9.2</b> Proof for <span class="math inline">\(Cov(x,~y)=\frac{1}{2N(N-1)}\sum_{i=1}^{N} \sum_{j=1}^{N}~(x_i-x_j)(y_i-y_j)\)</span></a></li>
+<li class="chapter" data-level="9.3" data-path="annexes.html"><a href="annexes.html#a-little-bit-of-calculation"><i class="fa fa-check"></i><b>9.3</b> a little bit of calculation</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Econometrics visualization</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="correlation" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Correlation</h1>
+<div id="correlation-overview" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Correlation overview</h2>
+<div id="from-covariance-to-correlation" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> From covariance to correlation</h3>
+<p>The normalized version of the covariance, the correlation coefficient, however, shows by its magnitude the strength of the linear relation.</p>
+<ul>
+<li>Both covariance and correlation measure the relationship and the dependency between two variables.</li>
+<li>Correlation values are standardized while covariance values are not.</li>
+<li>Covariance indicates the direction of the linear relationship between variables as well as the correlation but the latter measure also the strengh of the relationship.</li>
+</ul>
+<p>The normalized form of the covariance matrix is the correlation matrix.</p>
+</div>
+<div id="correlation-definition" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Correlation definition</h3>
+<p>In statistics, correlation or dependence is any statistical relationship, whether causal or not, between two random variables or bivariate data.</p>
+<p>In the broadest sense correlation is any statistical association, though it actually refers to the degree to which a pair of variables are linearly related.</p>
+<p>There are several correlation coefficients, often denoted <span class="math inline">\(\rho\)</span> or <span class="math inline">\(r\)</span>, measuring the degree of correlation. The most common of these is the Pearson correlation coefficient, which is sensitive only to a linear relationship between two variables (which may be present even when one variable is a nonlinear function of the other). Other correlation coefficients – such as Spearman’s rank correlation – have been developed to be more robust than Pearson’s, that is, more sensitive to nonlinear relationships.</p>
+</div>
+<div id="galton-a-pioneer-in-the-history-of-correlation" class="section level3" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> Galton, a pioneer in the history of correlation</h3>
+<blockquote>
+<blockquote>
+<p>“I can only say that there is a vast field of topics that fall under the laws of correlation, which lies quite open to the research of any competent person who cares to investigate it.” (Galton, 1890)</p>
+</blockquote>
+</blockquote>
+<p>Galton’s 1888 paper <span class="citation">(<a href="#ref-galton" role="doc-biblioref">Galton 1888</a>)</span>, presented to the Royal Society in London, defines correlation as follows:</p>
+<blockquote>
+<blockquote>
+<p>“Two variable organs are said to be co-related when the variation of the one is accompanied on the average by more or less variation of the other, and in the same direction…. It is easy to see that co-relation must be the consequence of the variations of the two organs being partly due to common causes… If they were in no respect due to common causes, the co-relation would be nil.”</p>
+</blockquote>
+</blockquote>
+<p>Galton’s definition reveals the properties of the correlation coefficient. It is a measure of the strength of a linear relationship; the closer it is to 1, the more two variables can be predicted from each other by a linear equation. It is a measure of direction: a positive correlation indicates that <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span> increase together; a negative correlation indicates that one decreases as the other increases. Note that Galton does not claim that co-relation implies cause and effect (it would be absurd to assume that the size of one organ determines the size of another). Galton hypothesized that the correlation indicated the presence of “common causes” for the observed relationship between the variables (the size of each organ respectively).</p>
+<p>More technically Galton continues his presentation as follows:</p>
+<blockquote>
+<blockquote>
+<p>“Let y = the deviation of the subject [in units of the probably error, Q], whichever of the two variables may be taken in that capacity; and let x1, x2, x3, &amp;c., be the corresponding deviations of the relative, and let the mean of these be X. Then we find: (1) that y = rX for all values of y; (2) that r is the same, whichever of the two variables is taken for the subject; (3) that r is always less that 1; (4) that r measures the closeness of co-relation.”</p>
+</blockquote>
+</blockquote>
+<p>Galton particularly liked the correlation coefficient because it could be used to predict deviations <span class="math inline">\(Y\)</span> from <span class="math inline">\(X\)</span> or <span class="math inline">\(X\)</span> from <span class="math inline">\(Y\)</span>. Thus, from the beginning, the correlation coefficient was closely related to the regression line. Originally, <span class="math inline">\(r\)</span> meant the regression slope, but there was a problem in that the regression line of the slope was partly a function of the units of measurement chosen. Galton perceived the correlation coefficient as a unitless regression slope and appropriated the label <span class="math inline">\(r\)</span>.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+### Thirteen ways to see correlation <span class="citation">(<a href="#ref-13cor" role="doc-biblioref">Rodgers and co 1988</a>)</span></p>
+<blockquote>
+<p>In 1885, Sir Francis Galton first defined the term “regression” and completed the theory of bivariate correlation. A decade later, Karl Pearson developed the index that we still use to measure correlation, Pearson’s r . Our article is written in recognition of the 100th anniversary of Galton’s first discussion of regression and correlation.</p>
+</blockquote>
+<p>According Joseph Lee Rodgers and co article, Several ways to interpret the correlation:</p>
+<ul>
+<li>As standardized covariance
+<span class="math display">\[r=\frac{Cov(x,y)}{\sigma^2_x\sigma^2_y}\]</span></li>
+<li>As standardized slope of regression line
+<span class="math display">\[r=b_{Y.X}\left(\frac{\sigma^2_x}{\sigma^2_y}\right)=b_{X.Y}\left(\frac{\sigma^2_y}{\sigma^2_x}\right)\]</span></li>
+<li>As geometric mean of the two regression slopes
+<span class="math display">\[r=\pm\sqrt{b_{Y.X}\times b_{X.Y}}\]</span></li>
+<li>As the square root of the ratio of two variances
+<span class="math display">\[r=\sqrt{\frac{\sum(Y_i -\hat{Y}_i)}{\sum(Y_i -\bar{Y}_i)}}=\sqrt{\frac{SS_{reg}}{SS_{tot}}}\]</span></li>
+<li>And so many other…</li>
+</ul>
+</div>
+<div id="pearson-correlation-coefficient" class="section level3" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> Pearson correlation coefficient</h3>
+<ul>
+<li>Some notations that may be useful:</li>
+</ul>
+<p><span class="math inline">\(S_{xx} = \sum_{i=1}^n(x_i -\bar{x})^2\)</span></p>
+<p><span class="math inline">\(S_{yy} = \sum_{i=1}^n(y_i -\bar{y})^2\)</span></p>
+<p><span class="math inline">\(S_{xy} = \sum_{i=1}^n(x_i -\bar{x})(y_i -\bar{y})\)</span></p>
+<ul>
+<li>Pearson correlation coefficient:</li>
+</ul>
+<p><span class="math display">\[\rho=\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}\]</span></p>
+<p>The Pearson correlation coefficient is a bounded index (i.e., <span class="math inline">\(-1 \leq \rho \leq 1\)</span>) that provides a unitless measure for the strength and direction of the association between two variables.</p>
+</div>
+</div>
+<div id="alternatives-correlation-measurement" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Alternatives correlation measurement</h2>
+<div id="spearmans-rank-correlation-coefficient" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Spearman’s rank correlation coefficient</h3>
+<p>Measures the association based on the ranks of the variables.</p>
+<p><span class="math display">\[\hat{\theta}=\frac{\sum_{i=1}^n(R_i-\bar{R}(S_i-\bar{S}))}{\sqrt{\sum_{i=1}^n(R_i-\bar{R})^2\sum_{i=1}^n(S_i-\bar{S})^2}}\]</span></p>
+<p>Where <span class="math inline">\(R_i\)</span> and <span class="math inline">\(S_i\)</span> are the rank of the <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> values, respectively.</p>
+<p>Note that this is just the estimated Pearson’s correlation coeffcient, but the values of the variables have been replaced by their respective ranks.</p>
+<p>The Spearman correlation is the non-parametric equivalent of the Pearson correlation. It measures the relationship between two variables. If the variables are ordinal, discrete or do not follow a normal distribution, the Spearman correlation is used. This correlation does not use the values of the data but their rank.
+In fact, nothing changes, everything is the same as calculating a Pearson correlation but on transformed variables.
+The interest of establishing a correlation on the ranks of the variables is to detect if there is a monotonic relationship, which may not be linear.</p>
+</div>
+<div id="partial-correlation" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Partial Correlation</h3>
+<p>The partial correlation coefficient, noted here <span class="math inline">\(r_{AB.C}\)</span>, allows us to know the value of the correlation between two variables A and B, if the variable C had remained constant for the series of observations considered.</p>
+<p>Put another way, the partial correlation coefficient <span class="math inline">\(r_{AB.C}\)</span> is the total correlation coefficient between variables A and B when we have removed their best linear explanation in terms of C. It is given by the formula :</p>
+<p><span class="math display">\[r_{AB.C}=\frac{r_{AB}-r_{AC} \cdot r_{BC}}{\sqrt{1-r_{AC}^2} \cdot \sqrt{1-r_{BC}^2}}\]</span>
+Let’s go a little further in understanding this coefficient:</p>
+<p>The OLS estimator of <span class="math inline">\(\beta\)</span> is written
+<span class="math display">\[\hat{\beta}=\frac{Cov(y,x_1)}{\mathbb{V}ar(x_1)}\]</span>
+The estimator <span class="math inline">\(\beta&#39;\)</span> is written</p>
+<p><span class="math display">\[\begin{align*}
+  \hat{\beta&#39;} &amp;= \frac{Cov(y,x_1)\mathbb{V}(x_2)-Cov(y,x_2)Cov(x_1,x_2)}{
+  \mathbb{V}(x_1)\mathbb{V}(x_2)-Cov(x_1,x_2)^2} \\
+&amp;= \hat{\beta&#39;}=\frac{\rho_{y1} \sigma_y \sigma_1\sigma_2^2-\rho_{y2} \sigma_y     \sigma_2\rho_{12} \sigma_1 \sigma_2}{\sigma_1^2\sigma_2^2-\rho_{12}^2 \sigma_1^2 \sigma_2^2} \\
+&amp;= \hat{\beta&#39;}={\frac{\rho_{y1}-\rho_{y2}\rho_{12}} 
+{1-\rho_{12}^2}}\quad\frac{\sigma_y}{\sigma_1}
+\end{align*}\]</span></p>
+<p>After some transformation we have:
+<span class="math display">\[\hat{\beta&#39;}=\underbrace{\underbrace{\frac{\rho_{y1}-\rho_{y2}\rho_{12}} 
+{\sqrt{1-\rho_{12}^2}\sqrt{1-\rho_{y2}^2}}}_{\text{Partial correlation}}}_{\rho_{y1|2}}
+\quad\frac{\sigma_y\sqrt{1-\rho_{y2}^2}}{\sigma_1\sqrt{1-\rho_{12}^2}}\]</span></p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+In order to understand this expression, consider the following two regressions:</p>
+<p><span class="math display">\[x_1=\kappa +\tau x_2+\varepsilon_{1|2}\]</span><br />
+<span class="math display">\[y=\delta +\gamma x_2+\varepsilon_{y|2}\]</span></p>
+<p>We have:
+<span class="math display">\[\begin{align*}
+Cov(e_{1|2},e_{y|2})&amp;=Cov(x_1-\hat{\kappa}-\hat{\tau} x_2,~y-\hat{\delta} -\hat{\gamma} x_2)\\
+&amp;=Cov(x_1,y)-\hat{\gamma}Cov(x_1,x_2)-\hat{\tau}Cov(x_1,y)+\hat{\gamma}\hat{\tau}\mathbb{V}ar(x_2)\\
+\mathbb{V}ar(e_{y|2})&amp;=\mathbb{V}ar(y-\hat{\delta} - \hat{\gamma} x_2)\\
+&amp;=\mathbb{V}ar(y)-2\hat{\gamma}Cov(x_1,y)+\hat{\gamma}^2\mathbb{V}ar(x_2)\\
+\mathbb{V}ar(e_{1|2})&amp;=\mathbb{V}ar(x_1-\hat{\kappa} - \hat{\tau} x_2)\\
+&amp;=\mathbb{V}ar(x_1)-2\hat{\tau}Cov(x_1,x_2)+\hat{\tau}^2\mathbb{V}ar(x_2)
+\end{align*}\]</span></p>
+<p>The linear correlation coefficient between <span class="math inline">\(e_{1|2}\)</span> and <span class="math inline">\(e_{y|2}\)</span> corresponds to the correlation between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_1\)</span> after taking into account the linear influence of <span class="math inline">\(x_2\)</span> on these two respective variables:</p>
+<p><span class="math display">\[\begin{align*}
+\rho_{yx_1|x_2}&amp;=\frac{Cov(e_{1|2},e_{y|2})}{\sqrt{\mathbb{V}ar(e_{y|2})\mathbb{V}ar(e_{1|2})}}\\
+\end{align*}\]</span></p>
+<p>After simplification we obtain the expression of the partial correlation:</p>
+<p><span class="math display">\[\begin{align*}
+\rho_{y1|2}&amp;=\frac{\rho_{y1}-\rho_{y2}\rho_{12}}{\sqrt{(1-\rho_{y2}^2)(1-\rho_{12}^2)}}
+\end{align*}\]</span></p>
+<p>And so, the estimator <span class="math inline">\(\hat{\beta&#39;}\)</span> can thus be written as that of a simple linear regression where the variables are the residuals of prior regressions of <span class="math inline">\(y\)</span> respectively <span class="math inline">\(x_1\)</span> on <span class="math inline">\(x_2\)</span>.</p>
+<p><span class="math display">\[\hat{\beta&#39;}=\rho_{y1|2}\frac{\sigma_y\sqrt{1-\rho_{y2}^2}}{\sigma_1\sqrt{1-\rho_{12}^2}}\]</span></p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<p>When the number of variable is quite high, computing the partial correlation coefficient can be quite laborious. It is advised to use some regression methods when there are more than 3 variables. The alternative is to compute regression’s residuals of both chosen variables on the other variables.
+This approach leads to the same results. Let’s remind that partial correlation measuring the link between the residual information of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> which is not already explained by the other variables.
+The <span class="math inline">\(j\)</span>-order partial correlation amounts to calculating the correlation between the regression’s residuals.</p>
+<p><span class="math display">\[\rho_{x_1y.x_2, \ldots, x_j} = \rho_{e_{x_1}e_y}\]</span></p>
+</div>
+<div id="semi-partial-correlation" class="section level3" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Semi partial Correlation</h3>
+<p>Unlike to partial correlation, semi-partial correlation is asymetrical. it get closer from multiple regression. We try to quantify, for one variable, its additional ability to explain.</p>
+<p>For more accuracy, we take off the third variable information from one of both variables. Thanks to it, We are seeking to quantify the link between <span class="math inline">\(y\)</span> and the residuals parts of <span class="math inline">\(x\)</span> in relation to the third variable.</p>
+<p><span class="math display">\[\rho_{xy.z_1, \ldots, z_j} = \rho_{e_xe_y}\]</span></p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<span class="math display">\[r_{y(x.z)}= \frac{r_{yx} - r_{yz}r_{xz}}{\sqrt{1-r^2_{xz}}}\]</span>
+It is obvious that if <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> are indepedent so <span class="math inline">\(r_{y(x.z)}= r_{yx}\)</span>. Unlike, If <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> are perfectly correlated, <span class="math inline">\(r_{y(x.z)}\)</span> is undefined, which means nothing remains in the <span class="math inline">\(X\)</span>-residuals to explain <span class="math inline">\(Z\)</span>.</p>
+</div>
+<div id="transitivity-correlation" class="section level3" number="3.2.4">
+<h3><span class="header-section-number">3.2.4</span> Transitivity correlation</h3>
+<p>Let <span class="math inline">\(\rho_{xy}\)</span> be the correlation between the variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Let <span class="math inline">\(\rho_{xz}\)</span> and <span class="math inline">\(\rho_{yz}\)</span> be the correlations of variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> with respect to a third variable <span class="math inline">\(Z\)</span>.</p>
+<p>Given <span class="math inline">\(\rho_{xz}\)</span> and <span class="math inline">\(\rho_{yz}\)</span>, can we deduce the possible values for <span class="math inline">\(\rho_{xy}\)</span>?</p>
+<p><span class="math display">\[\rho_{XY \mid Z}={\frac {\rho_{XY}-\rho _{XZ}\rho_{YZ}}{{\sqrt {1-\rho_{XZ}^{2}}}{\sqrt {1-\rho_{YZ}^{2}}}}}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+  \rho_{XY} 
+  &amp;=  \left( \rho_{XY \mid Z} - \frac{ - \rho_{XZ} \rho_{YZ}}{\sqrt{1 - \rho_{XZ}^{2}} \sqrt{1 - \rho_{YZ}^{2}}} \right)  \sqrt{1 - \rho_{XZ}^{2}} \sqrt{1 - \rho_{YZ}^{2}}  \\
+  &amp;=  \rho_{XY \mid Z} \sqrt{1 - \rho_{XZ}^{2}} \sqrt{1 - \rho_{YZ}^{2}} +  \rho_{XZ} \rho_{YZ}
+\end{align*}\]</span></p>
+<p><span class="math inline">\(\rho_{xy}\)</span> is in the range <span class="math inline">\(\rho_{XZ} \rho_{YZ} \pm \sqrt{1 - \rho_{XZ}^{2}} \sqrt{1 - \rho_{YZ}^{2}}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+  \rho_{XZ} \rho_{YZ} - \sqrt{1 - \rho_{XZ}^{2}} \sqrt{1 - \rho_{YZ}^{2}} &amp;&gt; 0 \\
+  \rho_{XZ} \rho_{YZ} + \sqrt{1 - \rho_{XZ}^{2}} \sqrt{1 - \rho_{YZ}^{2}} &amp;&gt; 0 .
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+  \rho_{XZ}^2 \rho_{YZ}^2 
+  &amp;&gt; \left ( 1 - \rho_{XZ}^{2}\right ) \left (1 - \rho_{YZ}^{2}\right ) \\
+  &amp;= 1 - \rho_{XZ}^{2} - \rho_{YZ}^{2} + \rho_{XZ}^2 \rho_{YZ}^2 .
+\end{align*}\]</span>
+Si <span class="math inline">\(\rho_{xy}&gt;0\)</span> alors on a</p>
+<p><span class="math display">\[\begin{align*}
+  \rho_{XZ}^2 \rho_{YZ}^2 
+  &amp;&gt; \left ( 1 - \rho_{XZ}^{2}\right ) \left (1 - \rho_{YZ}^{2}\right ) \\
+  &amp;= 1 - \rho_{XZ}^{2} - \rho_{YZ}^{2} + \rho_{XZ}^2 \rho_{YZ}^2 .
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{equation*}
+\text{sign}(\rho_{XY}) 
+  =
+\begin{cases}
+    \text{sign}(\rho_{XZ}) \text{sign}(\rho_{YZ}) &amp; \text{ if } \rho_{XZ}^2 + \rho_{YZ}^2 &gt; 1  \\
+    \text{not known} &amp; \text{ if } \rho_{XZ}^2 + \rho_{YZ}^2 \leq 1.
+  \end{cases}
+\end{equation*}\]</span></p>
+</div>
+</div>
+<div id="distance-correlation" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Distance correlation</h2>
+<p>The so-called association measures are an active and recent field of research that renews the well established and old field of correlation. The <em>energy</em> package developed under R as well as Gabor’s article <span class="citation">(<a href="#ref-discor" role="doc-biblioref"><strong>discor?</strong></a>)</span> are good references.</p>
+<p>Let <span class="math inline">\((x_i,y_i)\)</span>, <span class="math inline">\(i=1,2, \dots, N\)</span> be a sample of pairs of observations of the variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<p>We compute successively</p>
+<p><span class="math display">\[dx_{ij}=\lVert x_i-xj \rVert\]</span>
+<span class="math display">\[dy_{ij}=\lVert y_i-yj \rVert\]</span></p>
+<p><span class="math display">\[\overline{\overline{dx_{ij}}}=dx_{ij}-\overline{dx_{i.}}-\overline{dx_{.j}}+\overline{dx_{..}}\]</span>
+<span class="math display">\[\overline{\overline{dy_{ij}}}=dy_{ij}-\overline{dy_{i.}}-\overline{dy_{.j}}+\overline{dy_{..}}\]</span>
+with</p>
+<p><span class="math inline">\(\overline{dx_{i.}}=\frac{1}{N}\sum_{j=1}^{N} dx_{ij}\)</span></p>
+<p>and</p>
+<p><span class="math inline">\(\overline{dx_{..}}=\frac{1}{N^2}\sum_{i=1}^{N}\sum_{j=1}^{N} dx_{ij}\)</span></p>
+<p><span class="math display">\[dCov(X,Y)=\frac{1}{N^2}\sum_{i=1}^{N}\sum_{j=1}^{N}
+\overline{\overline{dx_{ij}}}~ 
+\overline{\overline{dy_{ij}}}\]</span></p>
+<p><span class="math display">\[dVar(X)=dCov^2(X,X)=\frac{1}{N^2}\sum_{i=1}^{N}\sum_{j=1}^{N} 
+\overline{\overline{dx_{ij}}}~^2\]</span></p>
+<p><span class="math display">\[d\rho=\frac{dCov(X,Y)}{d\sigma_X~d\sigma_Y}\]</span></p>
+<div id="other-correlations" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Other Correlations</h3>
+<p>Here we introduced some correlation type <span class="citation">(<a href="#ref-mako" role="doc-biblioref">Makowski and co 2020</a>)</span>:</p>
+<ul>
+<li><p>Kendall’s rank correlation: In the normal case, the Kendall correlation is preferred
+to the Spearman correlation because of a smaller gross error sensitivity (GES) and a
+smaller asymptotic variance (AV), making it more robust and more efficient. However,
+the interpretation of Kendall’s tau is less direct compared to that of the Spearman’s rho,
+in the sense that it quantifies the difference between the % of concordant and discordant
+pairs among all possible pairwise events. Confidence Intervals (CI) for Kendall’s correlations are computed using the Fieller et al. (1957) correction (see Bishara &amp; Hittner,
+2017).</p></li>
+<li><p>Hoeffding’s D: The Hoeffding’s D statistic is a non-parametric rank based measure of association
+that detects more general departures from independence (Hoeffding 1948), including non-linear
+associations. Hoeffding’s D varies between -0.5 and 1 (if there are no tied ranks, otherwise it can
+have lower values), with larger values indicating a stronger relationship between the variables.</p></li>
+<li><p>Gamma correlation: The Goodman-Kruskal gamma statistic is similar to Kendall’s Tau coefficient. It
+is relatively robust to outliers and deals well with data that have many ties.</p></li>
+<li><p>Gaussian rank correlation: The Gaussian rank correlation estimator is a simple and wellperforming alternative for robust rank correlations (Boudt et al., 2012). It is based on the Gaussian
+quantiles of the ranks.</p></li>
+<li><p>Winsorized correlation: Correlation of variables that have been Winsorized, i.e., transformed by
+limiting extreme values to reduce the effect of possibly spurious outliers.</p></li>
+<li><p>Biweight midcorrelation: A measure of similarity that is median-based, instead of
+the traditional mean-based, thus being less sensitive to outliers. It can be used as a
+robust alternative to other similarity metrics, such as Pearson correlation (Langfelder &amp;
+Horvath, 2012).</p></li>
+<li><p>Percentage bend correlation: Introduced by Wilcox (1994), it is based on a downweight of a specified percentage of marginal observations deviating from the median (by
+default, 20 percent).</p></li>
+<li><p>Shepherd’s Pi correlation: Equivalent to a Spearman’s rank correlation after outliers
+removal (by means of bootstrapped Mahalanobis distance).</p></li>
+<li><p>Point-Biserial and biserial correlation: Correlation coefficient used when one variable
+is continuous and the other is dichotomous (binary). Point-Biserial is equivalent to a
+Pearson’s correlation, while Biserial should be used when the binary variable is assumed
+to have an underlying continuity. For example, anxiety level can be measured on a
+continuous scale, but can be classified dichotomously as high/low.</p></li>
+<li><p>Tetrachoric correlation: Special case of the polychoric correlation applicable when
+both observed variables are dichotomous.</p></li>
+</ul>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-galton" class="csl-entry">
+Galton, Francis. 1888. <em>Co-Relation and Their Measurements</em>.
+</div>
+<div id="ref-mako" class="csl-entry">
+Makowski, Dominique, and co. 2020. <span>“Methods and Algorithms for Correlation Analysis in r.”</span> <em>Journal of Open Source Software</em> 5 (51): 2306. <a href="https://joss.theoj.org/papers/10.21105/joss.02306">https://joss.theoj.org/papers/10.21105/joss.02306</a>.
+</div>
+<div id="ref-13cor" class="csl-entry">
+Rodgers, Joseph Lee, and co. 1988. <em>Thirteen Ways to Look at the Correlation Coefficient</em>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="covariance.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualization-of-covariance.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Correlation.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

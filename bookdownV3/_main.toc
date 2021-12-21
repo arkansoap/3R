@@ -1,0 +1,65 @@
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}What is Econometrics?}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}What about econometric visualization?}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}State of the art}{4}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Our project, an R package}{4}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Covariance}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Variance definition reminder}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Covariance standard definition}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Mathematical standard and alternatives covariance definition}{6}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Standard definition}{6}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Alternative definition, a story of rectangles}{7}{subsection.2.3.2}%
+\contentsline {chapter}{\numberline {3}Correlation}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Correlation overview}{9}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}From covariance to correlation}{9}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Correlation definition}{9}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Galton, a pioneer in the history of correlation}{9}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Pearson correlation coefficient}{11}{subsection.3.1.4}%
+\contentsline {section}{\numberline {3.2}Alternatives correlation measurement}{11}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Spearman's rank correlation coefficient}{11}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Partial Correlation}{12}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Semi partial Correlation}{14}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Transitivity correlation}{14}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}Distance correlation}{15}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Other Correlations}{16}{subsection.3.3.1}%
+\contentsline {chapter}{\numberline {4}Visualization of covariance}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}State of the art: different attempts to represent the covariance}{18}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Venn diagramm}{18}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Visualizing distributions of covariance matrices}{18}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}A geometrical interpretation of an alternative formula for the sample covariance}{20}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Covariance as signed area of rectangles}{20}{subsection.4.1.4}%
+\contentsline {section}{\numberline {4.2}Our current project: the package Plotnetrec}{21}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Heterogeneity}{23}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Heteroskedasticity}{23}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Non linear relationship}{23}{subsection.4.2.3}%
+\contentsline {chapter}{\numberline {5}Linear regression and first reliability measure}{24}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Simple linear regression}{24}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Estimation by ordinary least squares}{24}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Measuring overall variation from the sample line}{25}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Multiple linear regression}{25}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Visualisation of regression and correlation beetween variable}{27}{chapter.6}%
+\contentsline {section}{\numberline {6.1}State of the art}{27}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}More on Venn Diagrams for Regression (figure 6.1)}{27}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}A geometric approach to compare variables in a regression model}{28}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Two Additional Views of Linear Regression Coefficients}{28}{subsection.6.1.3}%
+\contentsline {section}{\numberline {6.2}Our current project, the Plotnetrec package:}{30}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}OLS diagramatic representation}{30}{subsection.6.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.1.1}Multiple linear regression diagram}{32}{subsubsection.6.2.1.1}%
+\contentsline {subsection}{\numberline {6.2.2}Correlation representation}{32}{subsection.6.2.2}%
+\contentsline {chapter}{\numberline {7}Causality}{35}{chapter.7}%
+\contentsline {section}{\numberline {7.1}The main cases}{35}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Simultaneous causality}{35}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Omitted variables}{35}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Measurement errors}{35}{subsection.7.1.3}%
+\contentsline {section}{\numberline {7.2}Measurement error on the dependent variable}{36}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Measurement error on the independent variable}{36}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Diagram of the model with measurement error on the independent variable}{37}{subsection.7.3.1}%
+\contentsline {section}{\numberline {7.4}Instrumental variables}{37}{section.7.4}%
+\contentsline {chapter}{\numberline {8}State of the art of R packages in visualization econometrics (and data-viz more broadly)}{38}{chapter.8}%
+\contentsline {chapter}{\numberline {9}annexes}{41}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Correction of Bessel's proof}{41}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Proof for \(Cov(x,\nobreakspace {}y)=\frac {1}{2N(N-1)}\sum _{i=1}^{N} \sum _{j=1}^{N}\nobreakspace {}(x_i-x_j)(y_i-y_j)\)}{41}{section.9.2}%
+\contentsline {section}{\numberline {9.3}a little bit of calculation}{42}{section.9.3}%
+\contentsline {subsubsection}{\numberline {9.3.0.1}Variance of the sum of two random variables}{42}{subsubsection.9.3.0.1}%
+\contentsline {subsubsection}{\numberline {9.3.0.2}Definition of the linear correlation coefficient (Bravais-Pearson)}{43}{subsubsection.9.3.0.2}%
+\contentsline {subsubsection}{\numberline {9.3.0.3}Covariance framing}{43}{subsubsection.9.3.0.3}%
