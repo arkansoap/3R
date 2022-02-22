@@ -1,0 +1,374 @@
+---
+title: "Untitled"
+author: "Chaveneau Lucas"
+date: "22/02/2022"
+output: html_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=3.5, fig.height=2.8,
+                      fig.align='center', echo = TRUE,
+                      warning=FALSE, message=FALSE)
+library(tidyverse)
+library(gridExtra)
+library(tibble)
+library(ggplot2)
+library(knitr)
+library(UsingR)
+library(skimr)
+library(pastecs)
+#library(summarytools)
+library(psych)
+library(kableExtra)
+library(grid)
+library(TeachingDemos)
+library('MASS')
+library(forecast)
+library(fpp2)
+library(scales)
+library(RColorBrewer)
+library("cowplot")
+library(extrafont)
+library(plotly)
+library(sfsmisc)
+library(patternplot)
+library(stargazer)
+library(latex2exp)
+library(dplyr)
+library(gridExtra)
+theme_set(theme_minimal())
+```
+
+# Recherche d'optimisation couleur de la matrice S
+
+```{r}
+circle.size = 2.5
+colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+r=0.6
+N=100
+
+
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1- 2*X + rnorm(N, 0, 200) # forte variance
+data <- data.frame(X,Y)
+data <- data[order(data[,1]),]
+
+X = data[,1]
+Y = data[,2]
+  
+N = nrow(data)
+```
+
+
+## Divisant par la abs de max
+
+```{r}
+circle.size = 2.5
+  colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+  r=0.6
+  Nmat=N*(N-1)/2
+  Nm1s=(N-1)^2
+  
+  S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+  X.bar <- rep(mean(X),N)
+  Y.bar <- rep(mean(Y),N)
+  
+  mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+  
+  ##################### Calculs usuels #########################
+    #theme_light()
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+  {
+  for(j in (i+1):N)
+    {
+      TRUC<-rep(0,N-1)
+      posyi<-which(SY==Y[i])
+      posyj<-which(SY==Y[j])
+      min=min(c(posyi,posyj))
+      max=max(c(posyi,posyj))-1
+      TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+      RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+    }
+  } 
+i = 2
+j =3
+  
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+    
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+S  <- S / max(abs(S))
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+######################### 4th output ###########################
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+# scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+#scale_fill_gradientn(colours = c('red', 'white','blue'), breaks=c(-1,0,1)) +
+  xlab("X")+
+    ylab("Y")
+```
+
+```{r}
+plotnetrec
+```
+
+## Divisant par le min et max 
+
+```{r}
+  circle.size = 2.5
+  colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+  r=0.6
+  Nmat=N*(N-1)/2
+  Nm1s=(N-1)^2
+  
+  S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+  X.bar <- rep(mean(X),N)
+  Y.bar <- rep(mean(Y),N)
+  
+  mydata=data.frame(X,Y,X.bar,Y.bar,S.bar)
+  
+  ##################### Calculs usuels #########################
+    #theme_light()
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+for(j in (i+1):N)
+{
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+}
+} 
+i = 2
+j =3
+  
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+
+    
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+
+for (i in 1:length(S)){
+  if(S[i] < 0){
+    S[i] <- - S[i] / min(S)
+  }else{
+    S[i] <- S[i] / max(S)
+   }
+}
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+######################### 4th output ###########################
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', midpoint = 0) +
+scale_fill_gradientn(colours = c('red', 'white','blue'), breaks=c(-1,0,1)) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y")
+```
+
+```{r}
+plotnetrec
+```
+
+## Normalisation
+
+```{r}
+
+  ##################### Calculs usuels #########################
+    #theme_light()
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+i=1
+for(i in 1:(N-1))
+{
+for(j in (i+1):N)
+{
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+}
+} 
+i = 2
+j =3
+  
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+
+    
+truc1<- vector()
+truc2<- vector()
+i=1
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+i=1
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+# S<-factor(matrix(RES,((N-1)^2)))
+S<-(matrix(RES,((N-1)^2)))
+
+S <- (S - mean(S))/sd(S)^2
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+######################### 4th output ###########################
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+#scale_fill_gradientn(colours = c('red', 'white','blue'), breaks=c(-1,0,1)) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y")
+```
+
+```{r}
+plotnetrec
+```
+
+
