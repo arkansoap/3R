@@ -36,6 +36,7 @@ library(stargazer)
 library(latex2exp)
 library(dplyr)
 library(gridExtra)
+library(scales)
 theme_set(theme_minimal())
 ```
 
@@ -339,7 +340,7 @@ for(i in 1:Nm1s){
 # S<-factor(matrix(RES,((N-1)^2)))
 S<-(matrix(RES,((N-1)^2)))
 
-S <- (S - mean(S))/sd(S)^2
+S <- (S - mean(S))/sd(S)
 MS<-mean(S)
 MS<-quantile(S, probs = seq(0, 1, 0.2))
 #MS<-c(-500,0,1000,2000,2440)
@@ -354,8 +355,9 @@ plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=
   geom_rect(alpha=1, aes(fill=S)) +
   #alpha=.1
     # S continuous
-scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
-#scale_fill_gradientn(colours = c('red', 'white','blue'), breaks=c(-1,0,1)) +
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+scale_fill_gradientn(colours = c('red', 'pink', 'white','cyan', 'blue'), 
+                     breaks=c(-1, -0.5,0, 0.5,1)) +
 #scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
 #scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
   # S discrete
@@ -372,3 +374,141 @@ plotnetrec
 ```
 
 
+# Recherche palette de couleur
+
+## Avec scale_fillgradient_n 
+
+### my Gradient 
+
+Plusieur couleur mais je ne peux fixer le blanc à 0
+
+```{r}
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+scale_fill_gradientn(colours = c("blue", "cyan","white", "pink", "red"),
+                       values = scales::rescale(c(min(S), -0.5, 0, 0.5,  max(S))))+ 
+                     #rescaler=function(S, ...) S, oob=identity) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y") ; plotnetrec
+```
+
+### Gradient automatique
+
+```{r}
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+scale_fill_gradientn(colours = cm.colors(10), 
+                     breaks=c(-1, -0.5,0, 0.5,1)) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y") ; plotnetrec
+```
+
+
+
+## Avec scale_fillgradient_2 
+
+### my Gradient 
+
+
+```{r}
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+#scale_fill_gradientn(colours = c('red', 'pink', 'white','cyan', 'blue'), 
+                     #breaks=c(-1, -0.5,0, 0.5,1)) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y") ; plotnetrec
+```
+
+### Gradient automatique
+
+```{r}
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+scale_fill_gradientn(colours = cm.colors(10), 
+                     breaks=c(-1, -0.5,0, 0.5,1)) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y") ; plotnetrec
+```
+
+
+## Avec  scalee_fill_cotinuous
+
+
+### my Gradient 
+
+
+```{r}
+plotnetrec<- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=1, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+  scale_fill_continuous('red', 'pink', 'white','cyan', 'blue',
+                     breaks=c(-1, -0.5,0, 0.5,1))+
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+#scale_fill_gradientn(colours = c('red', 'pink', 'white','cyan', 'blue'), 
+                     #breaks=c(-1, -0.5,0, 0.5,1)) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y") ; plotnetrec
+```
