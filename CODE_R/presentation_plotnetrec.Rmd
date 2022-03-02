@@ -127,18 +127,18 @@ plotnetrec <- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax
   #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
   #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
   #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
-  geom_rect(alpha=1, aes(fill=S)) +
+  geom_rect(alpha=0.5, aes(fill=S)) +
   #alpha=.1
     # S continuous
 #scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
 ###################################################################
 # scale_fill_gradientn(colours = c(
-#   rgb(14,18,77, maxColorValue = 255),
+#   rgb(3,77,0, maxColorValue = 255),
 #   "cyan",
 #   "white", 
-#   rgb(255, 122 ,243, maxColorValue = 255), 
-#   rgb(201,9,9, maxColorValue = 255)),
-#                        values = scales::rescale(c(min(S), min(S)/2 , 0, max(S) / 2,  max(S))))+
+#   rgb(255, 255 ,51, maxColorValue = 255), 
+#   rgb(212,92,22, maxColorValue = 255)),
+#                        values = scales::rescale(c(min(S), -0.5, 0, 0.5,  max(S))))+ 
 ###################################################################
   scale_fill_gradientn(colours = c(
   rgb(201,9,9, maxColorValue = 255),
