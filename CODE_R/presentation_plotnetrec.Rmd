@@ -159,7 +159,118 @@ plotnetrec <- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax
   #  ylim(0, 5) +
   xlab("X")+
     ylab("Y")
-  return(list(plotscatter,plotnetrec))
+
+circle.size = 2.5
+  colors = list('red', '#0066CC', '#4BB14B', '#FCE638')
+  r=0.6
+  X <- data[,1]
+  Y <- data[,2]
+  
+  reg <- lm(X~Y)
+  Y <- reg$residuals
+  
+  N <- length(X)
+  S.bar<-factor(sign((X-mean(X))*(Y-(mean(Y)))))
+  X.bar <- rep(mean(X),N)
+  Y.bar <- rep(mean(Y),N)
+  
+  
+SX<-sort(X,decreasing=FALSE)
+SY<-sort(Y,decreasing=FALSE)
+
+N <- length(X)
+
+Nm1s=(N-1)^2
+Nmat=N*(N-1)/2
+
+#initialyse
+RES<-matrix(0,(N-1),(N-1))
+for(i in 1:(N-1))
+{
+for(j in (i+1):N)
+{
+TRUC<-rep(0,N-1)
+posyi<-which(SY==Y[i])
+posyj<-which(SY==Y[j])
+min=min(c(posyi,posyj))
+max=max(c(posyi,posyj))-1
+TRUC<- replace(TRUC,c(min:max),sign((X[i]-X[j])*(Y[i]-Y[j])))
+RES[,i:(j-1)]=RES[,i:(j-1)]+TRUC
+}
+} 
+
+truc1<- vector()
+truc2<- vector()
+
+for(i in 1:N){
+  up=N-1
+  truc1=cbind(truc1,t((rep(i,up))))
+  truc2=cbind(truc2,t((rep((i+1),(up)))))
+}
+truc3=t(rep(seq(1,N-1),N-1))
+truc4=t(rep(seq(2,N),N-1))
+
+Xmin<-rep(0,Nm1s)
+Xmax<-rep(0,Nm1s)
+Ymin<-rep(0,Nm1s)
+Ymax<-rep(0,Nm1s)
+
+for(i in 1:Nm1s){
+  Xmin[i]<-X[(truc1[i])]
+  Xmax[i]<-X[(truc2[i])]
+  Ymin[i]<-SY[(truc3[i])]
+  Ymax[i]<-SY[(truc4[i])]
+  i=i+1
+}
+
+S<-(matrix(RES,((N-1)^2)))
+
+
+
+MS<-mean(S)
+MS<-quantile(S, probs = seq(0, 1, 0.2))
+#MS<-c(-500,0,1000,2000,2440)
+d=data.frame(Xmin,Xmax,Ymin,Ymax,S)
+
+
+######################### 4th output ###########################
+plotnetrec2 <- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax=Ymax)) +
+  #  geom_point(size=circle.size, pch=21, fill=colors[[4]]) +
+  #  geom_hline(yintercept=Y.bar, linetype='longdash',color="red") +
+  #  geom_vline(xintercept=X.bar, linetype='longdash',color="red") +
+  geom_rect(alpha=0.5, aes(fill=S)) +
+  #alpha=.1
+    # S continuous
+#scale_fill_gradient2(low = 'red', mid = 'white', high = 'blue', breaks=c(-1,0,1)) +
+###################################################################
+# scale_fill_gradientn(colours = c(
+#   rgb(3,77,0, maxColorValue = 255),
+#   "cyan",
+#   "white", 
+#   rgb(255, 255 ,51, maxColorValue = 255), 
+#   rgb(212,92,22, maxColorValue = 255)),
+#                        values = scales::rescale(c(min(S), -0.5, 0, 0.5,  max(S))))+ 
+###################################################################
+  scale_fill_gradientn(colours = c(
+  rgb(201,9,9, maxColorValue = 255),
+  rgb(255, 122 ,243, maxColorValue = 255),
+  "white",
+  "cyan",
+  rgb(14,18,77, maxColorValue = 255)),
+                     limits = c(-max(abs(S)), max(abs(S))))+
+  
+#####################################################################
+                     #rescaler=function(S, ...) S, oob=identity) +
+#scale_fill_gradientn(colours = c("firebrick4","firebrick1","white","deepskyblue1","deepskyblue4"), breaks=MS) +
+#scale_fill_gradientn(colours = c("red","white","deepskyblue3","deepskyblue2","deepskyblue3"), breaks=MS) +
+  # S discrete
+#scale_fill_brewer(palette="Spectral")+
+#scale_fill_manual(breaks= quantile(S), values=c('white','cyan','turquoise2','blue2')) + 
+  # xlim(0, 5) +
+  #  ylim(0, 5) +
+  xlab("X")+
+    ylab("Y")
+  return(list(plotscatter,plotnetrec, plotnetrec2))
 }
 ```
 
@@ -167,9 +278,9 @@ plotnetrec <- ggplot(data=d,aes(Xmin, Ymin, xmin=Xmin, xmax=Xmax,ymin=Ymin, ymax
 graphique <- function(data, show_scatter = F){
   graphiques <- graph_plotnetrec(data)
   if(show_scatter == T){
-    return(grid.arrange(graphiques[[1]], graphiques[[2]]))
+    return(grid.arrange(graphiques[[1]], graphiques[[2]], graphiques[[3]], nrow = 3))
   }else{
-    return(graphiques[[2]])
+    return(grid.arrange(graphiques[[2]], graphiques[[3]], nrow = 3))
   }
 }
 ```
@@ -180,7 +291,7 @@ graphique <- function(data, show_scatter = F){
 ```{r}
 ### Normal case positive 
 
-N=400
+N=200
 
 
 X <- sort(rnorm(N, 40, 100)) 
@@ -513,3 +624,4 @@ data <- data.frame(c(X1,X2),c(Y1, Y2))
 ```{r}
 graphique(data, show_scatter = T)
 ```
+
