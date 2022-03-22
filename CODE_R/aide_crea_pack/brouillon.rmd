@@ -1,0 +1,112 @@
+---
+title: "brouillon"
+author: "Thibault FUCHEZ"
+date: "22/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+N=500
+X <- sort(rnorm(N, 40, 100)) 
+Y <- 1- 2*X + rnorm(N, 0, 200) # forte variance
+```
+
+# fonction tablo stats
+
+```{r}
+var_X = (1/N) * sum((X - mean(X))^2)
+var_Y = (1/N) * sum((Y - mean(Y))^2)
+COV_XY = (1/N) * sum((X - mean(X))*(Y - mean(Y)))
+CC_P = COV_XY/(sqrt(var_X * var_Y))
+V_X_Y = var_X + var_Y - 2 * sqrt(var_X) * sqrt(var_Y)
+```
+
+```{r}
+tablo <- function (X,Y,N) {
+  Mean_X <- mean(X)
+  Mean_Y <- mean(Y)
+  var_X <- (1/N) * sum((X - mean(X))^2)
+  var_Y <- (1/N) * sum((Y - mean(Y))^2)
+  COV_XY <- (1/N) * sum((X - mean(X))*(Y - mean(Y)))
+  CC_P <- COV_XY/(sqrt(var_X * var_Y))
+  V_X_Y <- var_X + var_Y - 2 * sqrt(var_X) * sqrt(var_Y)
+  names <- c("Mean_x", "Mean_y", "var_x", "var_y", "cov_XY", "cor", "Var_XY")
+  values <- c(Mean_X, Mean_Y, var_X, var_Y, COV_XY, CC_P, V_X_Y)
+  df <- data.frame(list(names, values))
+  colnames(df) <- (c("indic", "value"))
+  df <- format(df, scientific = F)
+  return(df)
+}
+```
+
+```{r}
+tablo(X,Y,N)
+```
+
+
+# fonction resample 
+
+```{r}
+splitter <- data.frame(X,Y)
+data_resample <- sample_n(splitter, size=100, replace = F)
+graphs_sample <- built_ggplot(data_resample)
+```
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+covRect_resample <- function(datas, size) {
+ splitter <- datas 
+ data_resample <- sample_n(splitter, size= size, replace = F)
+ graphs_sample <- covRect(data_resample)
+ return(graphs_sample)
+}
+```
+
+```{r}
+covRect_resample(data1, 100)
+```
+
+# fonction testlin
+
+
+
+
+# A retenir 
+
+- Différences selon packages utillisés...
+
+- liens internet utiles pr création package 
+
+- Pour import des packages : ...
+
+- Pour doc générale : ...
+    - Need package roxygen2, devtools, ... 
+    - To create a pdf document for the package -> devtools::build_manual()
+
+- ouvrir "Rproject pour avoir la fonction build"
+- fonctions ds le dossier "R" 
+  - A chaque fichier R sa documentation (doc de la fonction)
+- création de df d'exemples
+  - En .rda ds repo "data"
+  - Pour la doc, un fichier .R ds repo "R" au même nom que le dataset
+- Pour mettre à jour la doc
+  Roxygenizing a Package
+  You can use Project Options : Build Tools to configure Roxygen to run whenever you execute certain package   build commands: screenshot site internet / une option apparait ensuite / devtools::document()
+
+- test
+- install package
+
+- Publish package 
+  - on github
+  - on Cran
+  
+- description file 
+  LazyData is relevant if your package makes data available to the user. If you specify LazyData: true , the datasets are lazy-loaded, which makes them more immediately available, i.e. users don't have to use data() . The addition of LazyData: true is handled automatically by usethis::use_data() .
